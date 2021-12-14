@@ -9,23 +9,12 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
-      "/LiveWindow/ExampleSubsystem": "Subsystem",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
       "/LiveWindow/drivetrain": "Subsystem"
-    },
-    "windows": {
-      "/FMSInfo": {
-        "window": {
-          "visible": true
-        }
-      }
     }
   },
   "NetworkTables": {
     "LiveWindow": {
-      ".status": {
-        "open": true
-      },
       "drivetrain": {
         "open": true
       },
@@ -33,18 +22,6 @@
     },
     "SmartDashboard": {
       "open": true
-    }
-  },
-  "Plot": {
-    "Plot <0>": {
-      "plots": [
-        {
-          "height": 338
-        }
-      ],
-      "window": {
-        "visible": false
-      }
     }
   }
 }
