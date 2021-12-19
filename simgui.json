@@ -15,7 +15,19 @@
   },
   "NetworkTables": {
     "LiveWindow": {
-      "drivetrain": {
+      "Ungrouped": {
+        "Talon SRX [0]": {
+          "open": true
+        },
+        "Talon SRX [1]": {
+          "open": true
+        },
+        "Talon SRX [2]": {
+          "open": true
+        },
+        "Talon SRX [3]": {
+          "open": true
+        },
         "open": true
       },
       "open": true

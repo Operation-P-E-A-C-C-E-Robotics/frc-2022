@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import frc.robot.Constants;
@@ -14,7 +15,9 @@ public class drivetrain extends SubsystemBase {
   /** Creates a new drivetrain. */
   public drivetrain() {}
   public static WPI_TalonSRX m_leftMotor = new WPI_TalonSRX(Constants.Ldrive);
+  public static WPI_TalonSRX m_leftFollow = new WPI_TalonSRX(Constants.Lfollow);
   public static WPI_TalonSRX m_rightMotor = new WPI_TalonSRX(Constants.Rdrive);
+  public static WPI_TalonSRX m_rightFollow = new WPI_TalonSRX(Constants.Rfollow);
 
   @Override
   public void periodic() {
@@ -22,6 +25,8 @@ public class drivetrain extends SubsystemBase {
     SmartDashboard.putNumber("Left Speed:", m_leftMotor.get());
     SmartDashboard.putNumber("Right Speed:", m_rightMotor.get());
     //Puts the speed being sent to the motors on the dashboard, helpful for diagnostics
+    m_leftFollow.set(m_leftMotor.get());
+    m_rightFollow.set(m_rightMotor.get());
   }
 
 
@@ -30,6 +35,7 @@ public class drivetrain extends SubsystemBase {
   public void tankdrive(double left, double right) {
   m_leftMotor.set(left);
   m_rightMotor.set(right);
+
  }
 
 //Differential Drive, for taking joystick inputs
@@ -38,6 +44,7 @@ public class drivetrain extends SubsystemBase {
   
   m_rightMotor.set(sticklr - stickfb);
   m_leftMotor.set(stickfb + sticklr);
+
  }
 
 //Sets all motors to 0% output
