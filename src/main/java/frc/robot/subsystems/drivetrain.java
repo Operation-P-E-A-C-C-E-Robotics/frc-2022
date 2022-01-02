@@ -51,7 +51,9 @@ public class drivetrain extends SubsystemBase {
  public void arcadedrive(double stickfb, double sticklr) {
   
   m_rightMotor.set(sticklr - stickfb);
+  m_rightFollow.set(sticklr - stickfb);
   m_leftMotor.set(stickfb + sticklr);
+  m_leftFollow.set(stickfb + sticklr);
 
  }
 
