@@ -9,10 +9,12 @@ import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import frc.robot.Constants;
 
-public class shooter extends SubsystemBase {
-  /** Creates a new shooter. */
-  public shooter() {}
-  public static WPI_TalonSRX shootMotor = new WPI_TalonSRX(Constants.shooter);
+public class Shooter extends SubsystemBase {
+  //i saidddddd, NO PUBLIC, NO STATIC
+  private final WPI_TalonSRX shootMotor = new WPI_TalonSRX(Constants.flywheelMotorPort);
+  
+  /** Creates a new Shooter. */
+  public Shooter() {}
 
   @Override
   public void periodic() {
@@ -20,7 +22,6 @@ public class shooter extends SubsystemBase {
   }
 
   public void setSpeed(int speed) {
-    shooter.set(speed);
+    shootMotor.set(speed);
   }
-
 }

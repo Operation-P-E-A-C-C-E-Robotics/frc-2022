@@ -5,13 +5,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.drivetrain;
+import frc.robot.subsystems.DriveTrain;
 
-public class autonomous extends CommandBase {
-  private final drivetrain m_drivetrain;
+public class Autonomous extends CommandBase {
+  private final DriveTrain driveTrain;
+
   /** Creates a new autonomous. */
-  public autonomous(drivetrain dt) {
-    m_drivetrain = dt;
+  public Autonomous(DriveTrain dt) {
+    driveTrain = dt;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(dt);
   }
@@ -24,7 +25,7 @@ public class autonomous extends CommandBase {
   @Override
   public void execute() {
     //drives the robot forawrd at half speed as long as autonomous is enabled
-    m_drivetrain.tankdrive(0.5, 0.5);
+    driveTrain.tankDrive(0.5, 0.5);
   }
 
   // Called once the command ends or is interrupted.
