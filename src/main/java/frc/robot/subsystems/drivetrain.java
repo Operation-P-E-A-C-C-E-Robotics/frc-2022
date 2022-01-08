@@ -4,7 +4,7 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.FollowerType;
+
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import frc.robot.Constants;
@@ -25,32 +25,47 @@ public class drivetrain extends SubsystemBase {
     SmartDashboard.putNumber("Left Speed:", m_leftMotor.get());
     SmartDashboard.putNumber("Right Speed:", m_rightMotor.get());
     //Puts the speed being sent to the motors on the dashboard, helpful for diagnostics
-    m_leftFollow.set(m_leftMotor.get());
-    m_rightFollow.set(m_rightMotor.get());
   }
 
 
-//Tank Drive, takes values from -1 to 1, sets the side you pass to the speed passed
-//ie tankdrive(1,-1); would make the robot spin in a circle
+
+
+  /**
+   * Tank Drive - Send raw values to the DriveTrain, no differential mechanics involved, Useful for autonomous
+   * @param left - Power to send to the left side of the drive train, -1 - 1
+   * @param right - Power to send to the riht side of the drive train, -1 - 1
+   */
   public void tankdrive(double left, double right) {
   m_leftMotor.set(left);
   m_rightMotor.set(right);
+  m_leftFollow.set(left);
+  m_rightFollow.set(right);
 
  }
 
-//Differential Drive, for taking joystick inputs
-//Takes the joystick's forward and backward, left and right and converts it into a percentage and passes it to the motors giving beter control to the driver
+ /**
+  * Arcade Drive - Accepts joystick inputs, Takes the joystick's forward and backward, left and right and converts it into a percentage and passes it to the motors giving beter control to the driver
+  * @param stickfb
+  * @param sticklr
+  */
  public void arcadedrive(double stickfb, double sticklr) {
   
   m_rightMotor.set(sticklr - stickfb);
+  m_rightFollow.set(sticklr - stickfb);
   m_leftMotor.set(stickfb + sticklr);
+  m_leftFollow.set(stickfb + sticklr);
 
  }
 
-//Sets all motors to 0% output
+
+/**
+ * Sets all motors to 0% output
+ */
 public void allstop() {
   m_rightMotor.set(0);
   m_leftMotor.set(0);
+  m_leftFollow.set(0);
+  m_rightFollow.set(0);
  }
 
 }
