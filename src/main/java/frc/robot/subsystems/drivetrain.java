@@ -11,61 +11,67 @@ import frc.robot.Constants;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class drivetrain extends SubsystemBase {
-  /** Creates a new drivetrain. */
-  public drivetrain() {}
-  public static WPI_TalonSRX m_leftMotor = new WPI_TalonSRX(Constants.Ldrive);
-  public static WPI_TalonSRX m_leftFollow = new WPI_TalonSRX(Constants.Lfollow);
-  public static WPI_TalonSRX m_rightMotor = new WPI_TalonSRX(Constants.Rdrive);
-  public static WPI_TalonSRX m_rightFollow = new WPI_TalonSRX(Constants.Rfollow);
+public class DriveTrain extends SubsystemBase {
+  //NO PUBLIC STATIC!!! 
+  //NOTHING SHOULD BE STATIC UNLESS ITS SUPPOSED TO BE USED STATICALLY WHICH IS BASICALLY ONLY IN CONSTANTS. 
+  //NO VARIABLES SHOULD BE PUBLIC. EVER. 
+  private final WPI_TalonSRX leftMotor = new WPI_TalonSRX(Constants.leftDriveMotorPort);
+  private final WPI_TalonSRX leftFollow = new WPI_TalonSRX(Constants.leftFollowMotorPort);
+  private final WPI_TalonSRX rightMotor = new WPI_TalonSRX(Constants.rightDriveMotorPort);
+  private final WPI_TalonSRX rightFollow = new WPI_TalonSRX(Constants.rightFollowMotorPort);
+  
+  /** Creates a new DriveTrain. */
+  public DriveTrain() {
+    leftFollow.follow(leftMotor);
+    rightMotor.follow(rightFollow);
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Left Speed:", m_leftMotor.get());
-    SmartDashboard.putNumber("Right Speed:", m_rightMotor.get());
-    //Puts the speed being sent to the motors on the dashboard, helpful for diagnostics
+    //depending on gearboxes, motors could end up fighting. if so, change.
+    leftFollow.setInverted(false);
+    rightMotor.setInverted(false);
   }
-
-
-
 
   /**
    * Tank Drive - Send raw values to the DriveTrain, no differential mechanics involved, Useful for autonomous
    * @param left - Power to send to the left side of the drive train, -1 - 1
    * @param right - Power to send to the riht side of the drive train, -1 - 1
    */
-  public void tankdrive(double left, double right) {
-  m_leftMotor.set(left);
-  m_rightMotor.set(right);
-  m_leftFollow.set(left);
-  m_rightFollow.set(right);
-
+  public void tankDrive(double left, double right) {
+    leftMotor.set(left);
+  rightMotor.set(right);
  }
 
- /**
-  * Arcade Drive - Accepts joystick inputs, Takes the joystick's forward and backward, left and right and converts it into a percentage and passes it to the motors giving beter control to the driver
-  * @param stickfb
-  * @param sticklr
-  */
- public void arcadedrive(double stickfb, double sticklr) {
+ //!!! subsystems should only interface with the hardware, the logic/math should be left to commands. !!!
+
+//  /**
+//   * Arcade Drive - Accepts joystick inputs, Takes the joystick's forward and backward, left and right and converts it into a percentage and passes it to the motors giving beter control to the driver
+//   * @param stickfb
+//   * @param sticklr
+//   */
+//  public void arcadedrive(double stickfb, double sticklr) {
   
-  m_rightMotor.set(sticklr - stickfb);
-  m_rightFollow.set(sticklr - stickfb);
-  m_leftMotor.set(stickfb + sticklr);
-  m_leftFollow.set(stickfb + sticklr);
-
- }
-
-
-/**
- * Sets all motors to 0% output
- */
-public void allstop() {
-  m_rightMotor.set(0);
-  m_leftMotor.set(0);
-  m_leftFollow.set(0);
-  m_rightFollow.set(0);
- }
-
+  //   rightMotor.set(sticklr - stickfb);
+  //   rightFollow.set(sticklr - stickfb);
+  //   leftMotor.set(stickfb + sticklr);
+  //   leftFollow.set(stickfb + sticklr);
+  
+  //  }
+  
+  
+  /**
+   * Sets all motors to 0% output
+   */
+  public void stopAll() {
+    rightMotor.set(0);
+    leftMotor.set(0);
+    leftFollow.set(0);
+    rightFollow.set(0);
+  }
+  
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Left Speed:", leftMotor.get());
+    SmartDashboard.putNumber("Right Speed:", rightMotor.get());
+    //Puts the speed being sent to the motors on the dashboard, helpful for diagnostics
+  }
 }

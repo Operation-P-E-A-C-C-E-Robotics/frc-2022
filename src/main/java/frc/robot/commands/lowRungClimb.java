@@ -6,9 +6,9 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class lowRungClimb extends CommandBase {
+public class LowRungClimb extends CommandBase {
   /** Creates a new lowRungClimb. */
-  public lowRungClimb() {
+  public LowRungClimb() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 

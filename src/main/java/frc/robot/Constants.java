@@ -15,12 +15,12 @@ package frc.robot;
 public final class Constants {
 
     //Drivetrain
-    public static final int Ldrive = 0;
-    public static final int Lfollow = 1;
-    public static final int Rdrive = 2;
-    public static final int Rfollow = 3;
+    public static final int leftDriveMotorPort = 0;
+    public static final int leftFollowMotorPort = 1;
+    public static final int rightDriveMotorPort = 2;
+    public static final int rightFollowMotorPort = 3;
     
     //Shooter
-    public static final int shooter = 4; 
+    public static final int flywheelMotorPort = 4; 
 
 }
