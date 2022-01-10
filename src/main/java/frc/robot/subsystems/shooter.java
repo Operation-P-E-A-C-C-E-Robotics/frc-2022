@@ -4,21 +4,22 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import frc.robot.Constants;
 
-public class Shooter extends SubsystemBase {
-  //i saidddddd, NO PUBLIC, NO STATIC
+public class shooter extends SubsystemBase {
   private final WPI_TalonSRX shootMotor = new WPI_TalonSRX(Constants.flywheelMotorPort);
   
   /** Creates a new Shooter. */
-  public Shooter() {}
+  public shooter() {}
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Flywheel Speed:", shootMotor.get());
   }
 
   public void setSpeed(int speed) {

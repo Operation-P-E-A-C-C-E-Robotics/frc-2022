@@ -5,13 +5,13 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.drivetrain;
 
-public class Autonomous extends CommandBase {
-  private final DriveTrain driveTrain;
+public class autonomous extends CommandBase {
+  private final drivetrain driveTrain;
 
   /** Creates a new autonomous. */
-  public Autonomous(DriveTrain dt) {
+  public autonomous(drivetrain dt) {
     driveTrain = dt;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(dt);

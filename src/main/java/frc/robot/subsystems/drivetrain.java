@@ -11,7 +11,7 @@ import frc.robot.Constants;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class DriveTrain extends SubsystemBase {
+public class drivetrain extends SubsystemBase {
   //NO PUBLIC STATIC!!! 
   //NOTHING SHOULD BE STATIC UNLESS ITS SUPPOSED TO BE USED STATICALLY WHICH IS BASICALLY ONLY IN CONSTANTS. 
   //NO VARIABLES SHOULD BE PUBLIC. EVER. 
@@ -21,7 +21,7 @@ public class DriveTrain extends SubsystemBase {
   private final WPI_TalonSRX rightFollow = new WPI_TalonSRX(Constants.rightFollowMotorPort);
   
   /** Creates a new DriveTrain. */
-  public DriveTrain() {
+  public drivetrain() {
     leftFollow.follow(leftMotor);
     rightMotor.follow(rightFollow);
 
