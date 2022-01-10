@@ -6,19 +6,17 @@ package frc.robot.subsystems;
 
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class drivetrain extends SubsystemBase {
-  //NO PUBLIC STATIC!!! 
-  //NOTHING SHOULD BE STATIC UNLESS ITS SUPPOSED TO BE USED STATICALLY WHICH IS BASICALLY ONLY IN CONSTANTS. 
-  //NO VARIABLES SHOULD BE PUBLIC. EVER. 
-  private final WPI_TalonSRX leftMotor = new WPI_TalonSRX(Constants.leftDriveMotorPort);
-  private final WPI_TalonSRX leftFollow = new WPI_TalonSRX(Constants.leftFollowMotorPort);
-  private final WPI_TalonSRX rightMotor = new WPI_TalonSRX(Constants.rightDriveMotorPort);
-  private final WPI_TalonSRX rightFollow = new WPI_TalonSRX(Constants.rightFollowMotorPort);
+  private final WPI_TalonFX leftMotor = new WPI_TalonFX(Constants.leftDriveMotorPort);
+  private final WPI_TalonFX leftFollow = new WPI_TalonFX(Constants.leftFollowMotorPort);
+  private final WPI_TalonFX rightMotor = new WPI_TalonFX(Constants.rightDriveMotorPort);
+  private final WPI_TalonFX rightFollow = new WPI_TalonFX(Constants.rightFollowMotorPort);
   
   /** Creates a new DriveTrain. */
   public drivetrain() {
