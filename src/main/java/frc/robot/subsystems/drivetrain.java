@@ -21,11 +21,11 @@ public class drivetrain extends SubsystemBase {
   /** Creates a new DriveTrain. */
   public drivetrain() {
     leftFollow.follow(leftMotor);
-    rightMotor.follow(rightFollow);
+    rightFollow.follow(rightMotor);
 
     //depending on gearboxes, motors could end up fighting. if so, change.
     leftFollow.setInverted(false);
-    rightMotor.setInverted(false);
+    rightFollow.setInverted(false);
   }
 
   /**
@@ -35,7 +35,7 @@ public class drivetrain extends SubsystemBase {
    */
   public void tankDrive(double left, double right) {
     leftMotor.set(left);
-  rightMotor.set(right);
+    rightMotor.set(right);
  }
 
  //!!! subsystems should only interface with the hardware, the logic/math should be left to commands. !!!

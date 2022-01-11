@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final drivetrain driveTrain = new drivetrain();
-
+  private final autonomous autonomous = new autonomous(driveTrain);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -41,6 +41,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return null; //todo change to command when written
+    return autonomous; //todo change to command when written
   }
 }
