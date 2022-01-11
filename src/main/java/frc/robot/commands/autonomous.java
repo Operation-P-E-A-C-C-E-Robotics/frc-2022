@@ -6,27 +6,30 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.drivetrain;
+import frc.robot.subsystems.shooter;
 
 public class autonomous extends CommandBase {
   private final drivetrain driveTrain;
-
+  private final shooter shooter;
   /** Creates a new autonomous. */
-  public autonomous(drivetrain dt) {
+  public autonomous(drivetrain dt, shooter shr) {
     driveTrain = dt;
+    shooter = shr;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(dt);
+    addRequirements(dt, shooter);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    shooter.autoAim();
+    shooter.setSpeed(1);
+    driveTrain.tankDrive(0.5, 0.5);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    //drives the robot forawrd at half speed as long as autonomous is enabled
-    driveTrain.tankDrive(0.5, 0.5);
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
