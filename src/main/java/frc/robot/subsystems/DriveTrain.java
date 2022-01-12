@@ -11,14 +11,14 @@ import frc.robot.Constants;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class drivetrain extends SubsystemBase {
+public class DriveTrain extends SubsystemBase {
   private final WPI_TalonFX leftMotor = new WPI_TalonFX(Constants.leftDriveMotorPort);
   private final WPI_TalonFX leftFollow = new WPI_TalonFX(Constants.leftFollowMotorPort);
   private final WPI_TalonFX rightMotor = new WPI_TalonFX(Constants.rightDriveMotorPort);
   private final WPI_TalonFX rightFollow = new WPI_TalonFX(Constants.rightFollowMotorPort);
   
   /** Creates a new DriveTrain. */
-  public drivetrain() {
+  public DriveTrain() {
     leftFollow.follow(leftMotor);
     rightFollow.follow(rightMotor);
 

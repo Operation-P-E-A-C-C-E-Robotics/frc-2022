@@ -9,12 +9,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import frc.robot.Constants;
 
-public class shooter extends SubsystemBase {
+public class Shooter extends SubsystemBase {
   private final WPI_TalonSRX shootMotor = new WPI_TalonSRX(Constants.flywheelMotorPort);
   private final WPI_TalonSRX aimMotor = new WPI_TalonSRX(Constants.flywheelAimMotorPort);
 
   /** Creates a new Shooter. */
-  public shooter() {}
+  public Shooter() {}
 
   @Override
   public void periodic() {

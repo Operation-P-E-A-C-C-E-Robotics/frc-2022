@@ -16,9 +16,9 @@ import edu.wpi.first.wpilibj2.command.Command;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final drivetrain driveTrain = new drivetrain();
-  private final shooter shooter = new shooter();
-  private final Command autonomous = new autonomous(driveTrain, shooter);
+  private final DriveTrain driveTrain = new DriveTrain();
+  private final Shooter shooter = new Shooter();
+  private final Command autonomous = new Autonomous(driveTrain, shooter);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
