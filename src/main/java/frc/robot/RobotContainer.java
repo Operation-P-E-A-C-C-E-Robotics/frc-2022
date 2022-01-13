@@ -8,7 +8,6 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -24,7 +23,7 @@ public class RobotContainer {
 
   //Operator Joystick
   //I want this public so we can use it in all the Commands dont change it
-  public static Joystick operatorJoystick = new Joystick(1);
+  public Joystick operatorJoystick = new Joystick(1);
   
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
