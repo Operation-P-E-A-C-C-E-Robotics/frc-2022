@@ -30,7 +30,7 @@ public class ArcadeDrive extends CommandBase {
   public void execute() {
     double x = m_stick.getX();
     double y = m_stick.getY();
-    driveTrain.tankDrive(y - x, y + x);
+    driveTrain.tankDrive(-x - y, -x + y);
   }
 
   // Called once the command ends or is interrupted.

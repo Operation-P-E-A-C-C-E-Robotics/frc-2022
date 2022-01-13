@@ -24,4 +24,6 @@ public final class Constants {
     public static final int flywheelMotorPort = 4;
     public static final int flywheelAimMotorPort = 5;
 
+    //Intake
+    public static final int intakeMotorPort = 6;
 }

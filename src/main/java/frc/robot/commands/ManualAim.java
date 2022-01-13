@@ -5,11 +5,18 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Robot;
+import frc.robot.RobotContainer;
+import frc.robot.subsystems.Shooter;
 
 public class ManualAim extends CommandBase {
+  private final Shooter shooter;
+  private static RobotContainer joystick;
   /** Creates a new manualShooter. */
-  public ManualAim() {
+  public ManualAim(Shooter sht) {
+    shooter = sht;
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(sht);
   }
 
   // Called when the command is initially scheduled.
@@ -18,7 +25,9 @@ public class ManualAim extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    shooter.setSpeed(joystick.operatorJoystick.getX());
+  }
 
   // Called once the command ends or is interrupted.
   @Override

@@ -23,7 +23,7 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Flywheel Aim Speed:", shootMotor.get());
   }
 
-  public void setSpeed(int speed) {
+  public void setSpeed(double speed) {
     shootMotor.set(speed);
   }
 
