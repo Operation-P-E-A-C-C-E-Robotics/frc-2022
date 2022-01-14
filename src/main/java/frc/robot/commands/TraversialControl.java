@@ -23,7 +23,7 @@ public class TraversialControl extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    traversial.traversialOn();
+    traversial.setSpeed(1);
   }
 
   // Called once the command ends or is interrupted.

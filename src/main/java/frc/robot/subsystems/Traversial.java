@@ -19,8 +19,8 @@ public class Traversial extends SubsystemBase {
     // This method will be called once per scheduler run
   }
   
-  public void traversialOn() {
-    traversialMotor.set(1);
+  public void setSpeed(double speed) {
+    traversialMotor.set(speed);
   }
 
   public void traversialOff() {
