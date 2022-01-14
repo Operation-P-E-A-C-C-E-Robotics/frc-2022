@@ -26,4 +26,10 @@ public final class Constants {
 
     //Intake
     public static final int intakeMotorPort = 6;
+
+    //Traversial
+    public static final int traversialMotorPort = 7;
+    
+    //Limelight
+    public static final double CAMERA_ANGLE = 0;
 }

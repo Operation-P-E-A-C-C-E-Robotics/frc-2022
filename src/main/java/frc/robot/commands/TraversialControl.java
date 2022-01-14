@@ -5,18 +5,15 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Traversial;
 
-public class ManualAim extends CommandBase {
-  private final Shooter shooter;
-  private RobotContainer containter;
-  /** Creates a new manualShooter. */
-  public ManualAim(Shooter shooter, RobotContainer container) {
-    this.shooter = shooter;
-    this.containter = container;
+public class TraversialControl extends CommandBase {
+ private Traversial traversial;
+  /** Creates a new TraversialControl. */
+  public TraversialControl(Traversial traversial) {
+    this.traversial = traversial;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(shooter);
+    addRequirements(traversial);
   }
 
   // Called when the command is initially scheduled.
@@ -26,12 +23,14 @@ public class ManualAim extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.setSpeed(containter.getOperatorJoystick().getX());
+    traversial.traversialOn();
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    traversial.traversialOff();
+  }
 
   // Returns true when the command should end.
   @Override

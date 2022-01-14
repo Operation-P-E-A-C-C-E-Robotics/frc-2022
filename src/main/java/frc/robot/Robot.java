@@ -92,4 +92,8 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {}
+
+  public RobotContainer getContainer(){
+    return this.m_robotContainer;
+  }
 }
