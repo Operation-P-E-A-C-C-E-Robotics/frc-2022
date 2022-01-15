@@ -26,7 +26,7 @@ public class ManualAim extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.setSpeed(containter.getOperatorJoystick().getX());
+    shooter.manualAim(containter.getOperatorJoystick().getX());
   }
 
   // Called once the command ends or is interrupted.

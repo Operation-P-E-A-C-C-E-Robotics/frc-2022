@@ -19,8 +19,8 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Flywheel Speed:", shootMotor.get());
-    SmartDashboard.putNumber("Flywheel Aim Speed:", shootMotor.get());
+    SmartDashboard.putNumber("Flywheel Speed", shootMotor.get());
+    SmartDashboard.putNumber("Flywheel Aim Speed:", aimMotor.get());
   }
 
   public void setSpeed(double speed) {
@@ -31,6 +31,10 @@ public class Shooter extends SubsystemBase {
     //Vision Logic will go here
     aimMotor.set(1);
 
+  }
+
+  public void manualAim(Double speed) {
+    aimMotor.set(speed);
   }
 
 }
