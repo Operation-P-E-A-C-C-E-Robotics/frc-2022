@@ -17,32 +17,38 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
+  //declare robot components
+  //utilities:
+  private final Limelight limelight = new Limelight(0, 0);
+
+  // subsystems:
   private final DriveTrain driveTrain = new DriveTrain();
   private final Shooter shooter = new Shooter();
-  private final Command autonomous = new Autonomous(driveTrain, shooter);
-  private final Traversial traversial = new Traversial();
   private final Intake intake = new Intake();
-
-  //Operator Joystick
-  //I want this public so we can use it in all the Commands dont change it
-  private Joystick operatorJoystick = new Joystick(1);
-  private JoystickButton intakeButton = new JoystickButton(operatorJoystick, 2);
-  private JoystickButton traversialButton = new JoystickButton(operatorJoystick, 4);
+  
+  // commands:
+  private final DrivebaseAutoAim aimCommand = new DrivebaseAutoAim(driveTrain, limelight);
+  private final Command autonomous = new Autonomous(driveTrain, shooter);
+  
+  // OI:
+  private final Joystick driverJoystick = new Joystick(0);
+  private final Joystick operatorJoystick = new Joystick(1);
+  private final JoystickButton intakeButton = new JoystickButton(operatorJoystick, 2);
+  private final JoystickButton traversialButton = new JoystickButton(operatorJoystick, 4);
+  private final JoystickButton aimButton = new JoystickButton(operatorJoystick, 6);
+  private final JoystickButton shootButton = new JoystickButton(operatorJoystick, 5);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    //set default commands
+    driveTrain.setDefaultCommand(new ArcadeDrive(driveTrain, this));
+    shooter.setDefaultCommand(new ManualAim(shooter, this));
+
     // Configure the button bindings
     configureButtonBindings();
-    driveTrain.setDefaultCommand(new ArcadeDrive(driveTrain));
-    shooter.setDefaultCommand(new ManualAim(shooter, this));
-    
-    
   }
+  
 
-  public Joystick getOperatorJoystick(){
-    return operatorJoystick;
-  }
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
@@ -50,8 +56,24 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    intakeButton.whileHeld(new IntakeControl(intake));
-    traversialButton.whileHeld(new TraversialControl(traversial));
+    intakeButton.whileHeld(new RunIntake(intake));
+    aimButton.whileHeld(aimCommand);
+    shootButton.whileHeld(new ShooterNoPID(shooter));
+  }
+
+  //access functions:
+  /**
+   * @return the operator joystick
+   */
+  public Joystick getOperatorJoystick(){
+    return operatorJoystick;
+  }
+  
+  /**
+   * @return the driver joystick
+   */
+  public Joystick getDriverJoystick(){
+    return driverJoystick;
   }
 
   /**

@@ -1,19 +1,17 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Traversial;
+import frc.robot.subsystems.Shooter;
 
-public class TraversialControl extends CommandBase {
- private Traversial traversial;
-  /** Creates a new TraversialControl. */
-  public TraversialControl(Traversial traversial) {
-    this.traversial = traversial;
+public class ShooterNoPID extends CommandBase{
+    private Shooter shooter;
+  /** Creates a new ShooterControl. */
+  public ShooterNoPID(Shooter shooter) {
+    this.shooter = shooter;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(traversial);
+    addRequirements(shooter);
+    SmartDashboard.putNumber("shooter velocity", 0);
   }
 
   // Called when the command is initially scheduled.
@@ -23,13 +21,14 @@ public class TraversialControl extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    traversial.setSpeed(1);
+    //Replace with PID Control
+    shooter.flywheelPercent(1);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    traversial.traversialOff();
+    shooter.flywheelPercent(0);
   }
 
   // Returns true when the command should end.

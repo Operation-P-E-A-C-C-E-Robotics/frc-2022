@@ -13,22 +13,31 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    public static final class DriveTrain{
+        public static final int LEFT_MASTER_PORT = 0,
+                                LEFT_SLAVE_PORT = 1,
+                                RIGHT_MASTER_PORT = 2,
+                                RIGHT_SLAVE_PORT = 3;
+    }
 
-    //Drivetrain
-    public static final int leftDriveMotorPort = 0;
-    public static final int leftFollowMotorPort = 1;
-    public static final int rightDriveMotorPort = 2;
-    public static final int rightFollowMotorPort = 3;
+    public static final class Shooter{
+        public static final int FLYWHEEL_CONTROLLER_PORT = 4,
+                                TURRET_CONTROLLER_PORT = 5;  
+        
+        public static final double FLYWHEEL_kF = 0,
+                                    FLYWHEEL_kP = 0,
+                                    FLYWHEEL_kI = 0,
+                                    FLYWHEEL_kD = 0;
+    }
     
-    //Shooter
-    public static final int flywheelMotorPort = 4;
-    public static final int flywheelAimMotorPort = 5;
+    public static final class Intake{
+        public static final int INTAKE_CONTROLLER_PORT = 6;
+        public static final double INTAKE_SPEED = 0.2;
+    }
 
-    //Intake
-    public static final int intakeMotorPort = 6;
-
-    //Traversial
-    public static final int traversialMotorPort = 7;
+    public static final class Traversal{
+        public static final int TRAVERSAL_CONTROLLER_PORT = 7;
+    }
     
     //Limelight
     public static final double CAMERA_ANGLE = 0;

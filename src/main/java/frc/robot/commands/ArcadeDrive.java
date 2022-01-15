@@ -5,19 +5,21 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj.Joystick;
 
 public class ArcadeDrive extends CommandBase {
- private final DriveTrain driveTrain;
- private final Joystick m_stick = new Joystick(0);
+ private DriveTrain driveTrain;
+ private Joystick driverJoystick;
 
 
   /** Creates a new drive. */
-  public ArcadeDrive(DriveTrain dt) {
-    driveTrain = dt;
+  public ArcadeDrive(DriveTrain driveTrain, RobotContainer container) {
+    this.driveTrain = driveTrain;
+    this.driverJoystick = container.getDriverJoystick();
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(dt);
+    addRequirements(driveTrain);
   }
 
   // Called when the command is initially scheduled.
@@ -28,9 +30,9 @@ public class ArcadeDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double x = m_stick.getX();
-    double y = m_stick.getY();
-    driveTrain.tankDrive(-x - y, -x + y);
+    double x = driverJoystick.getX();
+    double y = driverJoystick.getY();
+    driveTrain.percentDrive(-y + x, -y - x);
   }
 
   // Called once the command ends or is interrupted.
