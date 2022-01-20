@@ -25,7 +25,7 @@ public class Shooter extends SubsystemBase {
 
     //CHANGE IF FIGHTING
     flywheelMasterController.setInverted(false);
-    flywheelSlaveController.setInverted(InvertType.FollowMaster);
+    flywheelSlaveController.setInverted(InvertType.OpposeMaster);
 
     configTalonGains(FLYWHEEL_kF, FLYWHEEL_kP, FLYWHEEL_kI, FLYWHEEL_kD);
     SmartDashboard.putNumber("flywheel kf", FLYWHEEL_kF);

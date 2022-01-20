@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
@@ -7,7 +8,7 @@ import frc.robot.subsystems.Shooter;
 public class ShooterNoPID extends CommandBase{
     private Shooter shooter;
   /** Creates a new ShooterControl. */
-  public ShooterNoPID(Shooter shooter) {
+  public ShooterNoPID(Shooter shooter, Joystick joystick) {
     this.shooter = shooter;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
@@ -22,7 +23,7 @@ public class ShooterNoPID extends CommandBase{
   @Override
   public void execute() {
     //Replace with PID Control
-    shooter.flywheelPercent(1);
+    shooter.flywheelPercent(0.75);
   }
 
   // Called once the command ends or is interrupted.
@@ -36,4 +37,9 @@ public class ShooterNoPID extends CommandBase{
   public boolean isFinished() {
     return false;
   }
+
+    private void getJoystickSpeed(Joystick joystick) {
+      double raw = joystick.getThrottle();
+      reutrn(raw +1 /2);
+    }
 }
