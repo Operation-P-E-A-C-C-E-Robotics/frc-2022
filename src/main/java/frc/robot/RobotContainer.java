@@ -4,8 +4,13 @@
 
 package frc.robot;
 
+import frc.lib.Limelight;
+import frc.lib.debloating.Pigeon;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+
+import com.ctre.phoenix.sensors.PigeonIMU;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -20,34 +25,36 @@ public class RobotContainer {
   //declare robot components
   //utilities:
   private final Limelight limelight = new Limelight(0, 0);
-
+  private final Pigeon pigeon = new Pigeon(new PigeonIMU(0));
+  
   // subsystems:
   private final DriveTrain driveTrain = new DriveTrain();
   private final Shooter shooter = new Shooter();
   private final Intake intake = new Intake();
   
+  private final Odometry odometry = new Odometry(driveTrain, pigeon, limelight);
+  
+  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  public RobotContainer() {
+    //set default commands
+    
+    // Configure the button bindings
+    configureButtonBindings();
+  }
+
   // commands:
-  private final DrivebaseAutoAim aimCommand = new DrivebaseAutoAim(driveTrain, limelight);
-  private final Command autonomous = new Autonomous(driveTrain, shooter);
+  private final ArcadeDrive arcadeDrive = new ArcadeDrive(driveTrain, this);
+  private final Autonomous autonomous = new Autonomous(driveTrain, shooter);
+  private final DrivebaseAutoAim drivebaseAutoAim = new DrivebaseAutoAim(driveTrain, limelight);
+  private final JoystickAim joystickAim = new JoystickAim(shooter, this);
+  private final RunIntake runIntake = new RunIntake(intake, this);
+  private final RunShooterPercent runShooterPercent = new RunShooterPercent(shooter);
   
   // OI:
   private final Joystick driverJoystick = new Joystick(0);
   private final Joystick operatorJoystick = new Joystick(1);
-  private final JoystickButton intakeButton = new JoystickButton(operatorJoystick, 2);
-  private final JoystickButton traversialButton = new JoystickButton(operatorJoystick, 4);
-  private final JoystickButton aimButton = new JoystickButton(operatorJoystick, 6);
-  private final JoystickButton shootButton = new JoystickButton(operatorJoystick, 5);
-
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
-    //set default commands
-    driveTrain.setDefaultCommand(new ArcadeDrive(driveTrain, this));
-    shooter.setDefaultCommand(new ManualAim(shooter, this));
-
-    // Configure the button bindings
-    configureButtonBindings();
-  }
-  
+  private final JoystickButton flywheelButton = new JoystickButton(operatorJoystick, 6);
+  private final JoystickButton aimButton = new JoystickButton(operatorJoystick, 8);
 
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
@@ -56,12 +63,17 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    intakeButton.whileHeld(new RunIntake(intake));
-    aimButton.whileHeld(aimCommand);
-    shootButton.whileHeld(new ShooterNoPID(shooter));
+    driveTrain.setDefaultCommand(arcadeDrive);
+    intake.setDefaultCommand(runIntake);
+
+    flywheelButton.whileHeld(runShooterPercent);
+    aimButton.whileHeld(drivebaseAutoAim);
   }
 
   //access functions:
+  public Odometry getOdometry() {
+    return odometry;
+  }
   /**
    * @return the operator joystick
    */

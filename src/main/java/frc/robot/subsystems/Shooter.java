@@ -33,7 +33,42 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("flywheel ki", FLYWHEEL_kI);
     SmartDashboard.putNumber("flywheel kd", FLYWHEEL_kD);
   }
-
+  
+  /**
+   * set the flywheel power
+   * @param speed the speed (-1 to 1)
+   */
+  public void flywheelPercent(double speed) {
+    flywheelMasterController.set(speed);
+  }
+  
+  /**
+   * set the turret motor power
+   * @param speed the speed (-1 to 1)
+   */
+  public void turretPercent(Double speed) {
+    turretMotor.set(speed);
+  }
+  
+  /**
+   * set the flywheel velocity with the built in pidf control
+   * @param velocity the velocity to set to in sensor units/100ms
+   */
+  public void flywheelVelocity(double velocity){
+    flywheelMasterController.set(ControlMode.Velocity, velocity);
+  }
+  
+  /**
+   * set pidf gains for talons
+   */
+  private void configTalonGains(double kF, double kP, double kI, double kD){
+    flywheelMasterController.config_kF(0, kF);
+    flywheelMasterController.config_kP(0, kP);
+    flywheelMasterController.config_kI(0, kI);
+    flywheelMasterController.config_kD(0, kD);
+    flywheelMasterController.configClosedloopRamp(10);
+  }
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -44,25 +79,4 @@ public class Shooter extends SubsystemBase {
                     SmartDashboard.getNumber("flywheel ki", FLYWHEEL_kI),
                     SmartDashboard.getNumber("flywheel kd", FLYWHEEL_kD));
   }
-
-  public void flywheelPercent(double speed) {
-    flywheelMasterController.set(speed);
-  }
-
-  public void turretPercent(Double speed) {
-    turretMotor.set(speed);
-  }
-
-  public void flywheelVelocity(double velocity){
-    flywheelMasterController.set(ControlMode.Velocity, velocity);
-  }
-
-  private void configTalonGains(double kF, double kP, double kI, double kD){
-    flywheelMasterController.config_kF(0, kF);
-    flywheelMasterController.config_kP(0, kP);
-    flywheelMasterController.config_kI(0, kI);
-    flywheelMasterController.config_kD(0, kD);
-    flywheelMasterController.configClosedloopRamp(10);
-  }
-
 }

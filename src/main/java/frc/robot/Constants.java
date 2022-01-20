@@ -22,7 +22,7 @@ public final class Constants {
 
     public static final class Shooter{
         public static final int FLYWHEEL_CONTROLLER_PORT = 4,
-                                TURRET_CONTROLLER_PORT = 5;  
+                                TURRET_CONTROLLER_PORT = 6;  
         
         public static final double FLYWHEEL_kF = 0,
                                     FLYWHEEL_kP = 0,
@@ -31,7 +31,7 @@ public final class Constants {
     }
     
     public static final class Intake{
-        public static final int INTAKE_CONTROLLER_PORT = 6;
+        public static final int INTAKE_CONTROLLER_PORT = 5;
         public static final double INTAKE_SPEED = 0.2;
     }
 

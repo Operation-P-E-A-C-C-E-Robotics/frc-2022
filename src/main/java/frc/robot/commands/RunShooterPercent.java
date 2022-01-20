@@ -4,10 +4,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
-public class ShooterNoPID extends CommandBase{
+public class RunShooterPercent extends CommandBase{
     private Shooter shooter;
   /** Creates a new ShooterControl. */
-  public ShooterNoPID(Shooter shooter) {
+  public RunShooterPercent(Shooter shooter) {
     this.shooter = shooter;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);

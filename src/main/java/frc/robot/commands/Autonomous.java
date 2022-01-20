@@ -22,8 +22,8 @@ public class Autonomous extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooter.flywheelPercent(1);
-    driveTrain.percentDrive(0.5, 0.5);
+    // shooter.flywheelPercent(1);
+    // driveTrain.percentDrive(0.5, 0.5);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
