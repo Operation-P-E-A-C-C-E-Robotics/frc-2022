@@ -20,33 +20,47 @@ public class DrivebaseAutoAim extends CommandBase{
     }
     
     // Called when the command is initially scheduled.
+    private double prev = 0;
     @Override
     public void initialize() {
       limelight.setModeVision();
-        // prev = limelight.getTargetOffsetY();
+      limelight.setLedOn();
+        prev = limelight.getTargetOffsetY();
     }
     
-    private final double kP = 0.03;
+    private final double kP = 0.02;
+    private final double kD = 0.00000001;
+    private final double kI = 0;
     private double p = 0;
+    private double i = 0;
+    private double d = 0;
+    private boolean isFirst = true;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if(limelight.hasTarget() == 1){
-        double offsetY = limelight.getTargetOffsetY();
+        double offsetY = limelight.getTargetOffsetX();
         SmartDashboard.putNumber("offset", offsetY);
 
         p = offsetY * kP;
 
-        double rot = p;
+        d = -(offsetY - prev) * kD;
+
+        if(isFirst) d = 0;
+
+
+        double rot = p + d;
 
         SmartDashboard.putNumber("rot", rot);
 
-         driveTrain.percentDrive(-rot, rot);
+         driveTrain.percentDrive(rot, -rot);
     
 
         // prev = offsetY;
+        isFirst = false;
     } else {
-        driveTrain.percentDrive(0, 0);
+        isFirst = true;
+        driveTrain.percentDrive(-0.1, 0.1);
     }
   }
 
@@ -54,6 +68,7 @@ public class DrivebaseAutoAim extends CommandBase{
   @Override
   public void end(boolean interrupted) {
     limelight.setModeDrive();
+    limelight.setLedOff();
     driveTrain.percentDrive(0, 0);
 }
 

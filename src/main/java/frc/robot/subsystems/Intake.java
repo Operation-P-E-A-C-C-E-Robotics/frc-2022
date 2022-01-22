@@ -23,6 +23,7 @@ public class Intake extends SubsystemBase {
   }
 
   public void setPercent(double speed){
+    System.out.println(speed);
     intakeMotor.set(speed);
   }
 }

@@ -13,6 +13,7 @@ import static frc.robot.Constants.DriveTrain.RIGHT_SLAVE_PORT;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
@@ -34,38 +35,44 @@ public class DriveTrain extends SubsystemBase {
 
   private final double wheelDiameter = 0;
       //shifter stuff
-      public DoubleSolenoid shiftSolenoid = new DoubleSolenoid(21, PneumaticsModuleType.REVPH, 0,0);
+    //   public DoubleSolenoid shiftSolenoid = new DoubleSolenoid(21, PneumaticsModuleType.REVPH, 0,0);
       private Gear _gear = Gear.LOW_GEAR;
   
   /** Creates a new DriveTrain. */
   public DriveTrain() {
+    setNeutralModes(NeutralMode.Coast);
+
     leftSlaveController.follow(leftMasterController);
     
     rightSlaveController.follow(rightMasterController);
 
     //depending on gearboxes, motors could end up fighting. if so, change.
-    leftMasterController.setInverted(true);
-    rightMasterController.setInverted(false);
+    leftMasterController.setInverted(false);
+    rightMasterController.setInverted(true);
     leftSlaveController.setInverted(InvertType.FollowMaster);
     rightSlaveController.setInverted(InvertType.FollowMaster);
+
+    leftMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 30, 35, 2));
+    rightMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 30, 35, 2));
+
   }
 
       /**
      * shift the drivetrain into high, low, or MAYBE neutral gear
      * @param gear the drivetrain.gear to shift into
      */
-    public void shift(Gear gear) {
-      if(gear == Gear.HIGH_GEAR){
-          shiftSolenoid.set(Value.kForward);
-      }
-      if(gear == Gear.LOW_GEAR){
-          shiftSolenoid.set(Value.kReverse);
-      }
-      if(gear == Gear.NEUTRAL){
-          shiftSolenoid.set(Value.kOff);
-      }
-      _gear = gear;
-  }
+//     public void shift(Gear gear) {
+//       if(gear == Gear.HIGH_GEAR){
+//           shiftSolenoid.set(Value.kForward);
+//       }
+//       if(gear == Gear.LOW_GEAR){
+//           shiftSolenoid.set(Value.kReverse);
+//       }
+//       if(gear == Gear.NEUTRAL){
+//           shiftSolenoid.set(Value.kOff);
+//       }
+//       _gear = gear;
+//   }
 
   /**
    * get the current gear of the drivetrain gearboxes

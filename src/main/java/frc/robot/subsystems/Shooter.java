@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
@@ -32,6 +33,8 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("flywheel kp", FLYWHEEL_kP);
     SmartDashboard.putNumber("flywheel ki", FLYWHEEL_kI);
     SmartDashboard.putNumber("flywheel kd", FLYWHEEL_kD);
+
+    flywheelMasterController.setNeutralMode(NeutralMode.Coast);
   }
   
   /**
@@ -66,14 +69,14 @@ public class Shooter extends SubsystemBase {
     flywheelMasterController.config_kP(0, kP);
     flywheelMasterController.config_kI(0, kI);
     flywheelMasterController.config_kD(0, kD);
-    flywheelMasterController.configClosedloopRamp(10);
+    flywheelMasterController.configClosedloopRamp(7);
   }
   
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     // SmartDashboard.putNumber("Flywheel Speed", shootMotor.get());
-    SmartDashboard.putNumber("Flywheel Aim Speed:", turretMotor.get());
+    SmartDashboard.putNumber("Flywheel Velocity", flywheelMasterController.getSelectedSensorVelocity());
     configTalonGains(SmartDashboard.getNumber("flywheel kf", FLYWHEEL_kF), 
                     SmartDashboard.getNumber("flywheel kp", FLYWHEEL_kP), 
                     SmartDashboard.getNumber("flywheel ki", FLYWHEEL_kI),

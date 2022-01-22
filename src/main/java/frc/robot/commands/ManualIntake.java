@@ -9,11 +9,11 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.Intake;
 import static frc.robot.Constants.Intake.*;
 
-public class RunIntake extends CommandBase {
+public class ManualIntake extends CommandBase {
   private Intake intake;
   private RobotContainer container;
   /** Creates a new ShooterControl. */
-  public RunIntake(Intake intake, RobotContainer container) {
+  public ManualIntake(Intake intake, RobotContainer container) {
     this.intake = intake;
     this.container = container;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -27,7 +27,8 @@ public class RunIntake extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    int pov = container.getDriverJoystick().getPOV();
+    int pov = container.getOperatorJoystick().getPOV();
+    System.out.println(pov);
     if (pov == 0) {
       intake.setPercent(INTAKE_SPEED);
     } else if (pov == 180) {

@@ -11,13 +11,13 @@ import edu.wpi.first.wpilibj.Joystick;
 
 public class ArcadeDrive extends CommandBase {
  private DriveTrain driveTrain;
- private Joystick driverJoystick;
+  private RobotContainer container;
 
 
   /** Creates a new drive. */
   public ArcadeDrive(DriveTrain driveTrain, RobotContainer container) {
     this.driveTrain = driveTrain;
-    this.driverJoystick = container.getDriverJoystick();
+    this.container = container;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(driveTrain);
   }
@@ -30,6 +30,7 @@ public class ArcadeDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    Joystick driverJoystick = container.getDriverJoystick();
     double x = driverJoystick.getX();
     double y = driverJoystick.getY();
     driveTrain.percentDrive(-y + x, -y - x);

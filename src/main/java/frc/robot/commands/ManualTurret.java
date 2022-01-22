@@ -4,18 +4,19 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.Shooter;
 
-public class RunShooter extends CommandBase {
-  private Shooter shooter;
-  /** Creates a new ShooterControl. */
-  public RunShooter(Shooter shooter) {
+public class ManualTurret extends CommandBase {
+  private final Shooter shooter;
+  private RobotContainer containter;
+  /** Creates a new manualShooter. */
+  public ManualTurret(Shooter shooter, RobotContainer container) {
     this.shooter = shooter;
+    this.containter = container;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
-    SmartDashboard.putNumber("shooter velocity", 0);
   }
 
   // Called when the command is initially scheduled.
@@ -25,15 +26,12 @@ public class RunShooter extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //Replace with PID Control
-    shooter.flywheelVelocity(SmartDashboard.getNumber("shooter velocity", 0));
+    shooter.turretPercent(containter.getOperatorJoystick().getX());
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    shooter.flywheelPercent(0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

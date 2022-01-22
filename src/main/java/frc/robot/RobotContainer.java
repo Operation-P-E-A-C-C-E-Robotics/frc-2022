@@ -34,6 +34,7 @@ public class RobotContainer {
   
   private final Odometry odometry = new Odometry(driveTrain, pigeon, limelight);
   
+  
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     //set default commands
@@ -41,14 +42,15 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
   }
-
+  
   // commands:
   private final ArcadeDrive arcadeDrive = new ArcadeDrive(driveTrain, this);
   private final Autonomous autonomous = new Autonomous(driveTrain, shooter);
   private final DrivebaseAutoAim drivebaseAutoAim = new DrivebaseAutoAim(driveTrain, limelight);
-  private final JoystickAim joystickAim = new JoystickAim(shooter, this);
-  private final RunIntake runIntake = new RunIntake(intake, this);
-  private final RunShooterPercent runShooterPercent = new RunShooterPercent(shooter);
+  private final ManualTurret joystickAim = new ManualTurret(shooter, this);
+  private final ManualIntake runIntake = new ManualIntake(intake, this);
+  private final FlywheelPercent runShooterPercent = new FlywheelPercent(shooter);
+  private final FlywheelVelocity1 flywheel1 = new FlywheelVelocity1(shooter);
   
   // OI:
   private final Joystick driverJoystick = new Joystick(0);
@@ -66,7 +68,7 @@ public class RobotContainer {
     driveTrain.setDefaultCommand(arcadeDrive);
     intake.setDefaultCommand(runIntake);
 
-    flywheelButton.whileHeld(runShooterPercent);
+    flywheelButton.whileHeld(flywheel1);
     aimButton.whileHeld(drivebaseAutoAim);
   }
 

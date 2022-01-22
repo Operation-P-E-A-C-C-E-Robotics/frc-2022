@@ -14,26 +14,26 @@ package frc.robot;
  */
 public final class Constants {
     public static final class DriveTrain{
-        public static final int LEFT_MASTER_PORT = 0,
-                                LEFT_SLAVE_PORT = 1,
-                                RIGHT_MASTER_PORT = 2,
-                                RIGHT_SLAVE_PORT = 3,
+        public static final int RIGHT_MASTER_PORT = 0,
+                                RIGHT_SLAVE_PORT = 1,
+                                LEFT_MASTER_PORT = 2,
+                                LEFT_SLAVE_PORT = 3,
                                 DRIVE_ENCODER_CPR = 0,
                                 DRIVE_HIGH_GEAR_RATIO = 0;
     }
 
     public static final class Shooter{
         public static final int FLYWHEEL_CONTROLLER_PORT = 4,
-                                TURRET_CONTROLLER_PORT = 6;  
+                                TURRET_CONTROLLER_PORT = 5;  
         
-        public static final double FLYWHEEL_kF = 0,
-                                    FLYWHEEL_kP = 0,
+        public static final double FLYWHEEL_kF = 0.05,
+                                    FLYWHEEL_kP = 10,
                                     FLYWHEEL_kI = 0,
-                                    FLYWHEEL_kD = 0;
+                                    FLYWHEEL_kD = 0.01;
     }
     
     public static final class Intake{
-        public static final int INTAKE_CONTROLLER_PORT = 5;
+        public static final int INTAKE_CONTROLLER_PORT = 6;
         public static final double INTAKE_SPEED = 0.2;
     }
 
