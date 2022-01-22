@@ -17,7 +17,9 @@ public final class Constants {
         public static final int LEFT_MASTER_PORT = 0,
                                 LEFT_SLAVE_PORT = 1,
                                 RIGHT_MASTER_PORT = 2,
-                                RIGHT_SLAVE_PORT = 3;
+                                RIGHT_SLAVE_PORT = 3,
+                                DRIVE_ENCODER_CPR = 0,
+                                DRIVE_HIGH_GEAR_RATIO = 0;
     }
 
     public static final class Shooter{
@@ -41,4 +43,5 @@ public final class Constants {
     
     //Limelight
     public static final double CAMERA_ANGLE = 0;
+
 }
