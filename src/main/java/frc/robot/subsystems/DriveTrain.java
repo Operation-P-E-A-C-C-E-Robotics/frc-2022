@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.DriveSignal;
 import frc.robot.Constants;
+import frc.robot.Constants.DriveTrain.*;
 
 public class DriveTrain extends SubsystemBase {
   private final WPI_TalonFX leftMasterController = new WPI_TalonFX(LEFT_MASTER_PORT);
@@ -122,8 +123,8 @@ public class DriveTrain extends SubsystemBase {
    */
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
       return new DifferentialDriveWheelSpeeds(
-        leftMasterController.getSelectedSensorVelocity(0)/Constants.DRIVE_ENCODER_CPR / Constants.DRIVE_HIGH_GEAR_RATIO * wheelDiameter
-      , rightMasterController.getSelectedSensorVelocity(0)/Constants.DRIVE_ENCODER_CPR / Constants.DRIVE_HIGH_GEAR_RATIO * wheelDiameter
+        leftMasterController.getSelectedSensorVelocity(0)/Constants.DriveTrain.DRIVE_ENCODER_CPR / Constants.DriveTrain.DRIVE_HIGH_GEAR_RATIO * wheelDiameter
+      , rightMasterController.getSelectedSensorVelocity(0)/Constants.DriveTrain.DRIVE_ENCODER_CPR / Constants.DriveTrain.DRIVE_HIGH_GEAR_RATIO * wheelDiameter
       );
   }
 
@@ -165,13 +166,13 @@ public class DriveTrain extends SubsystemBase {
    * @return position of left side encoder
    */
   public double lEncoderPosition(){
-      return leftMasterController.getSelectedSensorPosition()/Constants.DRIVE_ENCODER_CPR / Constants.DRIVE_HIGH_GEAR_RATIO * wheelDiameter;
+      return leftMasterController.getSelectedSensorPosition()/Constants.DriveTrain.DRIVE_ENCODER_CPR / Constants.DriveTrain.DRIVE_HIGH_GEAR_RATIO * wheelDiameter;
   }
   /**
    * @return position of right side encoder
    */
   public double rEncoderPosition(){
-      return rightMasterController.getSelectedSensorPosition()/Constants.DRIVE_ENCODER_CPR / Constants.DRIVE_HIGH_GEAR_RATIO * wheelDiameter;
+      return rightMasterController.getSelectedSensorPosition()/Constants.DriveTrain.DRIVE_ENCODER_CPR / Constants.DriveTrain.DRIVE_HIGH_GEAR_RATIO * wheelDiameter;
   }
 
   /**
