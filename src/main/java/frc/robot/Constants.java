@@ -40,8 +40,5 @@ public final class Constants {
     public static final class Traversal{
         public static final int TRAVERSAL_CONTROLLER_PORT = 7;
     }
-    
-    //Limelight
-    public static final double CAMERA_ANGLE = 0;
 
 }

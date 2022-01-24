@@ -10,14 +10,16 @@ public class Limelight {
   public NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
   private final double tHeight;
   private final double cHeight;
+  private final double cAngle;
 
   /**
    * @param targetHeight the height of the target for calculating distance
    * @param cameraHeight the height of the camera for calculating distance
    */
-  public Limelight(double targetHeight, double cameraHeight){
+  public Limelight(double targetHeight, double cameraHeight, double cameraAngle){
     tHeight = targetHeight;
     cHeight = cameraHeight;
+    cAngle = cameraAngle;
   }
 
   /**
@@ -43,7 +45,7 @@ public class Limelight {
   public double getTargetDistance(){
     double targetOffsetY = getTargetOffsetY();
     double distance = 0;
-    distance = (tHeight - cHeight) / Math.tan(Math.toRadians(Constants.CAMERA_ANGLE) + Math.toRadians(targetOffsetY));
+    distance = (tHeight - cHeight) / Math.tan(Math.toRadians(cAngle) + Math.toRadians(targetOffsetY));
     return distance;
   }
   /**
