@@ -5,13 +5,12 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
 public class FlywheelPercent extends CommandBase{
-    private Shooter shooter;
+    private final Shooter shooter;
   /** Creates a new ShooterControl. */
   public FlywheelPercent(Shooter shooter) {
     this.shooter = shooter;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
-    SmartDashboard.putNumber("shooter velocity", 0);
   }
 
   // Called when the command is initially scheduled.

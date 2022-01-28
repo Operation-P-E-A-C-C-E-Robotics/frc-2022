@@ -6,14 +6,14 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Turret;
 
 public class ManualTurret extends CommandBase {
-  private final Shooter shooter;
-  private RobotContainer containter;
+  private final Turret turret;
+  private final RobotContainer containter;
   /** Creates a new manualShooter. */
-  public ManualTurret(Shooter shooter, RobotContainer container) {
-    this.shooter = shooter;
+  public ManualTurret(Turret shooter, RobotContainer container) {
+    this.turret = shooter;
     this.containter = container;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
@@ -26,7 +26,7 @@ public class ManualTurret extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.turretPercent(containter.getOperatorJoystick().getX());
+    // shooter.turretPercent(containter.getOperatorJoystick().getX());
   }
 
   // Called once the command ends or is interrupted.

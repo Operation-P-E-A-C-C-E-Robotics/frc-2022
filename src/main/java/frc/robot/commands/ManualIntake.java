@@ -10,8 +10,8 @@ import frc.robot.subsystems.Intake;
 import static frc.robot.Constants.Intake.*;
 
 public class ManualIntake extends CommandBase {
-  private Intake intake;
-  private RobotContainer container;
+  private final Intake intake;
+  private final RobotContainer container;
   /** Creates a new ShooterControl. */
   public ManualIntake(Intake intake, RobotContainer container) {
     this.intake = intake;

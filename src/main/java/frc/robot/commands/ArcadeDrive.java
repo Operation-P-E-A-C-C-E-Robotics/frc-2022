@@ -10,8 +10,8 @@ import frc.robot.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj.Joystick;
 
 public class ArcadeDrive extends CommandBase {
- private DriveTrain driveTrain;
-  private RobotContainer container;
+ private final DriveTrain driveTrain;
+  private final RobotContainer container;
 
 
   /** Creates a new drive. */

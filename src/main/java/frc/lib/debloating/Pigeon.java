@@ -17,10 +17,10 @@ import frc.lib.math.Point2d;
  * Add your docs here.
  */
 public class Pigeon {
-    private PigeonIMU pg;
+    private final PigeonIMU pg;
 
 
-    private double[] ypr = new double[3];
+    private final double[] ypr = new double[3];
     private double accelerometerVelocityX = 0;
     private double accelerometerVelocityY = 0;
     private double accelerometerVelocityZ = 0;
@@ -107,11 +107,7 @@ public class Pigeon {
         double z = (xyz[2]) / 16384 * 9.80665;
         System.out.println("Pigeon: x acceleration of " + x);
         System.out.println("Pigeon: y acceleration of " + y);
-        if(Math.abs(x) > bump_acceleration_thresh){
-            bumped = true;
-        }else{
-            bumped = false;
-        }
+        bumped = Math.abs(x) > bump_acceleration_thresh;
         //get velocity from acceleration
         accelerometerVelocityX += x*dTime;
         accelerometerVelocityY += y*dTime;

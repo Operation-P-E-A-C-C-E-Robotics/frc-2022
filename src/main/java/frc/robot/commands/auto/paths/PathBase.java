@@ -26,9 +26,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
-import frc.robot.commands.auto.AutoConstants;
 import frc.robot.Odometry;
-import frc.robot.RobotContainer;
+import frc.robot.commands.auto.AutoConstants;
 import frc.robot.commands.auto.actions.Action;
 import frc.robot.subsystems.DriveTrain;
 
@@ -37,8 +36,8 @@ import frc.robot.subsystems.DriveTrain;
  * call start() when you want to drive the path.
  */
 public class PathBase extends CommandBase implements Action{
-    Odometry odometry;
-    DriveTrain driveTrain;
+    final Odometry odometry;
+    final DriveTrain driveTrain;
     Trajectory trajectory_;
     DifferentialDriveVoltageConstraint autoVoltageConstraint;
     RamseteCommand ramsete;
@@ -80,13 +79,11 @@ public class PathBase extends CommandBase implements Action{
      * get a trajectory from a pathweaver json.
      * @param uri the location of the pathweaver json
      * @return a trajectory
-     * @throws IOException
      */
-    public Trajectory getPathweaverTrajectory(String trajectoryJSON) throws IOException {
+    public Trajectory getPathweaverTrajectory(String trajectoryJSON) {
         try {
             Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-            Trajectory trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-            return trajectory;
+            return TrajectoryUtil.fromPathweaverJson(trajectoryPath);
           } catch (IOException ex) {
             DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
             return null;
@@ -116,7 +113,7 @@ public class PathBase extends CommandBase implements Action{
 
     @Override
     public boolean isFinished() {
-        return finished;
+        return !finished;
     }
 
     @Override

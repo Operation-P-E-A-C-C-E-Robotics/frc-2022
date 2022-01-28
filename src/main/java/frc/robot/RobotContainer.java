@@ -47,9 +47,9 @@ public class RobotContainer {
   private final ArcadeDrive arcadeDrive = new ArcadeDrive(driveTrain, this);
   private final Autonomous autonomous = new Autonomous(driveTrain, shooter);
   private final DrivebaseAutoAim drivebaseAutoAim = new DrivebaseAutoAim(driveTrain, limelight);
-  private final ManualTurret joystickAim = new ManualTurret(shooter, this);
+  // private final ManualTurret joystickAim = new ManualTurret(shooter, this);
   private final ManualIntake runIntake = new ManualIntake(intake, this);
-  private final FlywheelPercent runShooterPercent = new FlywheelPercent(shooter);
+  // private final FlywheelPercent runShooterPercent = new FlywheelPercent(shooter);
   private final FlywheelVelocity1 flywheel1 = new FlywheelVelocity1(shooter);
   
   // OI:

@@ -1,14 +1,13 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.Limelight;
 import frc.robot.subsystems.DriveTrain;
 
 public class DrivebaseAutoAim extends CommandBase{
-    private DriveTrain driveTrain;
+    private final DriveTrain driveTrain;
 
-    private Limelight limelight;
+    private final Limelight limelight;
 
     
     /** Creates a new ShooterControl. */
@@ -27,31 +26,27 @@ public class DrivebaseAutoAim extends CommandBase{
       limelight.setLedOn();
         prev = limelight.getTargetOffsetY();
     }
-    
-    private final double kP = 0.02;
-    private final double kD = 0.00000001;
-    private final double kI = 0;
-    private double p = 0;
-    private double i = 0;
-    private double d = 0;
+
     private boolean isFirst = true;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if(limelight.hasTarget() == 1){
         double offsetY = limelight.getTargetOffsetX();
-        SmartDashboard.putNumber("offset", offsetY);
+        
 
-        p = offsetY * kP;
+        // private final double kI = 0;
+        double kP = 0.02;
+        double p = offsetY * kP;
 
-        d = -(offsetY - prev) * kD;
+        // private double i = 0;
+        double kD = 0.00000001;
+        double d = -(offsetY - prev) * kD;
 
         if(isFirst) d = 0;
 
 
         double rot = p + d;
-
-        SmartDashboard.putNumber("rot", rot);
 
          driveTrain.percentDrive(rot, -rot);
     

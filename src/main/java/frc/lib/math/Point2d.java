@@ -49,8 +49,7 @@ public class Point2d {
     }
     public static Point2d fromPose(Pose2d pose){
         Translation2d translation = pose.getTranslation();
-        Point2d cartesian = new Point2d(translation.getX(), translation.getY());
-        return cartesian;
+        return new Point2d(translation.getX(), translation.getY());
     }
     public void rotateBy(Rotation2d rotation){
         PolarPoint2d polarPoint = getPolarPoint(this);

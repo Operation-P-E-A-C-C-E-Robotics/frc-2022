@@ -9,11 +9,12 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Shooter;
 
 public class Autonomous extends CommandBase {
-  private final DriveTrain driveTrain;
+  // private final DriveTrain driveTrain;
+  @SuppressWarnings("FieldCanBeLocal")
   private final Shooter shooter;
   /** Creates a new autonomous. */
   public Autonomous(DriveTrain dt, Shooter shr) {
-    driveTrain = dt;
+    // driveTrain = dt;
     shooter = shr;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(dt, shooter);
