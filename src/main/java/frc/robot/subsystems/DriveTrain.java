@@ -52,8 +52,11 @@ public class DriveTrain extends SubsystemBase {
     leftSlaveController.setInverted(InvertType.FollowMaster);
     rightSlaveController.setInverted(InvertType.FollowMaster);
 
-    leftMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 30, 35, 2));
-    rightMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 30, 35, 2));
+    // rightMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 30, 35, 2));
+    // leftMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 30, 35, 2));
+
+    rightMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 20, 20, 0));
+    leftMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 20, 20, 0));
 
   }
 
