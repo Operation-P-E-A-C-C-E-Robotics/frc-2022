@@ -5,44 +5,43 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.lib.Limelight;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.BallHandler;
-import static frc.robot.Constants.Intake.*;
+import frc.robot.subsystems.Turret;
 
-public class ManualIntake extends CommandBase {
-  private final BallHandler intake;
-  private final RobotContainer container;
-  /** Creates a new ShooterControl. */
-  public ManualIntake(BallHandler intake, RobotContainer container) {
-    this.intake = intake;
-    this.container = container;
+public class LimelightTurret extends CommandBase {
+  private final Turret turret;
+  private final Limelight limelight;
+
+  private double curretTurretPosition, targetTurretPosition;
+
+  /** Creates a new AutoAim. */
+  public LimelightTurret(Turret turret, Limelight limelight) {
+    this.turret = turret;
+    this.limelight = limelight;
+
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(intake);
+    addRequirements(turret);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
-
+  public void initialize() {
+  }
+  
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    int pov = container.getOperatorJoystick().getPOV();
-    System.out.println(pov);
-    if (pov == 0) {
-      intake.setPercent(INTAKE_SPEED);
-    } else if (pov == 180) {
-      intake.setPercent(-INTAKE_SPEED);
-    } else {
-      intake.setPercent(0);
-    }
-    
+    curretTurretPosition = turret.getPosition();
+    double deltaX = limelight.getTargetOffsetX() / 360;
+    targetTurretPosition = curretTurretPosition + deltaX; //todo figure out what's flipped
+
+    turret.turretRotations(targetTurretPosition);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.setPercent(0);
   }
 
   // Returns true when the command should end.

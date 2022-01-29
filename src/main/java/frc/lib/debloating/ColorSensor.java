@@ -28,7 +28,7 @@ public class ColorSensor {
     }
 
     public boolean objPresent(){
-        return colorSensor.getProximity() > 1300; //todo get right number
+        return colorSensor.getProximity() > 800; //todo get right number
     }
 
     public boolean isRedNotBlue(){

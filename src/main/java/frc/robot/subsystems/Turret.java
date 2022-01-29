@@ -23,6 +23,7 @@ public class Turret extends SubsystemBase {
     private final DigitalInput zeroSwitch;
 
     private double setpoint = 0;
+    private final double TURRET_RATIO = 0; //todo get ratio
 
 
     /** Creates a new Shooter. */
@@ -50,6 +51,7 @@ public class Turret extends SubsystemBase {
     }
 
     public void turretRotations(double rotations){
+        rotations *= TURRET_RATIO; //convert from motor rotations to turret rotations
         pidController.setReference(rotations, CANSparkMax.ControlType.kPosition);
         setpoint = rotations;
     }
@@ -68,7 +70,7 @@ public class Turret extends SubsystemBase {
     }
 
     public double getPosition(){
-        return encoder.getPosition();
+        return encoder.getPosition() / TURRET_RATIO; //should it be / or *??
     }
 
     @Override

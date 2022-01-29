@@ -30,7 +30,7 @@ public class RobotContainer {
   // subsystems:
   private final DriveTrain driveTrain = new DriveTrain();
   private final Shooter shooter = new Shooter();
-  private final Intake intake = new Intake();
+  private final BallHandler intake = new BallHandler();
   private final Turret turret = new Turret();
   
   private final Odometry odometry = new Odometry(driveTrain, pigeon, limelight);
