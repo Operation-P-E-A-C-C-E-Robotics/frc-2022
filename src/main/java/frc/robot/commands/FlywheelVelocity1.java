@@ -9,13 +9,12 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
 public class FlywheelVelocity1 extends CommandBase {
-  private Shooter shooter;
+  private final Shooter shooter;
   /** Creates a new ShooterControl. */
   public FlywheelVelocity1(Shooter shooter) {
     this.shooter = shooter;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
-    SmartDashboard.putNumber("shooter velocity", 0);
   }
 
   // Called when the command is initially scheduled.

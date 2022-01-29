@@ -10,15 +10,15 @@ import frc.robot.subsystems.DriveTrain;
 
 public class Odometry {
     private DifferentialDriveKinematics kinematics;
-    private DifferentialDriveOdometry odometry;
-    private Pigeon pigeon;
-    private DriveTrain driveTrain;
-    private Limelight camera;
+    private final DifferentialDriveOdometry odometry;
+    private final Pigeon pigeon;
+    private final DriveTrain driveTrain;
+    // private Limelight camera;
 
     public Odometry (DriveTrain driveTrain, Pigeon pigeon, Limelight camera){
         this.driveTrain = driveTrain;
         this.pigeon = pigeon;
-        this.camera = camera;
+        // this.camera = camera;
 
         odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getHeading()));
     }

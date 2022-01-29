@@ -1,7 +1,7 @@
 package frc.lib;
 
-import edu.wpi.first.networktables.*;
-import frc.robot.Constants;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 /*
  *Simple class for interfacing with the limelight camera.
@@ -102,8 +102,7 @@ public class Limelight {
    * @return boolean. true if the limelight has target.
    */
   public double hasTarget() {
-    double value = limelightTableValue("tv"); //0 or 1
-    return value;
+    return limelightTableValue("tv");
   }
   /**
    * turn the led's on.

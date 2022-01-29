@@ -18,18 +18,31 @@ public final class Constants {
                                 RIGHT_SLAVE_PORT = 1,
                                 LEFT_MASTER_PORT = 2,
                                 LEFT_SLAVE_PORT = 3,
-                                DRIVE_ENCODER_CPR = 0,
+                                DRIVE_ENCODER_CPR = 1, //todo get right number
                                 DRIVE_HIGH_GEAR_RATIO = 0;
     }
 
     public static final class Shooter{
-        public static final int FLYWHEEL_CONTROLLER_PORT = 4,
-                                TURRET_CONTROLLER_PORT = 5;  
+        public static final int FLYWHEEL_CONTROLLER_PORT = 4;
+                                // TURRET_CONTROLLER_PORT = 5;  
         
         public static final double FLYWHEEL_kF = 0.05,
                                     FLYWHEEL_kP = 10,
                                     FLYWHEEL_kI = 0,
                                     FLYWHEEL_kD = 0.01;
+    }
+    
+    public static final class Turret{
+        public static final int TURRET_CONTROLLER_PORT = 10; //TODO CONFIGURE SPARK MAX
+
+        public static final double kFF = 0,
+                                    kP = 0,
+                                    kI = 0,
+                                    kD = 0,
+                                   kIz = 0,
+                                   MAX_OUTPUT = 1,
+                                   MIN_OUTPUT = -1;
+
     }
     
     public static final class Intake{

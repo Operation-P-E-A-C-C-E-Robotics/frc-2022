@@ -1,14 +1,13 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.Limelight;
 import frc.robot.subsystems.DriveTrain;
 
 public class DrivebaseAutoAim extends CommandBase{
-    private DriveTrain driveTrain;
+    private final DriveTrain driveTrain;
 
-    private Limelight limelight;
+    private final Limelight limelight;
 
     
     /** Creates a new ShooterControl. */
@@ -45,7 +44,6 @@ public class DrivebaseAutoAim extends CommandBase{
         double offsetY = limelight.getTargetOffsetX();
         avg += offsetY;
         avg /= 2;
-        SmartDashboard.putNumber("offset", offsetY);
 
         p = avg * kP;
 
@@ -55,9 +53,6 @@ public class DrivebaseAutoAim extends CommandBase{
 
 
         double rot = p + d;
-
-
-        SmartDashboard.putNumber("rot", rot);
 
          driveTrain.percentDrive(-rot, rot);
     
