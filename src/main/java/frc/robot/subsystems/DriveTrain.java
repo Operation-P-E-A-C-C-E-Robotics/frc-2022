@@ -45,8 +45,8 @@ public class DriveTrain extends SubsystemBase {
     // rightMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 30, 35, 2));
     // leftMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 30, 35, 2));
 
-    rightMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 20, 20, 0));
-    leftMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 20, 20, 0));
+    // rightMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 20, 20, 0));
+    // leftMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 20, 20, 0));
 
         //depending on gearboxes, motors could end up fighting. if so, change.
         leftMasterController.setInverted(false);
@@ -54,8 +54,8 @@ public class DriveTrain extends SubsystemBase {
         leftSlaveController.setInverted(InvertType.FollowMaster);
         rightSlaveController.setInverted(InvertType.FollowMaster);
 
-        leftMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 30, 35, 2));
-        rightMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 30, 35, 2));
+        // leftMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 30, 35, 2));
+        // rightMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 30, 35, 2));
 
     }
 
@@ -174,13 +174,13 @@ public class DriveTrain extends SubsystemBase {
      * @return position of left side encoder
      */
     public double lEncoderPosition() {
-        return leftMasterController.getSelectedSensorPosition() / Constants.DriveTrain.DRIVE_ENCODER_CPR / Constants.DriveTrain.DRIVE_HIGH_GEAR_RATIO * wheelDiameter;
+        return leftMasterController.getSelectedSensorPosition();// / Constants.DriveTrain.DRIVE_ENCODER_CPR / Constants.DriveTrain.DRIVE_HIGH_GEAR_RATIO * wheelDiameter;
     }
     /**
      * @return position of right side encoder
      */
     public double rEncoderPosition() {
-        return rightMasterController.getSelectedSensorPosition() / Constants.DriveTrain.DRIVE_ENCODER_CPR / Constants.DriveTrain.DRIVE_HIGH_GEAR_RATIO * wheelDiameter;
+        return rightMasterController.getSelectedSensorPosition();// / Constants.DriveTrain.DRIVE_ENCODER_CPR / Constants.DriveTrain.DRIVE_HIGH_GEAR_RATIO * wheelDiameter;
     }
 
     /**

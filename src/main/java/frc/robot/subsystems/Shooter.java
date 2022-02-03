@@ -10,13 +10,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import static frc.robot.Constants.Shooter.*;
 
 public class Shooter extends SubsystemBase {
-  private final WPI_TalonFX flywheelMasterController = new WPI_TalonFX(FLYWHEEL_CONTROLLER_PORT);
-  private final WPI_TalonFX flywheelSlaveController = new WPI_TalonFX(FLYWHEEL_CONTROLLER_PORT);
+  private final WPI_TalonFX flywheelMasterController = new WPI_TalonFX(FLYWHEEL_MASTER_PORT);
+  private final WPI_TalonFX flywheelSlaveController = new WPI_TalonFX(FLYWHEEL_SLAVE_PORT);
 
   /** Creates a new Shooter. */
   public Shooter() {
@@ -24,11 +25,18 @@ public class Shooter extends SubsystemBase {
 
     //CHANGE IF FIGHTING
     flywheelMasterController.setInverted(false);
-    flywheelSlaveController.setInverted(InvertType.FollowMaster);
+    flywheelSlaveController.setInverted(InvertType.OpposeMaster);
 
     configTalonGains(FLYWHEEL_kF, FLYWHEEL_kP, FLYWHEEL_kI, FLYWHEEL_kD);
 
     flywheelMasterController.setNeutralMode(NeutralMode.Coast);
+    flywheelMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 30, 35, 10));
+
+
+    SmartDashboard.putNumber("shooter kp", FLYWHEEL_kP);
+    SmartDashboard.putNumber("shooter ki", FLYWHEEL_kI);
+    SmartDashboard.putNumber("shooter kd", FLYWHEEL_kD);
+    SmartDashboard.putNumber("shooter kf", FLYWHEEL_kF);
   }
   
   /**
@@ -54,7 +62,7 @@ public class Shooter extends SubsystemBase {
     flywheelMasterController.config_kP(0, kP);
     flywheelMasterController.config_kI(0, kI);
     flywheelMasterController.config_kD(0, kD);
-    flywheelMasterController.configClosedloopRamp(7);
+    flywheelMasterController.configClosedloopRamp(20);
   }
   
   @Override
@@ -64,5 +72,10 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("shooter motor 1 current", flywheelMasterController.getSupplyCurrent());
     SmartDashboard.putNumber("shooter motor 2 current", flywheelSlaveController.getSupplyCurrent());
     SmartDashboard.putNumber("shooter velocity error", flywheelMasterController.getClosedLoopError());
+
+    configTalonGains(SmartDashboard.getNumber("shooter kf", FLYWHEEL_kF),
+              SmartDashboard.getNumber("shooter kp", FLYWHEEL_kP),
+              SmartDashboard.getNumber("shooter ki", FLYWHEEL_kI),
+              SmartDashboard.getNumber("shooter kd", FLYWHEEL_kD));
   }
 }

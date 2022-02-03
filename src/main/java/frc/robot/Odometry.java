@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.Limelight;
 import frc.lib.debloating.Pigeon;
 import frc.robot.subsystems.DriveTrain;
@@ -26,6 +27,9 @@ public class Odometry {
     public void update() {
         pigeon.update(getHeading());
         odometry.update(Rotation2d.fromDegrees(getHeading()), driveTrain.lEncoderPosition(), driveTrain.rEncoderPosition());
+        SmartDashboard.putNumber("robot x", odometry.getPoseMeters().getX());
+        SmartDashboard.putNumber("robot y", odometry.getPoseMeters().getY());
+        SmartDashboard.putNumber("robot dist", driveTrain.getAverageEncoderDistance());
     }
 
     public DifferentialDriveKinematics getKinematics() {

@@ -23,8 +23,8 @@ public class Turret extends SubsystemBase {
     private final DigitalInput zeroSwitch;
 
     private double setpoint = 0;
-    private final double TURRET_RATIO = 0; //todo get ratio
-
+    private final double TURRET_RATIO = (1/20) * (1/11); //todo get ratio
+    private final double MOTOR_ROTS_PER_TURRET_ROT = 242;
 
     /** Creates a new Shooter. */
     public Turret() {
@@ -32,9 +32,10 @@ public class Turret extends SubsystemBase {
         encoder = turretMotor.getEncoder();
         pidController = turretMotor.getPIDController();
         turretMotor.setInverted(false); //TODO i want positive numbers to make clockwise rotation
-        // turretMotor.setSoftLimit(SoftLimitDirection.kForward, 0);
-        // turretMotor.setSoftLimit(SoftLimitDirection.kReverse, 0);
-
+        turretMotor.setSoftLimit(SoftLimitDirection.kForward, (float)(0.25 * MOTOR_ROTS_PER_TURRET_ROT));
+        turretMotor.setSoftLimit(SoftLimitDirection.kReverse, 0);
+        turretMotor.setSmartCurrentLimit(10);
+        pidController.setSmartMotionAllowedClosedLoopError(40.0, 0);
         new GainSetter(pidController)
         .ff(kFF)
         .p(kP)
@@ -51,7 +52,10 @@ public class Turret extends SubsystemBase {
     }
 
     public void turretRotations(double rotations){
-        rotations *= TURRET_RATIO; //convert from motor rotations to turret rotations
+        // if(encoder.getPosition() - rotations < 40) rotations = encoder.getPosition();
+        rotations = rotations < 0.25 ? rotations : 0.25;
+        rotations = rotations > 0 ? rotations : 0;
+        rotations *= MOTOR_ROTS_PER_TURRET_ROT; //convert from motor rotations to turret rotations
         pidController.setReference(rotations, CANSparkMax.ControlType.kPosition);
         setpoint = rotations;
     }
@@ -70,19 +74,23 @@ public class Turret extends SubsystemBase {
     }
 
     public double getPosition(){
-        return encoder.getPosition() / TURRET_RATIO; //should it be / or *??
+        return encoder.getPosition() / MOTOR_ROTS_PER_TURRET_ROT; //should it be / or *??
+    }
+
+    public void zero(){
+        encoder.setPosition(0);
     }
 
     @Override
     public void periodic() {
         SmartDashboard.putNumber("turret current", turretMotor.getOutputCurrent());
         SmartDashboard.putNumber("turret temperature", turretMotor.getMotorTemperature());
-        SmartDashboard.putNumber("turret position", encoder.getPosition());
-        SmartDashboard.putNumber("turret position error", setpoint - encoder.getPosition());
+        SmartDashboard.putNumber("turret position", getPosition());
+        SmartDashboard.putNumber("turret position error", setpoint - getPosition());
 
-        if(zeroSwitch.get()){
-            encoder.setPosition(0);
-        }
+        // if(zeroSwitch.get()){
+        //     encoder.setPosition(0);
+        // }
     }
 
     public static class GainSetter {

@@ -10,6 +10,7 @@ import frc.robot.subsystems.Shooter;
 
 public class FlywheelVelocity1 extends CommandBase {
   private final Shooter shooter;
+  private double veloctiy_default = 12000;
   /** Creates a new ShooterControl. */
   public FlywheelVelocity1(Shooter shooter) {
     this.shooter = shooter;
@@ -19,14 +20,16 @@ public class FlywheelVelocity1 extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    SmartDashboard.putNumber("flywheel velocity 1", veloctiy_default);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     //Replace with PID Control
     // shooter.flywheelVelocity(SmartDashboard.getNumber("shooter velocity", 0));
-    shooter.flywheelVelocity(6000);
+    shooter.flywheelVelocity(SmartDashboard.getNumber("flywheel velocity 1", veloctiy_default));
   }
 
   // Called once the command ends or is interrupted.

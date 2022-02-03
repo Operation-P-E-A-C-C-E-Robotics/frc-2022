@@ -24,8 +24,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   //declare robot components
   //utilities:
-  private final Limelight limelight = new Limelight(0, 0, 0);
-  private final Pigeon pigeon = new Pigeon(new PigeonIMU(0));
+  private final Limelight limelight = new Limelight(63, 36, 30);
+  private final Pigeon pigeon = new Pigeon(new PigeonIMU(7));
   
   // subsystems:
   private final DriveTrain driveTrain = new DriveTrain();
@@ -35,6 +35,7 @@ public class RobotContainer {
   
   private final Odometry odometry = new Odometry(driveTrain, pigeon, limelight);
   
+  private final HoodWIthLinearServo hood = new HoodWIthLinearServo();
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -52,13 +53,15 @@ public class RobotContainer {
   private final ManualIntake runIntake = new ManualIntake(intake, this);
   // private final FlywheelPercent runShooterPercent = new FlywheelPercent(shooter);
   private final FlywheelVelocity1 flywheel1 = new FlywheelVelocity1(shooter);
-  
+  private final TurretTesting turretTesting = new TurretTesting(turret, this);
+  private final LimelightTurret autoAim = new LimelightTurret(turret, limelight);
+
   // OI:
   private final Joystick driverJoystick = new Joystick(0);
   private final Joystick operatorJoystick = new Joystick(1);
   private final JoystickButton flywheelButton = new JoystickButton(operatorJoystick, 6);
   private final JoystickButton aimButton = new JoystickButton(operatorJoystick, 8);
-
+  private final JoystickButton zeroButton = new JoystickButton(operatorJoystick, 10);
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
@@ -69,10 +72,12 @@ public class RobotContainer {
   private void configureButtonBindings() {
     driveTrain.setDefaultCommand(arcadeDrive);
     intake.setDefaultCommand(runIntake);
+    // hood.setDefaultCommand(new ManualHoodControl(hood, this));
     turret.setDefaultCommand(joystickAim);
 
     flywheelButton.whileHeld(flywheel1);
-    aimButton.whileHeld(drivebaseAutoAim);
+    aimButton.whileHeld(autoAim);
+    zeroButton.whenPressed(() -> turret.zero());
   }
 
   //access functions:
