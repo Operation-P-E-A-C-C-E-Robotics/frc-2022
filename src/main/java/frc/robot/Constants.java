@@ -44,6 +44,14 @@ public final class Constants {
                                    MIN_OUTPUT = -1;
 
     }
+
+    public static final class Hood{
+        //TODO these are all wrong
+        public static final double ENCODER_COUNTS_PER_CM = 1,
+                                    FULLY_EXTENDED_COUNTS = 1,
+                                    ATTACHMENT_POINT_RADIUS = 1,
+                                    LOWEST_ANGLE = 1;
+    }
     
     public static final class Intake{
         public static final int INTAKE_CONTROLLER_PORT = 10;
