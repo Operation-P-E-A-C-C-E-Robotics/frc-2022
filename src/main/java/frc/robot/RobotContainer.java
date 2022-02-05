@@ -35,7 +35,7 @@ public class RobotContainer {
   
   private final Odometry odometry = new Odometry(driveTrain, pigeon, limelight);
   
-  private final HoodWIthLinearServo hood = new HoodWIthLinearServo();
+  private final Hood hood = new Hood(this);
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -51,7 +51,7 @@ public class RobotContainer {
   private final DrivebaseAutoAim drivebaseAutoAim = new DrivebaseAutoAim(driveTrain, limelight);
   private final ManualTurret joystickAim = new ManualTurret(turret, this);
   private final ManualIntake runIntake = new ManualIntake(intake, this);
-  // private final FlywheelPercent runShooterPercent = new FlywheelPercent(shooter);
+  //private final FlywheelPercent runShooterPercent = new FlywheelPercent(shooter);
   private final FlywheelVelocity1 flywheel1 = new FlywheelVelocity1(shooter);
   private final TurretTesting turretTesting = new TurretTesting(turret, this);
   private final LimelightTurret autoAim = new LimelightTurret(turret, limelight);
@@ -72,9 +72,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
     driveTrain.setDefaultCommand(arcadeDrive);
     intake.setDefaultCommand(runIntake);
-    // hood.setDefaultCommand(new ManualHoodControl(hood, this));
     turret.setDefaultCommand(joystickAim);
-
+    hood.setDefaultCommand(new ManualHoodAdjust(hood, this));
     flywheelButton.whileHeld(flywheel1);
     aimButton.whileHeld(autoAim);
     zeroButton.whenPressed(() -> turret.zero());

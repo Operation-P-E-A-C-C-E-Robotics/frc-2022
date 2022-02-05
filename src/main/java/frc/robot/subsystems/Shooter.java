@@ -62,7 +62,7 @@ public class Shooter extends SubsystemBase {
     flywheelMasterController.config_kP(0, kP);
     flywheelMasterController.config_kI(0, kI);
     flywheelMasterController.config_kD(0, kD);
-    flywheelMasterController.configClosedloopRamp(20);
+    flywheelMasterController.configClosedloopRamp(0);
   }
   
   @Override

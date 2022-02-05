@@ -31,7 +31,7 @@ public class BallHandler extends SubsystemBase {
   }
 
   public void setPercent(double speed){
-    System.out.println(speed);
+    //System.out.println(speed);
     intakeMotor.set(speed);
   }
   

@@ -130,7 +130,7 @@ public class PathBase extends CommandBase implements Action{
      */
     @Override
     public void start() {
-        System.out.println("starting path");
+        //System.out.println("starting path");
         ramsete = new RamseteCommand(
             trajectory_,
             odometry::getCurrentPose,

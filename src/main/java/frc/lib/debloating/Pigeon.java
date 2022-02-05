@@ -97,7 +97,7 @@ public class Pigeon {
      */
     //super rough approximation...I hope
     public void updateRoughOdometry(short[] xyz, double heading){
-        System.out.println("Pigeon: updating odometry");
+        //System.out.println("Pigeon: updating odometry");
         double currentTime = Timer.getFPGATimestamp();
         double dTime = currentTime - prevTimestamp;
         // pigeon acceleration is scaled to 16384 = 1G
@@ -105,8 +105,8 @@ public class Pigeon {
         double x = (xyz[0]);// / 16384) * 9.80665;
         double y = (xyz[1]);// / 16384) * 9.80665;
         double z = (xyz[2]) / 16384 * 9.80665;
-        System.out.println("Pigeon: x acceleration of " + x);
-        System.out.println("Pigeon: y acceleration of " + y);
+        //System.out.println("Pigeon: x acceleration of " + x);
+        //System.out.println("Pigeon: y acceleration of " + y);
         bumped = Math.abs(x) > bump_acceleration_thresh;
         //get velocity from acceleration
         accelerometerVelocityX += x*dTime;

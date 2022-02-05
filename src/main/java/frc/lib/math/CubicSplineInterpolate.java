@@ -107,7 +107,7 @@ public class CubicSplineInterpolate{
 		double[] interpolatedValues = cubicSplineInterpolate(samplingInstants,sampledValues,interpolatedSamplingInstants);
 		/*Print out the result*/
 		for (int i = 0; i< interpolatedValues.length;++i){
-			System.out.println("si\t"+String.format("%.3f",samplingInstants[i])+"\tKnown\t"+String.format("%.2f",sampledValues[i])+"\tsi\t"+String.format("%.3f",interpolatedSamplingInstants[i])+"\tKnown\t"+String.format("%.2f",knownValues[i])+"\tinterp\t"+String.format("%.2f",interpolatedValues[i]));
+			//System.out.println("si\t"+String.format("%.3f",samplingInstants[i])+"\tKnown\t"+String.format("%.2f",sampledValues[i])+"\tsi\t"+String.format("%.3f",interpolatedSamplingInstants[i])+"\tKnown\t"+String.format("%.2f",knownValues[i])+"\tinterp\t"+String.format("%.2f",interpolatedValues[i]));
 		}
 	}
 }

@@ -39,6 +39,6 @@ public class TestPath extends PathBase {
         );*/
         //set the trajectory
         setTrajectory(getPathweaverTrajectory("output/Unnamed_0.wpilib.json"));
-        System.out.println("trajectory ready");
+        //System.out.println("trajectory ready");
 	}
 }

@@ -5,15 +5,21 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
+import frc.robot.RobotContainer;
 
 
 public class Hood extends SubsystemBase {
-    WPI_TalonSRX hoodMotor = new WPI_TalonSRX(0); //todo port number
-    
+    WPI_TalonSRX hoodMotor = new WPI_TalonSRX(15); //todo port number
+    RobotContainer container;
+
     private final double ENCODER_COUNTS_PER_INCH = 0; //todo get actual
     /** Creates a new Hood. */
-    public Hood() {
+    public Hood(RobotContainer container) {
+        this.container = container;
     }
 
     public void setHoodPercent(double percent){
@@ -21,11 +27,16 @@ public class Hood extends SubsystemBase {
     }
 
     public void setHoodPosition(double position){
-        
+
     }
 
     @Override
     public void periodic() {
-        if(hoodMotor.isRevLimitSwitchClosed() == 1) hoodMotor.setSelectedSensorPosition(0);
+        if(hoodMotor.isRevLimitSwitchClosed() == 1) {
+            hoodMotor.setSelectedSensorPosition(0);
+            //hoodMotor.set(0);
+        }
+        SmartDashboard.putNumber("Hood Encoder", hoodMotor.getSelectedSensorPosition());
+        //setHoodPercent(container.getOperatorJoystick().getY());
     }
 }
