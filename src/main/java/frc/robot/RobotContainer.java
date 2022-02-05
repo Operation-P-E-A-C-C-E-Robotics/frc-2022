@@ -35,8 +35,7 @@ public class RobotContainer {
   
   private final Odometry odometry = new Odometry(driveTrain, pigeon, limelight);
   
-  private final Hood hood = new Hood(this);
-  
+  private final Hood hood = new Hood();
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     //set default commands
