@@ -14,7 +14,7 @@ import frc.lib.math.CubicSplineInterpolate;
 import static frc.robot.Constants.Hood.*;
 
 public class Hood extends SubsystemBase {
-    private final WPI_TalonSRX hoodMotor = new WPI_TalonSRX(0); //todo port number
+    private final WPI_TalonSRX hoodMotor = new WPI_TalonSRX(HOOD_CONTROLLER_PORT); //todo port number
 
     private CubicSplineInterpolate distanceToAngle = new CubicSplineInterpolate();
 
