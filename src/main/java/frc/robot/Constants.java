@@ -54,6 +54,7 @@ public final class Constants {
                                     FULLY_EXTENDED_COUNTS = 1,
                                     ATTACHMENT_POINT_RADIUS = 1,
                                     LOWEST_ANGLE = 1;
+        public static final int     HOOD_CONTROLLER_PORT = 15;
     }
     
     public static final class Intake{
