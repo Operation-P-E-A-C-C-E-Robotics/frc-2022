@@ -4,12 +4,6 @@
 
 package frc.robot.subsystems;
 
-
-import static frc.robot.Constants.DriveTrain.LEFT_MASTER_PORT;
-import static frc.robot.Constants.DriveTrain.LEFT_SLAVE_PORT;
-import static frc.robot.Constants.DriveTrain.RIGHT_MASTER_PORT;
-import static frc.robot.Constants.DriveTrain.RIGHT_SLAVE_PORT;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -21,7 +15,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.DriveSignal;
-import frc.robot.Constants;
+import static frc.robot.Constants.DriveTrain.*;
 
 public class DriveTrain extends SubsystemBase {
     private final WPI_TalonFX leftMasterController = new WPI_TalonFX(LEFT_MASTER_PORT);
@@ -30,7 +24,7 @@ public class DriveTrain extends SubsystemBase {
     private final WPI_TalonFX rightMasterController = new WPI_TalonFX(RIGHT_MASTER_PORT);
     private final DifferentialDrive dDrive = new DifferentialDrive(leftMasterController, rightMasterController);
 
-    private final double wheelDiameter = 0;
+    private final double wheelCircumference = Math.PI * WHEEL_DIAMETER_METERS;
     //shifter stuff
     //   public DoubleSolenoid shiftSolenoid = new DoubleSolenoid(21, PneumaticsModuleType.REVPH, 0,0);
     @SuppressWarnings("FieldMayBeFinal")
@@ -54,8 +48,8 @@ public class DriveTrain extends SubsystemBase {
         leftSlaveController.setInverted(InvertType.FollowMaster);
         rightSlaveController.setInverted(InvertType.FollowMaster);
 
-        // leftMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 30, 35, 2));
-        // rightMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 30, 35, 2));
+        leftMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 30, 35, 2));
+        rightMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 30, 35, 2));
 
     }
 
@@ -132,7 +126,7 @@ public class DriveTrain extends SubsystemBase {
      */
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
         return new DifferentialDriveWheelSpeeds(
-            leftMasterController.getSelectedSensorVelocity(0) / Constants.DriveTrain.DRIVE_ENCODER_CPR / Constants.DriveTrain.DRIVE_HIGH_GEAR_RATIO * wheelDiameter, rightMasterController.getSelectedSensorVelocity(0) / Constants.DriveTrain.DRIVE_ENCODER_CPR / Constants.DriveTrain.DRIVE_HIGH_GEAR_RATIO * wheelDiameter
+            leftMasterController.getSelectedSensorVelocity(0) / DRIVE_ENCODER_CPR / DRIVE_HIGH_GEAR_RATIO * wheelCircumference, rightMasterController.getSelectedSensorVelocity(0) / DRIVE_ENCODER_CPR / DRIVE_HIGH_GEAR_RATIO * wheelCircumference
         );
     }
 
@@ -174,13 +168,13 @@ public class DriveTrain extends SubsystemBase {
      * @return position of left side encoder
      */
     public double lEncoderPosition() {
-        return leftMasterController.getSelectedSensorPosition();// / Constants.DriveTrain.DRIVE_ENCODER_CPR / Constants.DriveTrain.DRIVE_HIGH_GEAR_RATIO * wheelDiameter;
+        return leftMasterController.getSelectedSensorPosition() / DRIVE_ENCODER_CPR / DRIVE_HIGH_GEAR_RATIO * wheelCircumference;
     }
     /**
      * @return position of right side encoder
      */
     public double rEncoderPosition() {
-        return rightMasterController.getSelectedSensorPosition();// / Constants.DriveTrain.DRIVE_ENCODER_CPR / Constants.DriveTrain.DRIVE_HIGH_GEAR_RATIO * wheelDiameter;
+        return rightMasterController.getSelectedSensorPosition() / DRIVE_ENCODER_CPR / DRIVE_HIGH_GEAR_RATIO * wheelCircumference;
     }
 
     /**
@@ -200,6 +194,7 @@ public class DriveTrain extends SubsystemBase {
         SmartDashboard.putNumber("drivetrain r2 temp", rightSlaveController.getTemperature());
         SmartDashboard.putNumber("drivetrain left current", leftMasterController.getSupplyCurrent() + leftSlaveController.getSupplyCurrent());
         SmartDashboard.putNumber("drivetrain right current", rightMasterController.getSupplyCurrent() + rightSlaveController.getSupplyCurrent());
+        dDrive.feed();
     }
 
     public enum Gear {

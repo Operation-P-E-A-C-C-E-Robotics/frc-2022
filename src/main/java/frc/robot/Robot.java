@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.lib.debloating.ColorSensor;
+import frc.robot.commands.auto.paths.PathBase;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -18,7 +19,7 @@ import frc.lib.debloating.ColorSensor;
  * project.
  */
 public class Robot extends TimedRobot {
-  private Command m_autonomousCommand;
+  private PathBase m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
 
@@ -72,7 +73,8 @@ public class Robot extends TimedRobot {
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
+      m_autonomousCommand.init();
+      m_autonomousCommand.start();
     }
   }
 

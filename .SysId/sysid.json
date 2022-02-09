@@ -1,0 +1,11 @@
+{
+  "SysId": {
+    "Analysis Type": "Drivetrain",
+    "AnalyzerJSONLocation": "C:\\Users\\PEACCE\\Desktop\\sysid_data20220208-204338.json",
+    "NetworkTables Settings": {
+      "serverTeam": "3461"
+    },
+    "mode": "Client",
+    "serverTeam": "3461"
+  }
+}

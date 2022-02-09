@@ -8,11 +8,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Hood;
 
-public class ManualHoodAdjust extends CommandBase {
+public class ManualHood extends CommandBase {
   private Hood hood;
   private RobotContainer container;
   /** Creates a new ManualHoodAdjust. */
-  public ManualHoodAdjust(Hood hood, RobotContainer container) {
+  public ManualHood(Hood hood, RobotContainer container) {
     this.hood = hood;
     this.container = container;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -26,7 +26,7 @@ public class ManualHoodAdjust extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    hood.setHoodSpeed(container.getOperatorJoystick().getRawAxis(3) / 3);
+    hood.setHoodSpeed(container.getOperatorJoystick().getRawAxis(1) / 3);
   }
 
   // Called once the command ends or is interrupted.

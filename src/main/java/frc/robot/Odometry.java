@@ -10,7 +10,7 @@ import frc.lib.debloating.Pigeon;
 import frc.robot.subsystems.DriveTrain;
 
 public class Odometry {
-    private DifferentialDriveKinematics kinematics;
+    private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(0.6);
     private final DifferentialDriveOdometry odometry;
     private final Pigeon pigeon;
     private final DriveTrain driveTrain;

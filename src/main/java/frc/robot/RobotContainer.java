@@ -7,7 +7,11 @@ package frc.robot;
 import frc.lib.Limelight;
 import frc.lib.debloating.Pigeon;
 import frc.robot.commands.*;
+import frc.robot.commands.auto.paths.PathBase;
+import frc.robot.commands.auto.paths.TestPath;
 import frc.robot.subsystems.*;
+
+import java.io.IOException;
 
 import com.ctre.phoenix.sensors.PigeonIMU;
 
@@ -47,13 +51,14 @@ public class RobotContainer {
   // commands:
   private final ArcadeDrive arcadeDrive = new ArcadeDrive(driveTrain, this);
   private final Autonomous autonomous = new Autonomous(driveTrain, shooter);
-  private final DrivebaseAutoAim drivebaseAutoAim = new DrivebaseAutoAim(driveTrain, limelight);
+  // private final DrivebaseAutoAim drivebaseAutoAim = new DrivebaseAutoAim(driveTrain, limelight);
   private final ManualTurret joystickAim = new ManualTurret(turret, this);
   private final ManualIntake runIntake = new ManualIntake(intake, this);
   //private final FlywheelPercent runShooterPercent = new FlywheelPercent(shooter);
   private final FlywheelVelocity1 flywheel1 = new FlywheelVelocity1(shooter);
   // private final TurretTesting turretTesting = new TurretTesting(turret, this);
   private final LimelightTurret autoAim = new LimelightTurret(turret, limelight);
+  private final ManualHood manualHood = new ManualHood(hood, this);
 
   // OI:
   private final Joystick driverJoystick = new Joystick(0);
@@ -72,7 +77,7 @@ public class RobotContainer {
     driveTrain.setDefaultCommand(arcadeDrive);
     intake.setDefaultCommand(runIntake);
     turret.setDefaultCommand(joystickAim);
-    hood.setDefaultCommand(new ManualHoodAdjust(hood, this));
+    hood.setDefaultCommand(manualHood);
     flywheelButton.whileHeld(flywheel1);
     aimButton.whileHeld(autoAim);
     zeroButton.whenPressed(() -> turret.zero());
@@ -101,8 +106,13 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
+  public PathBase getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return autonomous; //todo change to command when written
+    try {
+      return new TestPath(driveTrain, odometry);
+    } catch (IOException e) {
+      e.printStackTrace();
+      return null;
+    } //todo change to command when written
   }
 }

@@ -18,8 +18,11 @@ public final class Constants {
                                 RIGHT_SLAVE_PORT = 2,
                                 LEFT_MASTER_PORT = 1,
                                 LEFT_SLAVE_PORT = 0,
-                                DRIVE_ENCODER_CPR = 1, //todo get right number
-                                DRIVE_HIGH_GEAR_RATIO = 0;
+                                DRIVE_ENCODER_CPR = 2048;
+        
+        public static final double DRIVE_HIGH_GEAR_RATIO = 9.1,
+                                    DRIVE_LOW_GEAR_RATIO = 24,
+                                    WHEEL_DIAMETER_METERS = 0.1524; //TODO!!!
     }
 
     public static final class Shooter{
