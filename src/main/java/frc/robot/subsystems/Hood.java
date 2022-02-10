@@ -20,7 +20,7 @@ public class Hood extends SubsystemBase {
 
     /** Creates a new Hood. */
     public Hood() {
-        hoodMotor.setInverted(false); //change so positive = forward
+        hoodMotor.setInverted(true); //change so positive = forward
         configTalonGains(0, 0, 0, 0); //todo change duh
     }
 
