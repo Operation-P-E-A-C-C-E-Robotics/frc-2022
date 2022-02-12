@@ -26,7 +26,7 @@ public class ManualHood extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    hood.setHoodSpeed(container.getOperatorJoystick().getRawAxis(3) / 3);
+    hood.setHoodSpeed(-container.getOperatorJoystick().getRawAxis(3) / 3);
   }
 
   // Called once the command ends or is interrupted.
