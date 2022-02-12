@@ -59,7 +59,7 @@ public final class Constants {
     }
     
     public static final class Intake{
-        public static final int INTAKE_CONTROLLER_PORT = 10;
+        public static final int INTAKE_CONTROLLER_PORT = 11;
         public static final double INTAKE_SPEED = 0.2;
     }
 
