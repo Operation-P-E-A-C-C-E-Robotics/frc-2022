@@ -32,25 +32,20 @@ public class DriveTrain extends SubsystemBase {
 
     /** Creates a new DriveTrain. */
     public DriveTrain() {
-        setNeutralModes(NeutralMode.Coast);
+        setNeutralModes(NeutralMode.Brake);
 
         leftSlaveController.follow(leftMasterController);
+        rightSlaveController.follow(rightMasterController);
 
-    // rightMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 30, 35, 2));
-    // leftMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 30, 35, 2));
-
-    // rightMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 20, 20, 0));
-    // leftMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 20, 20, 0));
 
         //depending on gearboxes, motors could end up fighting. if so, change.
-        leftMasterController.setInverted(false);
-        rightMasterController.setInverted(true);
+        leftMasterController.setInverted(true);
+        rightMasterController.setInverted(false);
         leftSlaveController.setInverted(InvertType.FollowMaster);
         rightSlaveController.setInverted(InvertType.FollowMaster);
 
-        leftMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 30, 35, 2));
-        rightMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 30, 35, 2));
-
+        leftMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 35, 35, 10));
+        rightMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 35, 35, 10));
     }
 
     /**
@@ -84,6 +79,8 @@ public class DriveTrain extends SubsystemBase {
      * @param lSpeed left side power percentage
      */
     public void percentDrive(double rSpeed, double lSpeed) {
+        SmartDashboard.putNumber("left speed", lSpeed);
+        SmartDashboard.putNumber("right speed", rSpeed);
         leftMasterController.set(ControlMode.PercentOutput, lSpeed);
         rightMasterController.set(ControlMode.PercentOutput, rSpeed);
         dDrive.feed(); //keep the wpilib arcade drive that we need for auto from freaking out

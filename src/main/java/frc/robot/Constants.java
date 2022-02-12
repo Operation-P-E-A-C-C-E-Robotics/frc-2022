@@ -14,10 +14,10 @@ package frc.robot;
  */
 public final class Constants {
     public static final class DriveTrain{
-        public static final int RIGHT_MASTER_PORT = 3,
-                                RIGHT_SLAVE_PORT = 2,
-                                LEFT_MASTER_PORT = 1,
-                                LEFT_SLAVE_PORT = 0,
+        public static final int RIGHT_MASTER_PORT = 0,
+                                RIGHT_SLAVE_PORT = 1,
+                                LEFT_MASTER_PORT = 2,
+                                LEFT_SLAVE_PORT = 3,
                                 DRIVE_ENCODER_CPR = 2048;
         
         public static final double DRIVE_HIGH_GEAR_RATIO = 9.1,
@@ -49,11 +49,12 @@ public final class Constants {
     }
 
     public static final class Hood{
+        //39 degrees max
         //TODO these are all wrong
-        public static final double ENCODER_COUNTS_PER_CM = 1,
-                                    FULLY_EXTENDED_COUNTS = 1,
-                                    ATTACHMENT_POINT_RADIUS = 1,
-                                    LOWEST_ANGLE = 1;
+        public static final double ENCODER_COUNTS_PER_CM = 2.5/100,
+                                    FULLY_EXTENDED_COUNTS = 267,
+                                    ATTACHMENT_POINT_RADIUS = 18,
+                                    LOWEST_ANGLE = 18;
         public static final int     HOOD_CONTROLLER_PORT = 15;
     }
     

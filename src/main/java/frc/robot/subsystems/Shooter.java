@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.math.CubicSplineInterpolate;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
@@ -19,8 +20,17 @@ public class Shooter extends SubsystemBase {
   private final WPI_TalonFX flywheelMasterController = new WPI_TalonFX(FLYWHEEL_MASTER_PORT);
   private final WPI_TalonFX flywheelSlaveController = new WPI_TalonFX(FLYWHEEL_SLAVE_PORT);
 
+  private CubicSplineInterpolate distanceToVelocity = new CubicSplineInterpolate();
+
+  double shooterSetpoint = 0;
+
   /** Creates a new Shooter. */
   public Shooter() {
+    double[] distances = {2,3};
+    double[] velocities = {1000,2000};
+
+    distanceToVelocity.setSamples(distances, velocities);
+
     flywheelSlaveController.follow(flywheelMasterController);
 
     //CHANGE IF FIGHTING
@@ -52,6 +62,19 @@ public class Shooter extends SubsystemBase {
    */
   public void flywheelVelocity(double velocity){
     flywheelMasterController.set(ControlMode.Velocity, velocity);
+    shooterSetpoint = velocity;
+  }
+
+  public void setVelcityForDistance(double distanceMeters){
+    try{
+      flywheelVelocity(distanceToVelocity.cubicSplineInterpolate(distanceMeters));
+    } catch (ArrayIndexOutOfBoundsException e){
+      flywheelPercent(0);
+    }
+  }
+
+  public boolean ready(){
+    return (shooterSetpoint - flywheelMasterController.getSelectedSensorVelocity()) < 10;
   }
   
   /**
@@ -72,6 +95,8 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("shooter motor 1 current", flywheelMasterController.getSupplyCurrent());
     SmartDashboard.putNumber("shooter motor 2 current", flywheelSlaveController.getSupplyCurrent());
     SmartDashboard.putNumber("shooter velocity error", flywheelMasterController.getClosedLoopError());
+
+    SmartDashboard.putBoolean("shooter ready", ready());
 
     configTalonGains(SmartDashboard.getNumber("shooter kf", FLYWHEEL_kF),
               SmartDashboard.getNumber("shooter kp", FLYWHEEL_kP),

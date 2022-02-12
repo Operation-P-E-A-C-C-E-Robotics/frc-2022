@@ -33,7 +33,7 @@ public class ArcadeDrive extends CommandBase {
     Joystick driverJoystick = container.getDriverJoystick();
     double x = driverJoystick.getX();
     double y = driverJoystick.getY();
-    driveTrain.percentDrive(-y + x, -y - x);
+    driveTrain.percentDrive(-y - x, -y + x);
   }
 
   // Called once the command ends or is interrupted.

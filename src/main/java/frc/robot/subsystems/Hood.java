@@ -18,10 +18,15 @@ public class Hood extends SubsystemBase {
 
     private CubicSplineInterpolate distanceToAngle = new CubicSplineInterpolate();
 
+    double setpoint = 0;
+
     /** Creates a new Hood. */
     public Hood() {
+        double[] distances = {1, 5};
+        double[] angles = {28, 38};
+        distanceToAngle.setSamples(distances, angles);
         hoodMotor.setInverted(true); //change so positive = forward
-        configTalonGains(0, 0, 0, 0); //todo change duh
+        configTalonGains(0, 100, 0, 10); //todo change duh
     }
 
     /**
@@ -32,12 +37,17 @@ public class Hood extends SubsystemBase {
         hoodMotor.set(percent);
     }
 
+    public boolean ready(){
+        return (setpoint - hoodMotor.getSelectedSensorVelocity()) < 3;
+      }
+
     /**
      * set the hood position as a percentage of position
      * @param percent where to move to (0 to 1)
      */
     public void setHoodPosition(double percent){
-        double counts = percent * FULLY_EXTENDED_COUNTS;
+        double counts = percent;
+        setpoint = percent;
         setMotorPosition(counts);
     }
 
@@ -55,14 +65,23 @@ public class Hood extends SubsystemBase {
      * @param angle
      */
     public void setHoodAngle(Rotation2d angle){
+        SmartDashboard.putNumber("hood angle setpoint", angle.getDegrees());
         double degreesFromZero = angle.getDegrees() - LOWEST_ANGLE;
         double rotations = degreesFromZero / 360;
         double cm = rotations * (2 * Math.PI * ATTACHMENT_POINT_RADIUS);
         setHoodExtension(cm);
     }
 
+    public void setHoodForDistance(double distanceMeters){
+        try{
+            setHoodAngle(Rotation2d.fromDegrees(distanceToAngle.cubicSplineInterpolate(distanceMeters)));
+        } catch (ArrayIndexOutOfBoundsException e) {
+            zero();
+        }
+    }
+
     public void zero(){
-        setHoodSpeed(-0.1); //limit switch should stop, zero when hits
+        setHoodSpeed(-0.5); //limit switch should stop, zero when hits
     }
 
     public void configTalonGains(double kF, double kP, double kI, double kD){
@@ -72,18 +91,19 @@ public class Hood extends SubsystemBase {
         hoodMotor.config_kD(0, kD);
     }
 
-    private void setMotorPosition(double counts){
+    public void setMotorPosition(double counts){
         counts = counts > FULLY_EXTENDED_COUNTS ? FULLY_EXTENDED_COUNTS : counts;
         counts = counts < 0 ? 0 : counts;
-        hoodMotor.set(ControlMode.Position, counts);
+        if(counts == 0) zero();
+        else hoodMotor.set(ControlMode.Position, counts);
     }
 
     private double countsToCM(double counts){
-        return counts / ENCODER_COUNTS_PER_CM;
+        return counts * ENCODER_COUNTS_PER_CM;
     }
 
     private double cmToCounts(double cm){
-        return cm * ENCODER_COUNTS_PER_CM;
+        return cm / ENCODER_COUNTS_PER_CM;
     }
 
     @Override
@@ -93,6 +113,8 @@ public class Hood extends SubsystemBase {
             //hoodMotor.set(0);
         }
         SmartDashboard.putNumber("Hood Encoder", hoodMotor.getSelectedSensorPosition());
+        SmartDashboard.putBoolean("hood ready", ready());
         //setHoodPercent(container.getOperatorJoystick().getY());
+        // SmartDashboard.putNumber("dist to target", limelight.)
     }
 }

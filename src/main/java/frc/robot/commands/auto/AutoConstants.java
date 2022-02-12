@@ -2,8 +2,8 @@ package frc.robot.commands.auto;
 
 public class AutoConstants {
     public static double auto_maxspeed       = 2,
-                        auto_maxacceleration = 2,
-                        auto_maxvoltage      = 9,
+                        auto_maxacceleration = 4,
+                        auto_maxvoltage      = 11,
                         ramsete_b            = 2.0,
                         ramsete_zeta         = 0.7,
                         odo_kS               = 1.1639,

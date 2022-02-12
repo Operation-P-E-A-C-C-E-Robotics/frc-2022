@@ -30,6 +30,7 @@ public class Odometry {
         SmartDashboard.putNumber("robot x", odometry.getPoseMeters().getX());
         SmartDashboard.putNumber("robot y", odometry.getPoseMeters().getY());
         SmartDashboard.putNumber("robot dist", driveTrain.getAverageEncoderDistance());
+        SmartDashboard.putNumber("headin", odometry.getPoseMeters().getRotation().getDegrees());
     }
 
     public DifferentialDriveKinematics getKinematics() {
@@ -86,6 +87,6 @@ public class Odometry {
      * @return the heading in degrees
      */
     public double getHeading(){
-        return pigeon.getHeading();
+        return -pigeon.getHeading();
     }
 }

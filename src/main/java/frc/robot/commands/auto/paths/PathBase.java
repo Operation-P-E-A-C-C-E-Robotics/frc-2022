@@ -61,7 +61,6 @@ public class PathBase extends CommandBase implements Action{
         return this;
     }
     public void init(){
-        odometry.zeroHeading();
         odometry.resetOdometry(new Pose2d(new Translation2d(0,0), new Rotation2d(0)));
     }
 
@@ -113,7 +112,7 @@ public class PathBase extends CommandBase implements Action{
 
     @Override
     public boolean isFinished() {
-        return !finished;
+        return ramsete.isFinished();
     }
 
     @Override
@@ -130,6 +129,7 @@ public class PathBase extends CommandBase implements Action{
      */
     @Override
     public void start() {
+        // odometry.zeroHeading();
         //System.out.println("starting path");
         ramsete = new RamseteCommand(
             trajectory_,
@@ -147,6 +147,5 @@ public class PathBase extends CommandBase implements Action{
             driveTrain::voltageDrive, driveTrain
         );
         CommandScheduler.getInstance().schedule(ramsete.andThen(() -> driveTrain.voltageDrive(0,0)));
-        finished = true;
     }
 }

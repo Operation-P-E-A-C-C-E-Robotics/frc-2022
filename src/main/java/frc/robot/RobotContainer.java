@@ -15,6 +15,8 @@ import java.io.IOException;
 
 import com.ctre.phoenix.sensors.PigeonIMU;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -28,7 +30,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   //declare robot components
   //utilities:
-  private final Limelight limelight = new Limelight(63, 36, 30);
+  private final Limelight limelight = new Limelight(1.6, 0.9, 30);
   private final Pigeon pigeon = new Pigeon(new PigeonIMU(7));
   
   // subsystems:
@@ -65,7 +67,7 @@ public class RobotContainer {
   private final Joystick operatorJoystick = new Joystick(1);
   private final JoystickButton flywheelButton = new JoystickButton(operatorJoystick, 6);
   private final JoystickButton aimButton = new JoystickButton(operatorJoystick, 8);
-  private final JoystickButton zeroButton = new JoystickButton(operatorJoystick, 10);
+  private final JoystickButton zeroButton = new JoystickButton(operatorJoystick, 1);
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
@@ -80,7 +82,8 @@ public class RobotContainer {
     hood.setDefaultCommand(manualHood);
     flywheelButton.whileHeld(flywheel1);
     aimButton.whileHeld(autoAim);
-    zeroButton.whenPressed(() -> turret.zero());
+    zeroButton.whenPressed(() -> odometry.resetOdometry(new Pose2d(0,0, new Rotation2d(0))));
+    new JoystickButton(operatorJoystick, 3).whileHeld(new HoodTesting(hood, limelight, this));
   }
 
   //access functions:
