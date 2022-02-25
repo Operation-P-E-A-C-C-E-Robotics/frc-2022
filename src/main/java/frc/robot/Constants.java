@@ -26,8 +26,8 @@ public final class Constants {
     }
 
     public static final class Shooter{
-        public static final int FLYWHEEL_MASTER_PORT = 4,
-                                FLYWHEEL_SLAVE_PORT = 5;  
+        public static final int FLYWHEEL_MASTER_PORT = 5,
+                                FLYWHEEL_SLAVE_PORT = 4;  
         
         public static final double FLYWHEEL_kF = 0.07,
                                     FLYWHEEL_kP = 0.6,
@@ -64,7 +64,8 @@ public final class Constants {
     }
 
     public static final class Traversal{
-        public static final int TRAVERSAL_CONTROLLER_PORT = 7;
+        public static final int TRAVERSAL_CONTROLLER_PORT = 7,
+                                TRIGGER_CONTROLLER_PORT = 8;
     }
 
 }

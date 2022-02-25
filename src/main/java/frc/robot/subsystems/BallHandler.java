@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -13,40 +15,87 @@ import frc.lib.debloating.ColorSensor;
 import frc.lib.debloating.Ball.Direction;
 
 import static frc.robot.Constants.Intake.*;
+import static frc.robot.Constants.Traversal.*;
 
 public class BallHandler extends SubsystemBase {
   private final WPI_TalonSRX intakeMotor = new WPI_TalonSRX(INTAKE_CONTROLLER_PORT);
-  private final WPI_TalonSRX triggerMotor = new WPI_TalonSRX(0); //todo do port number in constants
+  private final WPI_TalonSRX traversalMotor = new WPI_TalonSRX(TRAVERSAL_CONTROLLER_PORT);
+  private final WPI_TalonSRX triggerMotor = new WPI_TalonSRX(TRIGGER_CONTROLLER_PORT); //todo do port number in constants
   //TODO this wont work for now because need to add multiple color sensors support
   private final ColorSensor traversalBallSensor = new ColorSensor(); 
   private final ColorSensor triggerBallSensor = new ColorSensor();
-  private final Ball ball1 = new Ball();
-  private final Ball ball2 = new Ball();
   
-  boolean lastTraversalDirection = false; //todo false should be backwards, true forwards. make work like dat
-  boolean wasBallAtTraversalPosition = false;
 
   /** Creates a new Intake. */
   public BallHandler() {
+    setMotorConstants(intakeMotor, 0, 0, 0);
+    setMotorConstants(traversalMotor, 0, 0, 0);
+    setMotorConstants(triggerMotor, 0, 0, 0);
   }
 
-  public void setPercent(double speed){
+  private void setMotorConstants(WPI_TalonSRX m, double kp, double ki, double kd){
+    m.config_kP(0, kp);
+    m.config_kI(0, ki);
+    m.config_kD(0, kd);
+  }
+
+  public void setIntake(double speed){
     //System.out.println(speed);
     intakeMotor.set(speed);
+  }
+
+  public void setTraversal(double speed){
+    traversalMotor.set(speed);
+  }
+
+  public void setTrigger(double speed){
+    triggerMotor.set(speed);
+  }
+
+  public void setAll(double speed){
+    setIntake(speed * 1);
+    setTraversal(speed * 0.5);
+    setTrigger(speed * 0.2);
+  }
+  
+  public void setIntakePosition(double position){
+    intakeMotor.set(ControlMode.Position, position);
+  }
+
+  public void setTraversalPosition(double position){
+    traversalMotor.set(ControlMode.Position, position);
+  }
+
+  public void setTriggerPosition(double position){
+    triggerMotor.set(ControlMode.Position, position);
+  }
+
+  public boolean ballInTraversal(){
+    return traversalBallSensor.objPresent();
+  }
+
+  public boolean ballInTrigger(){
+    return triggerBallSensor.objPresent();
+  }
+
+  public boolean getTraversalBallColor(){
+    return traversalBallSensor.isRedNotBlue();
+  }
+
+  public boolean getTriggerBallColor(){
+    return triggerBallSensor.isRedNotBlue();
   }
   
   @Override
   public void periodic() {
     SmartDashboard.putNumber("intake current", intakeMotor.getSupplyCurrent());
-    
-    if(intakeMotor.getMotorOutputPercent() > 0 || triggerMotor.getMotorOutputPercent() > 0) {
-      ball1.setMotion(Direction.UPWARDS);
-      ball2.setMotion(Direction.UPWARDS);
-    } else if(intakeMotor.getMotorOutputPercent() < 0 || triggerMotor.getMotorOutputPercent() < 0) {
-      ball1.setMotion(Direction.DOWNWARDS);
-      ball2.setMotion(Direction.DOWNWARDS);
-    }
-    ball1.update(traversalBallSensor, triggerBallSensor, ball2);
-    ball2.update(traversalBallSensor, triggerBallSensor, ball1);
+  }
+
+  public double getIntakePosition() {
+    return intakeMotor.getSelectedSensorPosition();
+  }
+
+  public double getTraversalPosition() {
+    return traversalMotor.getSelectedSensorPosition();
   }
 }
