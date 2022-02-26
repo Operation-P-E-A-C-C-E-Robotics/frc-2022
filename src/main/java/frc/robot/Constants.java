@@ -60,7 +60,7 @@ public final class Constants {
     
     public static final class Intake{
         public static final int INTAKE_CONTROLLER_PORT = 11;
-        public static final double INTAKE_SPEED = 0.2;
+        public static final double INTAKE_SPEED = 0.5;
     }
 
     public static final class Traversal{

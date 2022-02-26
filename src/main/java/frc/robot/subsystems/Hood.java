@@ -22,8 +22,8 @@ public class Hood extends SubsystemBase {
 
     /** Creates a new Hood. */
     public Hood() {
-        double[] distances = {1, 5};
-        double[] angles = {28, 38};
+        double[] distances = {0, 9};
+        double[] angles = {0, 40};
         distanceToAngle.setSamples(distances, angles);
         hoodMotor.setInverted(true); //change so positive = forward
         configTalonGains(0, 100, 0, 10); //todo change duh
@@ -38,7 +38,7 @@ public class Hood extends SubsystemBase {
     }
 
     public boolean ready(){
-        return (setpoint - hoodMotor.getSelectedSensorVelocity()) < 3;
+        return (hoodMotor.getClosedLoopError()) < 3;
       }
 
     /**
@@ -112,7 +112,7 @@ public class Hood extends SubsystemBase {
             hoodMotor.setSelectedSensorPosition(0);
             //hoodMotor.set(0);
         }
-        SmartDashboard.putNumber("Hood Encoder", hoodMotor.getSelectedSensorPosition());
+        SmartDashboard.putNumber("Hood sepoint", hoodMotor.getClosedLoopError());
         SmartDashboard.putBoolean("hood ready", ready());
         //setHoodPercent(container.getOperatorJoystick().getY());
         // SmartDashboard.putNumber("dist to target", limelight.)

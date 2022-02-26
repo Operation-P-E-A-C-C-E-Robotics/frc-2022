@@ -46,7 +46,7 @@ public class HoodTesting extends CommandBase {
     //     SmartDashboard.getNumber("hood kd", 0)
     // );
     // hood.setHoodAngle(Rotation2d.fromDegrees(SmartDashboard.getNumber("hood setpoint", 0)));
-    hood.setHoodForDistance(limelight.getTargetDistance());
+    hood.setHoodAngle(Rotation2d.fromDegrees(SmartDashboard.getNumber("hood setpoint", 0)));
     SmartDashboard.putNumber("dist to target", limelight.getTargetDistance());
   }
 

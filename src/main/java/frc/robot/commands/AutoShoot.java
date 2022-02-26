@@ -60,7 +60,11 @@ public class AutoShoot extends CommandBase {
 
       shooter.setVelcityForDistance(limelight.getTargetDistance());
 
-      
+      if(hood.ready() && turret.ready() && shooter.ready()){
+        SmartDashboard.putBoolean("run trigger", true);
+      } else{
+        SmartDashboard.putBoolean("run trigger", false);
+      }
 
       SmartDashboard.putNumber("dist to target", limelight.getTargetDistance());
     } else{
@@ -76,6 +80,8 @@ public class AutoShoot extends CommandBase {
     limelight.setModeDrive();
     limelight.setLedOff();
     turret.turretPercent(0.0);
+    hood.zero();
+    shooter.flywheelPercent(0);
   }
 
   // Returns true when the command should end.

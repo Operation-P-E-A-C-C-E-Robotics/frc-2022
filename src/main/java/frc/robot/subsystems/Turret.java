@@ -81,6 +81,10 @@ public class Turret extends SubsystemBase {
         encoder.setPosition(0);
     }
 
+    public boolean ready(){
+        return (Math.abs(setpoint) - Math.abs(encoder.getPosition())) < 3;
+    }
+
     @Override
     public void periodic() {
         SmartDashboard.putNumber("turret current", turretMotor.getOutputCurrent());
@@ -88,6 +92,7 @@ public class Turret extends SubsystemBase {
         SmartDashboard.putNumber("turret position", getPosition());
         SmartDashboard.putNumber("turret position error", setpoint - getPosition());
 
+        SmartDashboard.putBoolean("turret ready", ready());
         // if(zeroSwitch.get()){
         //     encoder.setPosition(0);
         // }

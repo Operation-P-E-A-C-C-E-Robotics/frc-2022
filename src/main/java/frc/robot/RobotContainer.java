@@ -30,7 +30,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   //declare robot components
   //utilities:
-  private final Limelight limelight = new Limelight(1.6, 0.9, 30);
+  private final Limelight limelight = new Limelight(2.62, 0.9, 30);
   private final Pigeon pigeon = new Pigeon(new PigeonIMU(7));
   
   // subsystems:
@@ -80,7 +80,9 @@ public class RobotContainer {
     intake.setDefaultCommand(runIntake);
     turret.setDefaultCommand(joystickAim);
     hood.setDefaultCommand(manualHood);
-    flywheelButton.whileHeld(flywheel1);
+  
+    flywheelButton.whileHeld(new AutoShoot(turret, hood, shooter, limelight));
+    aimButton.whileHeld(flywheel1);
     aimButton.whileHeld(autoAim);
     zeroButton.whenPressed(() -> odometry.resetOdometry(new Pose2d(0,0, new Rotation2d(0))));
     new JoystickButton(operatorJoystick, 3).whileHeld(new HoodTesting(hood, limelight, this));

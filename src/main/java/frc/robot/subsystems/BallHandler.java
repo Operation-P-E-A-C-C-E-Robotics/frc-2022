@@ -8,6 +8,12 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.PneumaticsControlModule;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.debloating.Ball;
@@ -25,6 +31,8 @@ public class BallHandler extends SubsystemBase {
   private final ColorSensor traversalBallSensor = new ColorSensor(); 
   private final ColorSensor triggerBallSensor = new ColorSensor();
   
+  //Arm Pnuematics
+  private final DoubleSolenoid arms = new DoubleSolenoid(1, PneumaticsModuleType.REVPH, 2, 3);
 
   /** Creates a new Intake. */
   public BallHandler() {
@@ -72,6 +80,15 @@ public class BallHandler extends SubsystemBase {
 
   public boolean ballInTraversal(){
     return traversalBallSensor.objPresent();
+  }
+
+
+  public void armsUp() {
+    arms.set(Value.kForward);
+  }
+
+  public void armsDown() {
+    arms.set(Value.kReverse);
   }
 
   public boolean ballInTrigger(){

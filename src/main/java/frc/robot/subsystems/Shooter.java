@@ -26,8 +26,10 @@ public class Shooter extends SubsystemBase {
 
   /** Creates a new Shooter. */
   public Shooter() {
-    double[] distances = {2,3};
-    double[] velocities = {1000,2000};
+    //furthest distance: 12,000; 39
+    double[] distances = {0,9};
+    //
+    double[] velocities = {0,11000};
 
     distanceToVelocity.setSamples(distances, velocities);
 
@@ -40,7 +42,7 @@ public class Shooter extends SubsystemBase {
     configTalonGains(FLYWHEEL_kF, FLYWHEEL_kP, FLYWHEEL_kI, FLYWHEEL_kD);
 
     flywheelMasterController.setNeutralMode(NeutralMode.Coast);
-    flywheelMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 30, 35, 10));
+    // flywheelMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 40, 40, 10));
 
 
     SmartDashboard.putNumber("shooter kp", FLYWHEEL_kP);
@@ -74,7 +76,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean ready(){
-    return (shooterSetpoint - flywheelMasterController.getSelectedSensorVelocity()) < 10;
+    return (Math.abs(shooterSetpoint) - Math.abs(flywheelMasterController.getSelectedSensorVelocity())) < 500;
   }
   
   /**
@@ -85,7 +87,7 @@ public class Shooter extends SubsystemBase {
     flywheelMasterController.config_kP(0, kP);
     flywheelMasterController.config_kI(0, kI);
     flywheelMasterController.config_kD(0, kD);
-    flywheelMasterController.configClosedloopRamp(0);
+    flywheelMasterController.configClosedloopRamp(2);
   }
   
   @Override

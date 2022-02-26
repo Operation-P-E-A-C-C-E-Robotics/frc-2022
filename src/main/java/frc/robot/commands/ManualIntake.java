@@ -58,6 +58,14 @@ public class ManualIntake extends CommandBase {
     }
 
 
+   if (container.getOperatorJoystick().getRawButton(10) == true) {
+      intake.armsUp();
+    }
+
+    if (container.getOperatorJoystick().getRawButton(9) == true) {
+      intake.armsDown();
+    }
+    
   }
 
   // Called once the command ends or is interrupted.
