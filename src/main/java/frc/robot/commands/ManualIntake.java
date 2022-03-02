@@ -52,7 +52,7 @@ public class ManualIntake extends CommandBase {
 
 
     if (container.getOperatorJoystick().getRawButton(7) == true) {
-      intake.setTrigger(-1);
+      intake.setTrigger(1);
     } else {
       intake.setTrigger(0);
     }

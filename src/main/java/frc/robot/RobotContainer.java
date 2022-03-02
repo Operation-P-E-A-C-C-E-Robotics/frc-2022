@@ -18,6 +18,7 @@ import com.ctre.phoenix.sensors.PigeonIMU;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -32,7 +33,7 @@ public class RobotContainer {
   //utilities:
   private final Limelight limelight = new Limelight(2.62, 0.9, 30);
   private final Pigeon pigeon = new Pigeon(new PigeonIMU(7));
-  
+  private final PneumaticHub pneumaticHub = new PneumaticHub();
   // subsystems:
   private final DriveTrain driveTrain = new DriveTrain();
   private final Shooter shooter = new Shooter();
@@ -97,6 +98,10 @@ public class RobotContainer {
    */
   public Joystick getOperatorJoystick(){
     return operatorJoystick;
+  }
+
+  public PneumaticHub gPneumaticHub(){
+    return pneumaticHub;
   }
   
   /**

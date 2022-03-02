@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.BallHandler;
@@ -18,9 +19,14 @@ public class IndexBalls extends CommandBase {
   boolean ballInTraversal = false, 
           ballInTrigger = false,
           ballInTraversalCorrectColor = true,
-          ballInTriggerCorrectColor = true;
+          ballInTriggerCorrectColor = true,
+          ballInTriggerCentered = false,
+          ballReachedFloor = false;
+  
+  double ejectingTime = 0;
 
-  State state = State.NOT_RUNNING;
+  // State state = State.NOT_RUNNING;
+  boolean ejectingBall = false;
 
   double counts_at_traversal = 0;
   /** Creates a new ShooterControl. */
@@ -43,14 +49,58 @@ public class IndexBalls extends CommandBase {
     ballInTrigger = ballHandler.ballInTrigger();
     ballInTraversalCorrectColor = ballHandler.getTraversalBallColor() == allianceIsRed;
     ballInTriggerCorrectColor = ballHandler.getTriggerBallColor() == allianceIsRed;
+    
+    if(ejectingBall) ejectingBall = (Timer.getFPGATimestamp() - ejectingTime) > 3;
+    
+    if(ejectingBall){
+      ballHandler.armsUp();
+      ballHandler.setTraversal(-1);
+      ballHandler.setIntake(-0.5);
+    } else {
+      ballHandler.armsDown();
 
-    if(state == State.FLOOR_TO_TRAVERSAL){
-      ballHandler.setIntake(1);
-      ballHandler.setTraversal(0.25);
+      if(ballInTraversal && !ballInTraversalCorrectColor) {
+        ejectingBall = true;
+        ejectingTime = Timer.getFPGATimestamp();
+      }
+
+      ballHandler.setTraversal(0.2);
+      ballHandler.setIntake(0.5);
+      
+      if(ballInTrigger) ballHandler.setTrigger(0);
+      else ballHandler.setTrigger(0.2);
     }
 
-    if(state == State.TRAVERSAL_TO_TRIGGER){
-    }
+    // switch (state){
+    //   case FLOOR_TO_TRAVERSAL:
+    //     if(ballInTraversal){
+    //       if(ballInTraversalCorrectColor){
+    //         if(!ballInTrigger) state = State.TRAVERSAL_TO_TRIGGER;
+    //         else state = State.FULL;
+    //       } else state = State.TRAVERSAL_TO_FLOOR;
+    //     }
+    //   case CENTER_IN_TRIGGER:
+    //     if(ballInTriggerCentered) state = State.NOT_RUNNING;
+    //     break;
+    //   case FULL:
+    //     if (!ballInTrigger) state = State.TRAVERSAL_TO_TRIGGER;
+    //     if (!ballInTraversal) state = State.FLOOR_TO_TRAVERSAL;
+    //     break;
+    //   case NOT_RUNNING:
+    //     if (!ballInTrigger) state = State.TRAVERSAL_TO_TRIGGER;
+    //     if (!ballInTraversal) state = State.FLOOR_TO_TRAVERSAL;
+    //     break;
+    //   case TRAVERSAL_TO_FLOOR:
+    //     if (ballReachedFloor) state = State.NOT_RUNNING;
+    //     break;
+    //   case TRAVERSAL_TO_TRIGGER:
+    //     if (ballInTrigger) 
+    //     break;
+    //   default:
+    //     break;
+    // }
+
+
   }
 
   // Called once the command ends or is interrupted.

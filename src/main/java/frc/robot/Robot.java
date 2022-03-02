@@ -59,6 +59,7 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putNumber("color sensor dist value", testSensor.ir());
     // SmartDashboard.putBoolean("object present", testSensor.objPresent());
     // SmartDashboard.putBoolean("is red", testSensor.isRedNotBlue());
+    m_robotContainer.gPneumaticHub().enableCompressorAnalog(60, 100);
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
