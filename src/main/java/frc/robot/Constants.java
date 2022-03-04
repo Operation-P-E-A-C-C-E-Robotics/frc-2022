@@ -36,7 +36,7 @@ public final class Constants {
     }
     
     public static final class Turret{
-        public static final int TURRET_CONTROLLER_PORT = 10; //TODO CONFIGURE SPARK MAX
+        public static final int TURRET_CONTROLLER_PORT = 10;
 
         public static final double kFF = 0,
                                     kP = 0.1,
