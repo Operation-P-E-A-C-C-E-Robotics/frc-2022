@@ -68,4 +68,9 @@ public final class Constants {
                                 TRIGGER_CONTROLLER_PORT = 8;
     }
 
+    public static final class Climber{
+        public static final int CLIMBER_TOP_CONTROLLER_PORT = 16,
+                                CLIMBER_BOTTOM_CONTROLLER_PORT = 17;
+    }
+
 }
