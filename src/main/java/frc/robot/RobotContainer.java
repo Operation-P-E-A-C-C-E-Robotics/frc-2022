@@ -83,8 +83,7 @@ public class RobotContainer {
     hood.setDefaultCommand(manualHood);
   
     flywheelButton.whileHeld(new AutoShoot(turret, hood, shooter, limelight));
-    aimButton.whileHeld(flywheel1);
-    aimButton.whileHeld(autoAim);
+    aimButton.whileHeld(new ManualTrigger(intake));
     zeroButton.whenPressed(() -> odometry.resetOdometry(new Pose2d(0,0, new Rotation2d(0))));
     new JoystickButton(operatorJoystick, 3).whileHeld(new HoodTesting(hood, limelight, this));
   }

@@ -10,52 +10,34 @@ import frc.robot.Constants.Traversal;
 import frc.robot.subsystems.BallHandler;
 import static frc.robot.Constants.Intake.*;
 
-public class ManualIntake extends CommandBase {
+public class ManualTrigger extends CommandBase {
   private final BallHandler intake;
-  private final RobotContainer container;
   /** Creates a new ShooterControl. */
-  public ManualIntake(BallHandler intake, RobotContainer container) {
+  public ManualTrigger(BallHandler intake) {
     this.intake = intake;
-    this.container = container;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intake);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+      intake.setTraversal(0.15);
+      intake.setTrigger(1);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    int pov = container.getOperatorJoystick().getPOV();
-    //System.out.println(pov);
-    if (pov == 180) {
-      //intake
-      //intake.armsDown();
-      intake.setIntake(0.5);
-      intake.setTraversal(0.5);
-    } else if (pov == 0) {
-      //reverse
-      //intake.armsUp();
-      intake.setIntake(0);
-      intake.setTraversal((-1));
-    } else {
-      //intake.armsUp();
-      intake.setIntake(0);
-      intake.setTraversal(0);
-    }
     
-    if (container.getOperatorJoystick().getRawButtonPressed(9)) {
-      intake.armsToggle();
-    }
-
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     intake.setIntake(0);
+    intake.setTraversal(0);
+    intake.setTrigger(0);
   }
 
   // Returns true when the command should end.

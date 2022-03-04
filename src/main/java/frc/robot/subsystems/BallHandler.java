@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -30,15 +31,22 @@ public class BallHandler extends SubsystemBase {
   //TODO this wont work for now because need to add multiple color sensors support
   private final ColorSensor traversalBallSensor = new ColorSensor(); 
   private final ColorSensor triggerBallSensor = new ColorSensor();
-  
+  private boolean canRunIntake = false,
+                  armsDown = false;
+  private double armsLoweredTimer = 0;
+
+
   //Arm Pnuematics
   private final DoubleSolenoid arms = new DoubleSolenoid(1, PneumaticsModuleType.REVPH, 2, 3);
 
   /** Creates a new Intake. */
   public BallHandler() {
+    traversalMotor.setInverted(true);
     setMotorConstants(intakeMotor, 0, 0, 0);
     setMotorConstants(traversalMotor, 0, 0, 0);
     setMotorConstants(triggerMotor, 0, 0, 0);
+    traversalMotor.configContinuousCurrentLimit(5);
+    armsUp();
   }
 
   private void setMotorConstants(WPI_TalonSRX m, double kp, double ki, double kd){
@@ -49,8 +57,9 @@ public class BallHandler extends SubsystemBase {
 
   public void setIntake(double speed){
     //System.out.println(speed);
-    intakeMotor.set(speed);
-  }
+    if (arms.get() == Value.kForward ) {intakeMotor.set(speed);}
+    else {intakeMotor.set(0);}
+    }
 
   public void setTraversal(double speed){
     traversalMotor.set(speed);
@@ -84,11 +93,18 @@ public class BallHandler extends SubsystemBase {
 
 
   public void armsUp() {
-    arms.set(Value.kForward);
+    armsDown = false;
+    arms.set(Value.kReverse);
   }
 
   public void armsDown() {
-    arms.set(Value.kReverse);
+    //if(!armsDown) armsLoweredTimer = Timer.getFPGATimestamp();
+    armsDown = true;
+    arms.set(Value.kForward);
+  }
+
+  public void armsToggle() {
+    arms.toggle();
   }
 
   public boolean ballInTrigger(){
@@ -105,7 +121,10 @@ public class BallHandler extends SubsystemBase {
   
   @Override
   public void periodic() {
+    canRunIntake = (armsDown && (Timer.getFPGATimestamp() - armsLoweredTimer) > 0.4);
     SmartDashboard.putNumber("intake current", intakeMotor.getSupplyCurrent());
+    SmartDashboard.putBoolean("Arms Down", armsDown);
+
   }
 
   public double getIntakePosition() {
@@ -115,4 +134,9 @@ public class BallHandler extends SubsystemBase {
   public double getTraversalPosition() {
     return traversalMotor.getSelectedSensorPosition();
   }
+
+  public void initialize() {
+    armsUp();
+  }
+
 }

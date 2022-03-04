@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.lib.debloating.ColorSensor;
 import frc.robot.commands.auto.paths.PathBase;
+import frc.robot.subsystems.BallHandler;
+import frc.robot.RobotContainer;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -37,6 +39,8 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    
+    
     // testMotor.setBounds(2.0, 1.8, 1.5, 1.2, 1.0);
     // SmartDashboard.putNumber("test motor 'speed'", 0);
   }
