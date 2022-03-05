@@ -4,23 +4,33 @@
 
 package frc.robot;
 
-import frc.lib.Limelight;
-import frc.lib.debloating.Pigeon;
-import frc.robot.commands.*;
-import frc.robot.commands.auto.paths.PathBase;
-import frc.robot.commands.auto.paths.TestPath;
-import frc.robot.subsystems.*;
-
 import java.io.IOException;
 
 import com.ctre.phoenix.sensors.PigeonIMU;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticHub;
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.lib.Limelight;
+import frc.lib.debloating.Pigeon;
+import frc.robot.commands.auto.paths.PathBase;
+import frc.robot.commands.auto.paths.TestPath;
+import frc.robot.commands.drive.ArcadeDrive;
+import frc.robot.commands.intake.ManualIntake;
+import frc.robot.commands.shoot.AutoShoot;
+import frc.robot.commands.shoot.FlywheelVelocity1;
+import frc.robot.commands.shoot.HoodTesting;
+import frc.robot.commands.shoot.LimelightTurret;
+import frc.robot.commands.shoot.ManualHood;
+import frc.robot.commands.shoot.ManualTrigger;
+import frc.robot.commands.shoot.ManualTurret;
+import frc.robot.subsystems.BallHandler;
+import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Hood;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Turret;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -53,22 +63,18 @@ public class RobotContainer {
   
   // commands:
   private final ArcadeDrive arcadeDrive = new ArcadeDrive(driveTrain, this);
-  private final Autonomous autonomous = new Autonomous(driveTrain, shooter);
-  // private final DrivebaseAutoAim drivebaseAutoAim = new DrivebaseAutoAim(driveTrain, limelight);
   private final ManualTurret joystickAim = new ManualTurret(turret, this);
   private final ManualIntake runIntake = new ManualIntake(intake, this);
-  //private final FlywheelPercent runShooterPercent = new FlywheelPercent(shooter);
   private final FlywheelVelocity1 flywheel1 = new FlywheelVelocity1(shooter);
-  // private final TurretTesting turretTesting = new TurretTesting(turret, this);
   private final LimelightTurret autoAim = new LimelightTurret(turret, limelight);
   private final ManualHood manualHood = new ManualHood(hood, this);
 
   // OI:
   private final Joystick driverJoystick = new Joystick(0);
   private final Joystick operatorJoystick = new Joystick(1);
-  private final JoystickButton flywheelButton = new JoystickButton(operatorJoystick, 6);
-  private final JoystickButton aimButton = new JoystickButton(operatorJoystick, 8);
-  private final JoystickButton zeroButton = new JoystickButton(operatorJoystick, 1);
+  private final JoystickButton autoshootButton = new JoystickButton(operatorJoystick, 6);
+  private final JoystickButton triggerButton = new JoystickButton(operatorJoystick, 8);
+  private final JoystickButton velocity1JoystickButton = new JoystickButton(operatorJoystick, 1);
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
@@ -82,9 +88,9 @@ public class RobotContainer {
     turret.setDefaultCommand(joystickAim);
     hood.setDefaultCommand(manualHood);
   
-    flywheelButton.whileHeld(new AutoShoot(turret, hood, shooter, limelight));
-    aimButton.whileHeld(new ManualTrigger(intake));
-    zeroButton.whenPressed(() -> odometry.resetOdometry(new Pose2d(0,0, new Rotation2d(0))));
+    autoshootButton.whileHeld(new AutoShoot(turret, hood, shooter, intake, limelight));
+    triggerButton.whileHeld(new ManualTrigger(intake));
+    velocity1JoystickButton.whileHeld(flywheel1);
     new JoystickButton(operatorJoystick, 3).whileHeld(new HoodTesting(hood, limelight, this));
   }
 

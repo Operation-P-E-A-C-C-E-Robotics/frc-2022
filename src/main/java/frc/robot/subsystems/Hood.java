@@ -98,9 +98,9 @@ public class Hood extends SubsystemBase {
         else hoodMotor.set(ControlMode.Position, counts);
     }
 
-    private double countsToCM(double counts){
-        return counts * ENCODER_COUNTS_PER_CM;
-    }
+    // private double countsToCM(double counts){
+    //     return counts * ENCODER_COUNTS_PER_CM;
+    // }
 
     private double cmToCounts(double cm){
         return cm / ENCODER_COUNTS_PER_CM;

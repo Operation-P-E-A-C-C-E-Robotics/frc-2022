@@ -11,6 +11,9 @@ import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -26,7 +29,7 @@ public class DriveTrain extends SubsystemBase {
 
     private final double wheelCircumference = Math.PI * WHEEL_DIAMETER_METERS;
     //shifter stuff
-    //   public DoubleSolenoid shiftSolenoid = new DoubleSolenoid(21, PneumaticsModuleType.REVPH, 0,0);
+      public DoubleSolenoid shiftSolenoid = new DoubleSolenoid(1, PneumaticsModuleType.REVPH, 0,1);
     @SuppressWarnings("FieldMayBeFinal")
     private Gear _gear = Gear.LOW_GEAR;
 
@@ -52,18 +55,18 @@ public class DriveTrain extends SubsystemBase {
      * shift the drivetrain into high, low, or MAYBE neutral gear
      * @param gear the drivetrain.gear to shift into
      */
-    //     public void shift(Gear gear) {
-    //       if(gear == Gear.HIGH_GEAR){
-    //           shiftSolenoid.set(Value.kForward);
-    //       }
-    //       if(gear == Gear.LOW_GEAR){
-    //           shiftSolenoid.set(Value.kReverse);
-    //       }
-    //       if(gear == Gear.NEUTRAL){
-    //           shiftSolenoid.set(Value.kOff);
-    //       }
-    //       _gear = gear;
-    //   }
+        public void shift(Gear gear) {
+          if(gear == Gear.HIGH_GEAR){
+              shiftSolenoid.set(Value.kForward);
+          }
+          if(gear == Gear.LOW_GEAR){
+              shiftSolenoid.set(Value.kReverse);
+          }
+          if(gear == Gear.NEUTRAL){
+              shiftSolenoid.set(Value.kOff);
+          }
+          _gear = gear;
+      }
 
     /**
      * get the current gear of the drivetrain gearboxes

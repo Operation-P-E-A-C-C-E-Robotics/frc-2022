@@ -2,38 +2,43 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.shoot;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.Shooter;
+import frc.robot.RobotContainer;
+import frc.robot.Constants.Traversal;
+import frc.robot.subsystems.BallHandler;
+import static frc.robot.Constants.Intake.*;
 
-public class Autonomous extends CommandBase {
-  // private final DriveTrain driveTrain;
-  @SuppressWarnings("FieldCanBeLocal")
-  private final Shooter shooter;
-  /** Creates a new autonomous. */
-  public Autonomous(DriveTrain dt, Shooter shr) {
-    // driveTrain = dt;
-    shooter = shr;
+public class ManualTrigger extends CommandBase {
+  private final BallHandler intake;
+  /** Creates a new ShooterControl. */
+  public ManualTrigger(BallHandler intake) {
+    this.intake = intake;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(dt, shooter);
+    addRequirements(intake);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // shooter.flywheelPercent(1);
-    // driveTrain.percentDrive(0.5, 0.5);
+      intake.setTraversal(0.35);
+      intake.setTrigger(1);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    intake.setIntake(0);
+    intake.setTraversal(0);
+    intake.setTrigger(0);
+  }
 
   // Returns true when the command should end.
   @Override

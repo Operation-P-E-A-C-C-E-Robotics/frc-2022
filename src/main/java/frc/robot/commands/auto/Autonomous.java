@@ -2,32 +2,34 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
-import frc.robot.subsystems.Turret;
+import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Shooter;
 
-public class ManualTurret extends CommandBase {
-  private final Turret turret;
-  private final RobotContainer containter;
-  /** Creates a new manualShooter. */
-  public ManualTurret(Turret shooter, RobotContainer container) {
-    this.turret = shooter;
-    this.containter = container;
+public class Autonomous extends CommandBase {
+  // private final DriveTrain driveTrain;
+  @SuppressWarnings("FieldCanBeLocal")
+  private final Shooter shooter;
+  /** Creates a new autonomous. */
+  public Autonomous(DriveTrain dt, Shooter shr) {
+    // driveTrain = dt;
+    shooter = shr;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(shooter);
+    addRequirements(dt, shooter);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    // shooter.flywheelPercent(1);
+    // driveTrain.percentDrive(0.5, 0.5);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    turret.turretPercent(containter.getOperatorJoystick().getX() / 10);
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override

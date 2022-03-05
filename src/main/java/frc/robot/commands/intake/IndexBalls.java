@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -16,12 +16,9 @@ public class IndexBalls extends CommandBase {
 
   boolean allianceIsRed = false; //TODO change to reflect FMS data
 
-  boolean ballInTraversal = false, 
-          ballInTrigger = false,
-          ballInTraversalCorrectColor = true,
-          ballInTriggerCorrectColor = true,
-          ballInTriggerCentered = false,
-          ballReachedFloor = false;
+  boolean ejectingball = false,
+          ballInTraversal = false,
+          ballInTraversalCorrectColor = false;
   
   double ejectingTime = 0;
 
@@ -46,16 +43,14 @@ public class IndexBalls extends CommandBase {
   @Override
   public void execute() {
     ballInTraversal = ballHandler.ballInTraversal();
-    ballInTrigger = ballHandler.ballInTrigger();
     ballInTraversalCorrectColor = ballHandler.getTraversalBallColor() == allianceIsRed;
-    ballInTriggerCorrectColor = ballHandler.getTriggerBallColor() == allianceIsRed;
     
     if(ejectingBall) ejectingBall = (Timer.getFPGATimestamp() - ejectingTime) > 3;
     
     if(ejectingBall){
       ballHandler.armsUp();
       ballHandler.setTraversal(-1);
-      ballHandler.setIntake(-0.5);
+      ballHandler.setIntake(0);
     } else {
       ballHandler.armsDown();
 
@@ -66,9 +61,6 @@ public class IndexBalls extends CommandBase {
 
       ballHandler.setTraversal(0.2);
       ballHandler.setIntake(0.5);
-      
-      if(ballInTrigger) ballHandler.setTrigger(0);
-      else ballHandler.setTrigger(0.2);
     }
 
     // switch (state){

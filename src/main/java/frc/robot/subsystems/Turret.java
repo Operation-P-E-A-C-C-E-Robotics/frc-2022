@@ -23,7 +23,7 @@ public class Turret extends SubsystemBase {
     private final DigitalInput zeroSwitch;
 
     private double setpoint = 0;
-    private final double TURRET_RATIO = (1/20) * (1/11); //todo get ratio
+    // private final double TURRET_RATIO = (1/20) * (1/11); //todo get ratio
     private final double MOTOR_ROTS_PER_TURRET_ROT = 242;
 
     /** Creates a new Shooter. */

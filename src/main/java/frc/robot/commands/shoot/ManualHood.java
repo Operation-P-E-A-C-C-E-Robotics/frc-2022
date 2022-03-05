@@ -2,38 +2,31 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.shoot;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.DriveTrain;
-import edu.wpi.first.wpilibj.Joystick;
+import frc.robot.subsystems.Hood;
 
-public class ArcadeDrive extends CommandBase {
- private final DriveTrain driveTrain;
-  private final RobotContainer container;
-
-
-  /** Creates a new drive. */
-  public ArcadeDrive(DriveTrain driveTrain, RobotContainer container) {
-    this.driveTrain = driveTrain;
+public class ManualHood extends CommandBase {
+  private Hood hood;
+  private RobotContainer container;
+  /** Creates a new ManualHoodAdjust. */
+  public ManualHood(Hood hood, RobotContainer container) {
+    this.hood = hood;
     this.container = container;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(driveTrain);
+    addRequirements(hood);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
-  
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Joystick driverJoystick = container.getDriverJoystick();
-    double x = driverJoystick.getX();
-    double y = driverJoystick.getY();
-    driveTrain.percentDrive(-y - x, -y + x);
+    hood.setHoodSpeed(-container.getOperatorJoystick().getY() / 3);
   }
 
   // Called once the command ends or is interrupted.

@@ -4,25 +4,20 @@
 
 package frc.robot.subsystems;
 
+import static frc.robot.Constants.Intake.INTAKE_CONTROLLER_PORT;
+import static frc.robot.Constants.Traversal.TRAVERSAL_CONTROLLER_PORT;
+import static frc.robot.Constants.Traversal.TRIGGER_CONTROLLER_PORT;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticHub;
-import edu.wpi.first.wpilibj.PneumaticsControlModule;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.debloating.Ball;
 import frc.lib.debloating.ColorSensor;
-import frc.lib.debloating.Ball.Direction;
-
-import static frc.robot.Constants.Intake.*;
-import static frc.robot.Constants.Traversal.*;
 
 public class BallHandler extends SubsystemBase {
   private final WPI_TalonSRX intakeMotor = new WPI_TalonSRX(INTAKE_CONTROLLER_PORT);
@@ -57,7 +52,7 @@ public class BallHandler extends SubsystemBase {
 
   public void setIntake(double speed){
     //System.out.println(speed);
-    if (arms.get() == Value.kForward ) {intakeMotor.set(speed);}
+    if (canRunIntake) {intakeMotor.set(speed);}
     else {intakeMotor.set(0);}
     }
 
@@ -98,14 +93,14 @@ public class BallHandler extends SubsystemBase {
   }
 
   public void armsDown() {
-    //if(!armsDown) armsLoweredTimer = Timer.getFPGATimestamp();
+    if(!armsDown) armsLoweredTimer = Timer.getFPGATimestamp();
     armsDown = true;
     arms.set(Value.kForward);
   }
 
-  public void armsToggle() {
-    arms.toggle();
-  }
+  // public void armsToggle() {
+  //   arms.toggle();
+  // }
 
   public boolean ballInTrigger(){
     return triggerBallSensor.objPresent();
