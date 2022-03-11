@@ -5,16 +5,24 @@
 package frc.robot.commands.shoot;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.lib.Limelight;
 import frc.robot.RobotContainer;
-import frc.robot.Constants.Traversal;
 import frc.robot.subsystems.BallHandler;
+import frc.robot.subsystems.Turret;
 import static frc.robot.Constants.Intake.*;
 
 public class ManualTrigger extends CommandBase {
   private final BallHandler intake;
+  private Turret turret;
+  private Limelight limelight;
+
+  private double curretTurretPosition, 
+  targetTurretPosition = Double.NaN;
   /** Creates a new ShooterControl. */
-  public ManualTrigger(BallHandler intake) {
+  public ManualTrigger(BallHandler intake, Turret turret, Limelight limelight) {
     this.intake = intake;
+    this.turret = turret;
+    this.limelight = limelight;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intake);
   }

@@ -27,9 +27,9 @@ public class Shooter extends SubsystemBase {
   /** Creates a new Shooter. */
   public Shooter() {
     //furthest distance: 12,000; 39
-    double[] distances = {0,9};
+    double[] distances = {0.2,2.8,3.5, 6};
     //
-    double[] velocities = {0,11000};
+    double[] velocities = {6700,7400,8000, 10000};
 
     distanceToVelocity.setSamples(distances, velocities);
 

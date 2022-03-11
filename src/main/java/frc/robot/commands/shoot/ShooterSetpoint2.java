@@ -6,16 +6,20 @@ package frc.robot.commands.shoot;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Shooter;
 
-public class FlywheelVelocity1 extends CommandBase {
+public class ShooterSetpoint2 extends CommandBase {
   private final Shooter shooter;
-  private double veloctiy_default = 3000;
+  private final Hood hood;
+  private double veloctiy_default = 6700;
   /** Creates a new ShooterControl. */
-  public FlywheelVelocity1(Shooter shooter) {
+  public ShooterSetpoint2(Shooter shooter, Hood hood) {
     this.shooter = shooter;
+    this.hood = hood;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
+    addRequirements(hood);
   }
 
   // Called when the command is initially scheduled.
@@ -30,12 +34,15 @@ public class FlywheelVelocity1 extends CommandBase {
     //Replace with PID Control
     // shooter.flywheelVelocity(SmartDashboard.getNumber("shooter velocity", 0));
     shooter.flywheelVelocity(SmartDashboard.getNumber("flywheel velocity 1", veloctiy_default));
+    hood.setHoodPosition(32);
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     shooter.flywheelPercent(0);
+    hood.zero();
   }
 
   // Returns true when the command should end.

@@ -18,12 +18,12 @@ public class Hood extends SubsystemBase {
 
     private CubicSplineInterpolate distanceToAngle = new CubicSplineInterpolate();
 
-    double setpoint = 0;
+    double setpoint = 0; //177
 
     /** Creates a new Hood. */
     public Hood() {
-        double[] distances = {0, 9};
-        double[] angles = {0, 40};
+        double[] distances = {0.2, 2.8, 3.5, 6};
+        double[] angles = {50,170, 200, 226};
         distanceToAngle.setSamples(distances, angles);
         hoodMotor.setInverted(true); //change so positive = forward
         configTalonGains(0, 100, 0, 10); //todo change duh
@@ -74,7 +74,7 @@ public class Hood extends SubsystemBase {
 
     public void setHoodForDistance(double distanceMeters){
         try{
-            setHoodAngle(Rotation2d.fromDegrees(distanceToAngle.cubicSplineInterpolate(distanceMeters)));
+            setHoodPosition((distanceToAngle.cubicSplineInterpolate(distanceMeters)));
         } catch (ArrayIndexOutOfBoundsException e) {
             zero();
         }
@@ -94,8 +94,12 @@ public class Hood extends SubsystemBase {
     public void setMotorPosition(double counts){
         counts = counts > FULLY_EXTENDED_COUNTS ? FULLY_EXTENDED_COUNTS : counts;
         counts = counts < 0 ? 0 : counts;
-        if(counts == 0) zero();
+        if(counts == 0);// zero();
         else hoodMotor.set(ControlMode.Position, counts);
+    }
+
+    public void setEncoderZero(){
+        hoodMotor.setSelectedSensorPosition(0);
     }
 
     // private double countsToCM(double counts){
@@ -112,8 +116,9 @@ public class Hood extends SubsystemBase {
             hoodMotor.setSelectedSensorPosition(0);
             //hoodMotor.set(0);
         }
-        SmartDashboard.putNumber("Hood sepoint", hoodMotor.getClosedLoopError());
+        SmartDashboard.putNumber("Hood setpoint", setpoint);
         SmartDashboard.putBoolean("hood ready", ready());
+        SmartDashboard.putNumber("Hood position", hoodMotor.getSelectedSensorPosition());
         //setHoodPercent(container.getOperatorJoystick().getY());
         // SmartDashboard.putNumber("dist to target", limelight.)
     }

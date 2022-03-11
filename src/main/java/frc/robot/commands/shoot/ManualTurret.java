@@ -10,23 +10,36 @@ import frc.robot.subsystems.Turret;
 
 public class ManualTurret extends CommandBase {
   private final Turret turret;
-  private final RobotContainer containter;
+  private final RobotContainer container;
+  private double turretRotations = 0;
   /** Creates a new manualShooter. */
   public ManualTurret(Turret shooter, RobotContainer container) {
     this.turret = shooter;
-    this.containter = container;
+    this.container = container;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    turretRotations = 0;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    turret.turretPercent(containter.getOperatorJoystick().getX() / 10);
+    if(container.getOperatorJoystick().getRawButton(3)){
+      turret.zero();
+    }
+    if(Math.abs(container.getOperatorJoystick().getX()) > 0.1) {
+      turret.turretPercent(container.getOperatorJoystick().getX() * 0.5);
+      // turret.turretRotations(turretRotations);
+    }
+    else {
+      turret.turretPercent(0.0);
+      // turretRotations = turret.getPosition();
+    }
   }
 
   // Called once the command ends or is interrupted.

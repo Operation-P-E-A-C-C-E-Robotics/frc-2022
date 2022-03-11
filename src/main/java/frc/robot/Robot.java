@@ -23,9 +23,10 @@ import frc.robot.RobotContainer;
  * project.
  */
 public class Robot extends TimedRobot {
-  private PathBase m_autonomousCommand;
+  private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
+  
 
   // private ColorSensor testSensor = new ColorSensor();
   // private Servo testMotor = new Servo(0);
@@ -63,7 +64,7 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putNumber("color sensor dist value", testSensor.ir());
     // SmartDashboard.putBoolean("object present", testSensor.objPresent());
     // SmartDashboard.putBoolean("is red", testSensor.isRedNotBlue());
-    m_robotContainer.gPneumaticHub().enableCompressorAnalog(60, 100);
+    m_robotContainer.gPneumaticHub().enableCompressorAnalog(90, 120);
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -80,8 +81,9 @@ public class Robot extends TimedRobot {
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
-      m_autonomousCommand.init();
-      m_autonomousCommand.start();
+      // m_autonomousCommand.init();
+      // m_autonomousCommand.start();
+      CommandScheduler.getInstance().schedule(m_autonomousCommand);
     }
   }
 
@@ -119,4 +121,5 @@ public class Robot extends TimedRobot {
   public RobotContainer getContainer(){
     return this.m_robotContainer;
   }
+
 }

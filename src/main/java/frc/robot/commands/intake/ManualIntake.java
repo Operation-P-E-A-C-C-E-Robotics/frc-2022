@@ -31,26 +31,32 @@ public class ManualIntake extends CommandBase {
     if (pov == 180) {
       //intake
       intake.armsDown();
-      intake.setIntake(0.5);
-      intake.setTraversal(0.5);
+      intake.setIntake(1);
+      // intake.setTraversal(1);
     } else if (pov == 0) {
       //reverse
       intake.armsUp();
-      intake.setIntake(0);
-      intake.setTraversal(-1);
-      intake.setTrigger(-1);
+      intake.setAll(0);
     } else {
       intake.setIntake(0);
       intake.setTraversal(0);
       intake.setTrigger(0);
     }
 
-    if (container.getOperatorJoystick().getRawButton(7)) {
+    if (container.getOperatorJoystick().getRawButton(5) || container.getDriverJoystick().getRawButton(1)) {
       intake.armsDown();
-      intake.setIntake(0.5);
-      intake.setTraversal(0.5);
-    } else if(container.getOperatorJoystick().getRawButtonReleased(7)) {
+      intake.setIntake(1);
+      intake.setTraversal(1);
+    } else if(container.getOperatorJoystick().getRawButtonReleased(7) || container.getDriverJoystick().getRawButtonReleased(1)) {
       intake.armsUp();
+    }
+
+    if(container.getOperatorJoystick().getRawButton(7)){
+      intake.setTraversal(1);
+    }
+
+    if(container.getOperatorJoystick().getRawButton(8)){
+      intake.setTrigger(1);
     }
 
   }

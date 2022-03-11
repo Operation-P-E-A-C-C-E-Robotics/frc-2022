@@ -1,11 +1,11 @@
+
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
 
-import static frc.robot.Constants.Climber.CLIMBER_BOTTOM_CONTROLLER_PORT;
-import static frc.robot.Constants.Climber.CLIMBER_TOP_CONTROLLER_PORT;
+import static frc.robot.Constants.Climber.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
@@ -19,9 +19,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Climber extends SubsystemBase {
   private WPI_TalonFX liftMasterController = new WPI_TalonFX(CLIMBER_TOP_CONTROLLER_PORT); 
   private WPI_TalonFX liftSlaveController = new WPI_TalonFX(CLIMBER_BOTTOM_CONTROLLER_PORT);
-  private DoubleSolenoid primaryArmSolenoid = new DoubleSolenoid(1, PneumaticsModuleType.REVPH, 5, 6);//TODO Name Me
-  private DoubleSolenoid secondaryArmSolenoid = new DoubleSolenoid(1, PneumaticsModuleType.REVPH, 7, 8);//TODO Name Me
-  
+  //private DoubleSolenoid  leftArmWhich = new DoubleSolenoid(1, PneumaticsModuleType.REVPH, 4, 5);
+    //private DoubleSolenoid secondaryArmSolenoid = new DoubleSolenoid(1, PneumaticsModuleType.REVPH, 6, 7);
+  private WPI_TalonFX armWinch = new WPI_TalonFX(ARM_CONTORLLER_PORT);
   private final double liftRaisedCounts = 0;
 
   /** Creates a new Climber. */
@@ -38,6 +38,7 @@ public class Climber extends SubsystemBase {
     liftMasterController.configMotionAcceleration(0);
     liftMasterController.configMotionCruiseVelocity(0);
     liftMasterController.configMotionSCurveStrength(0);
+
   }
  
   public void setLiftPercent(double percent){
@@ -52,20 +53,22 @@ public class Climber extends SubsystemBase {
     liftMasterController.set(ControlMode.MotionMagic, 0);
   }
 
-  public void armToggle(){
-    primaryArmSolenoid.toggle();
-    secondaryArmSolenoid.toggle();
+
+  public void setArmPercent(double percent){
+    armWinch.set(percent);
   }
 
-  public void extendArm(){
-    primaryArmSolenoid.set(Value.kForward);
-    secondaryArmSolenoid.set(Value.kForward);
-  }
+  // public void extendArm(){
+  //   armWinch.set(1);
+  // }
 
-  public void retractArm(){
-    primaryArmSolenoid.set(Value.kReverse);
-    secondaryArmSolenoid.set(Value.kReverse);
-  }
+  // public void retractArm(){
+  //   armWinch.set(-1);
+  // }
+
+  // public void stopArm() {
+  //   armWinch.set(0);
+  // }
 
   @Override
   public void periodic() {

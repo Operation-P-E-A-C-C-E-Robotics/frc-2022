@@ -7,6 +7,7 @@ package frc.robot.commands.shoot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.Limelight;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.BallHandler;
 import frc.robot.subsystems.Hood;
@@ -18,18 +19,20 @@ public class AutoShoot extends CommandBase {
   private final Hood hood;
   private final Shooter shooter;
   private final Limelight limelight;
+  private final RobotContainer container;
 
   private double curretTurretPosition, 
   targetTurretPosition = Double.NaN;
   private BallHandler intake;
 
   /** Creates a new AutoAim. */
-  public AutoShoot(Turret turret, Hood hood, Shooter shooter, BallHandler intake, Limelight limelight) {
+  public AutoShoot(Turret turret, Hood hood, Shooter shooter, BallHandler intake, Limelight limelight, RobotContainer container) {
     this.turret = turret;
     this.hood = hood;
     this.shooter = shooter;
     this.limelight = limelight;
     this.intake = intake;
+    this.container = container;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(turret, hood, shooter);
@@ -49,24 +52,26 @@ public class AutoShoot extends CommandBase {
       curretTurretPosition = turret.getPosition();
       double deltaX = limelight.getTargetOffsetX() / 360;
       double newTargetTurretPosition = curretTurretPosition + deltaX; //todo figure out what's flipped
-
-      if(Double.isNaN(targetTurretPosition) || Math.abs(deltaX) > 5){
+      
+      if(Double.isNaN(targetTurretPosition)){
         targetTurretPosition = newTargetTurretPosition;
       } else {
         targetTurretPosition += (newTargetTurretPosition - targetTurretPosition) / 10;
       }
+      SmartDashboard.putNumber("turret target position", targetTurretPosition); 
+      SmartDashboard.putNumber("lldist", limelight.getTargetDistance());
 
 
-      turret.turretRotations(targetTurretPosition);
+      turret.turretRotations(newTargetTurretPosition);
 
-      // hood.setHoodForDistance(limelight.getTargetDistance());
+      hood.setHoodForDistance(limelight.getTargetDistance());
       // hood.zero();
       // hood.setHoodSpeed(0);
 
-      // shooter.setVelcityForDistance(limelight.getTargetDistance());
-      shooter.flywheelVelocity(3000);
+      shooter.setVelcityForDistance(limelight.getTargetDistance());
+      // shooter.flywheelVelocity(3000);
 
-      if(turret.ready() && shooter.ready()){
+      if((turret.ready() && shooter.ready() && hood.ready()) || container.getOperatorJoystick().getRawButton(8)){
         SmartDashboard.putBoolean("run trigger", true);
         intake.setTrigger(1);
         intake.setTraversal(0.5);
@@ -80,6 +85,7 @@ public class AutoShoot extends CommandBase {
     } else{
       targetTurretPosition = Double.NaN;
       turret.turretPercent(0.0);
+      hood.zero();
     }
   }
 

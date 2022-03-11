@@ -37,6 +37,7 @@ public class BallHandler extends SubsystemBase {
   /** Creates a new Intake. */
   public BallHandler() {
     traversalMotor.setInverted(true);
+    intakeMotor.setInverted(true);
     setMotorConstants(intakeMotor, 0, 0, 0);
     setMotorConstants(traversalMotor, 0, 0, 0);
     setMotorConstants(triggerMotor, 0, 0, 0);

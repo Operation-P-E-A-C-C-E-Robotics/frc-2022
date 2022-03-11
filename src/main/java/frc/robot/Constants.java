@@ -29,10 +29,10 @@ public final class Constants {
         public static final int FLYWHEEL_MASTER_PORT = 5,
                                 FLYWHEEL_SLAVE_PORT = 4;  
         
-        public static final double FLYWHEEL_kF = 0.07,
-                                    FLYWHEEL_kP = 0.6,
+        public static final double FLYWHEEL_kF = 0.05,
+                                    FLYWHEEL_kP = 0.1,
                                     FLYWHEEL_kI = 0,
-                                    FLYWHEEL_kD = 0.01;
+                                    FLYWHEEL_kD = 0;
     }
     
     public static final class Turret{
@@ -70,7 +70,8 @@ public final class Constants {
 
     public static final class Climber{
         public static final int CLIMBER_TOP_CONTROLLER_PORT = 16,
-                                CLIMBER_BOTTOM_CONTROLLER_PORT = 17;
+                                CLIMBER_BOTTOM_CONTROLLER_PORT = 17,
+                                ARM_CONTORLLER_PORT = 18;
     }
 
 }

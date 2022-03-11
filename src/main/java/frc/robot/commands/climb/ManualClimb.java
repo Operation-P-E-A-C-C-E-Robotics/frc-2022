@@ -27,7 +27,7 @@ public class ManualClimb extends CommandBase{
   public void execute() {
       Joystick operatorJoystick = container.getOperatorJoystick();
       climber.setLiftPercent(operatorJoystick.getRawAxis(3));
-      if(operatorJoystick.getRawButtonPressed(10)) climber.armToggle();
+      climber.setArmPercent(operatorJoystick.getRawAxis(2));
   }
 
   // Called once the command ends or is interrupted.

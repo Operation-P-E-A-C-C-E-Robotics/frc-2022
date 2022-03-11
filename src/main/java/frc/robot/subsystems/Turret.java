@@ -53,8 +53,9 @@ public class Turret extends SubsystemBase {
 
     public void turretRotations(double rotations){
         // if(encoder.getPosition() - rotations < 40) rotations = encoder.getPosition();
-        rotations = rotations < 0.25 ? rotations : 0.25;
-        rotations = rotations > 0 ? rotations : 0;
+        // rotations = rotations < 0.5 ? rotations : 0.5;
+        // rotations = rotations > -0.5 ? rotations : -0.5;
+        rotations = ((rotations + 0.5) % 1) - 0.5;
         rotations *= MOTOR_ROTS_PER_TURRET_ROT; //convert from motor rotations to turret rotations
         pidController.setReference(rotations, CANSparkMax.ControlType.kPosition);
         setpoint = rotations;
