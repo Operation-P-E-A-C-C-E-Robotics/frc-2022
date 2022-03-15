@@ -71,6 +71,10 @@ public class Util {
         return newList;
     }
 
+    public static boolean inRange(double in, double range){
+        return (Math.abs(in) < Math.abs(range));
+    }
+
     public static Double last(List<Double> ar, int i){
         return ar.get(ar.size() - 1 - i);
     }

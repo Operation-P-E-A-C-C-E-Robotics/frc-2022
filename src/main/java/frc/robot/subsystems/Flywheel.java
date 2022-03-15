@@ -7,6 +7,8 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.math.CubicSplineInterpolate;
+import frc.lib.math.Sequencer;
+import frc.lib.util.Util;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
@@ -22,6 +24,12 @@ public class Flywheel extends SubsystemBase {
   private CubicSplineInterpolate distanceToVelocity = new CubicSplineInterpolate();
 
   double shooterSetpoint = 0;
+
+  private final double velocityRange = 500,
+                        accelerationRange = 100,
+                        jerkRange = 10;
+
+  double[] history = new double[3];
 
   /** Creates a new Shooter. */
   public Flywheel() {
@@ -75,7 +83,13 @@ public class Flywheel extends SubsystemBase {
   }
 
   public boolean ready(){
-    return (Math.abs(shooterSetpoint) - Math.abs(flywheelMasterController.getSelectedSensorVelocity())) < 500;
+    double[] decomposition = Sequencer.compute(history);
+    return (
+      Util.inRange(decomposition[0], velocityRange) &&
+      Util.inRange(decomposition[1], accelerationRange) &&
+      Util.inRange(decomposition[2], jerkRange)
+      );
+    // return (Math.abs(shooterSetpoint) - Math.abs(flywheelMasterController.getSelectedSensorVelocity())) < 500;
   }
   
   /**
@@ -103,5 +117,10 @@ public class Flywheel extends SubsystemBase {
               SmartDashboard.getNumber("shooter kp", FLYWHEEL_kP),
               SmartDashboard.getNumber("shooter ki", FLYWHEEL_kI),
               SmartDashboard.getNumber("shooter kd", FLYWHEEL_kD));
+
+    for(int i = 0; i < history.length - 1; i++){
+      history[i] = history[i + 1];
+    }
+    history[history.length - 1] = Math.abs(shooterSetpoint) - Math.abs(flywheelMasterController.getSelectedSensorVelocity());
   }
 }
