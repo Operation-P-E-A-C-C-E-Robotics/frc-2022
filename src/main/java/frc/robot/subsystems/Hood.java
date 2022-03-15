@@ -65,7 +65,6 @@ public class Hood extends SubsystemBase {
      * @param angle
      */
     public void setHoodAngle(Rotation2d angle){
-        SmartDashboard.putNumber("hood angle setpoint", angle.getDegrees());
         double degreesFromZero = angle.getDegrees() - LOWEST_ANGLE;
         double rotations = degreesFromZero / 360;
         double cm = rotations * (2 * Math.PI * ATTACHMENT_POINT_RADIUS);
@@ -116,10 +115,7 @@ public class Hood extends SubsystemBase {
             hoodMotor.setSelectedSensorPosition(0);
             //hoodMotor.set(0);
         }
-        SmartDashboard.putNumber("Hood setpoint", setpoint);
-        SmartDashboard.putBoolean("hood ready", ready());
         SmartDashboard.putNumber("Hood position", hoodMotor.getSelectedSensorPosition());
-        //setHoodPercent(container.getOperatorJoystick().getY());
-        // SmartDashboard.putNumber("dist to target", limelight.)
+
     }
 }

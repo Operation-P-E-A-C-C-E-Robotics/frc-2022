@@ -82,8 +82,6 @@ public class DriveTrain extends SubsystemBase {
      * @param lSpeed left side power percentage
      */
     public void percentDrive(double rSpeed, double lSpeed) {
-        SmartDashboard.putNumber("left speed", lSpeed);
-        SmartDashboard.putNumber("right speed", rSpeed);
         leftMasterController.set(ControlMode.PercentOutput, lSpeed);
         rightMasterController.set(ControlMode.PercentOutput, rSpeed);
         dDrive.feed(); //keep the wpilib arcade drive that we need for auto from freaking out

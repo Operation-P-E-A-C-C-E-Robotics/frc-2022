@@ -1,5 +1,6 @@
 package frc.lib.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -60,5 +61,26 @@ public class Util {
             result &= epsilonEquals(value_in, value, epsilon);
         }
         return result;
+    }
+
+    public static List<Double> subList(List<Double> list, int start, int end){
+        ArrayList<Double> newList = new ArrayList<>();
+        for(int i = start; i <= end; i++){
+            newList.add(list.get(i));
+        }
+        return newList;
+    }
+
+    public static Double last(List<Double> ar, int i){
+        return ar.get(ar.size() - 1 - i);
+    }
+
+    public static double[] shiftLeft(double[] ar, double newv){
+        int i = 0;
+        for (;i < ar.length - 1; i++){
+            ar[i] = ar[i + 1];
+        }
+        ar[i] = newv;
+        return ar;
     }
 }

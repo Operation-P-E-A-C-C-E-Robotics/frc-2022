@@ -1,0 +1,18 @@
+package frc.robot.autonomous;
+
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.lib.Limelight;
+import frc.robot.RobotContainer;
+import frc.robot.oldCommands.shoot.AutoShoot;
+import frc.robot.subsystems.Turret;
+import frc.robot.subsystems.BallHandler;
+import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Hood;
+import frc.robot.subsystems.Flywheel;
+
+public class RealAuto extends SequentialCommandGroup {
+    public RealAuto(DriveTrain driveTrain, Flywheel shooter, Hood hood, BallHandler intake, Turret turret, Limelight limelight, RobotContainer container){
+        addCommands(new Autonomous(driveTrain, shooter, hood, intake, turret, limelight, container), new AutoShoot(turret, hood, shooter, intake, limelight, container));
+    }
+    
+}

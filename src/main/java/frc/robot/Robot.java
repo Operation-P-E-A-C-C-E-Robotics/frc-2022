@@ -4,17 +4,9 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.lib.debloating.ColorSensor;
-import frc.robot.commands.auto.paths.PathBase;
-import frc.robot.subsystems.BallHandler;
-import frc.robot.RobotContainer;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -26,10 +18,6 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
-  
-
-  // private ColorSensor testSensor = new ColorSensor();
-  // private Servo testMotor = new Servo(0);
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -40,10 +28,6 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    
-    
-    // testMotor.setBounds(2.0, 1.8, 1.5, 1.2, 1.0);
-    // SmartDashboard.putNumber("test motor 'speed'", 0);
   }
 
   /**
@@ -61,9 +45,6 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
     m_robotContainer.getOdometry().update();
-    // SmartDashboard.putNumber("color sensor dist value", testSensor.ir());
-    // SmartDashboard.putBoolean("object present", testSensor.objPresent());
-    // SmartDashboard.putBoolean("is red", testSensor.isRedNotBlue());
     m_robotContainer.gPneumaticHub().enableCompressorAnalog(90, 120);
   }
 
@@ -105,7 +86,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    // testMotor.setSpeed(SmartDashboard.getNumber("test motor 'speed'", 0));
   }
 
   @Override
