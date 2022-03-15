@@ -56,7 +56,7 @@ public class RobotContainer {
   private final Turret turret = new Turret();
   private final Climber climber = new Climber();
 
-  private final Odometry odometry = new Odometry(driveTrain, pigeon, limelight);
+  private final Odometry odometry = new Odometry(driveTrain, turret, pigeon, limelight);
   
   private final Hood hood = new Hood();
   /** The container for the robot. Contains subsystems, OI devices, and commands. */

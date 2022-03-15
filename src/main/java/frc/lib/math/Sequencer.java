@@ -91,8 +91,8 @@ public class Sequencer {
         // ArrayList<Double> computed = test.compute();
         // System.out.println(computed);
         // System.out.println(test.predict(computed, 1, 1));
-        double[] test = {1,1,0};
-        double[] res = Sequencer.predict(test, 50);
+        double[] test = {1,4,9,16};
+        double[] res = Sequencer.predict(Sequencer.compute(test), 50);
         for (double i : res) System.out.println(i);
     }
 }
