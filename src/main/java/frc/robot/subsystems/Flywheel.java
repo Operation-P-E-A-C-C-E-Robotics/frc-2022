@@ -27,7 +27,7 @@ public class Flywheel extends SubsystemBase {
 
   private final double velocityRange = 500,
                         accelerationRange = 100,
-                        jerkRange = 10;
+                        jerkRange = 100;
 
   double[] history = new double[3];
 

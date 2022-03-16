@@ -4,21 +4,24 @@
 
 package frc.robot.commands.shooter;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.Limelight;
+import frc.lib.util.TargetTracker;
 import frc.robot.subsystems.Turret;
 
 public class AutoTurret extends CommandBase {
   private final Turret turret;
-  private final Limelight limelight;
+  // private final Limelight limelight;
 
   private double curretTurretPosition, 
   targetTurretPosition = Double.NaN;
+  private TargetTracker target;
 
   /** Creates a new AutoAim. */
-  public AutoTurret(Turret turret, Limelight limelight) {
+  public AutoTurret(Turret turret, TargetTracker target) {
     this.turret = turret;
-    this.limelight = limelight;
+    this.target = target;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(turret);
@@ -27,18 +30,19 @@ public class AutoTurret extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    limelight.setModeVision();
-    limelight.setLedOn();
+    // limelight.setModeVision();
+    // limelight.setLedOn();
     targetTurretPosition = Double.NaN;
   }
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(limelight.hasTarget() == 1){
+    // if(limelight.hasTarget() == 1){
       curretTurretPosition = turret.getPosition();
-      double deltaX = limelight.getTargetOffsetX() / 360;
-      double newTargetTurretPosition = curretTurretPosition + deltaX; //todo figure out what's flipped
-      
+      // double deltaX = limelight.getTargetOffsetX() / 360;
+      // double newTargetTurretPosition = curretTurretPosition + deltaX; //todo figure out what's flipped
+      double newTargetTurretPosition = target.getTargetAngle();
+      SmartDashboard.putNumber("target angle", target.getTargetAngle());
       if(Double.isNaN(targetTurretPosition)){
         targetTurretPosition = newTargetTurretPosition;
       } else {
@@ -47,10 +51,10 @@ public class AutoTurret extends CommandBase {
 
 
       turret.turretRotations(newTargetTurretPosition);
-    } else{
-      targetTurretPosition = Double.NaN;
-      turret.turretPercent(0.0);
-    }
+    // } else{
+      // targetTurretPosition = Double.NaN;
+      // turret.turretPercent(0.0);
+    // }
   }
 
   // Called once the command ends or is interrupted.

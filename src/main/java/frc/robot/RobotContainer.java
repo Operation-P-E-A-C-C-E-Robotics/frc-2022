@@ -46,7 +46,7 @@ public class RobotContainer {
   //declare robot components
   //utilities:
   private final Limelight limelight = new Limelight(2.62, 0.9, 30);
-  private final Pigeon pigeon = new Pigeon(new PigeonIMU(7));
+  private final Pigeon pigeon = new Pigeon(new PigeonIMU(20));
   private final PneumaticHub pneumaticHub = new PneumaticHub();
   private Robot robot = new Robot();
   // subsystems:

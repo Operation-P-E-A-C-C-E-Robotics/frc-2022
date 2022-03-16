@@ -66,8 +66,8 @@ public class PointTracker {
             lx.add(x[i]);
             ly.add(y[i]);
         }
-        double[] newx = Util.shiftLeft(x, lx.compute(1, keep));
-        double[] newy = Util.shiftLeft(y, ly.compute(1, keep));
+        double[] newx = Util.shiftLeft(x, lx.compute(10, keep));
+        double[] newy = Util.shiftLeft(y, ly.compute(10, keep));
         PointTracker result = new PointTracker(keep);
         for (int i = 0; i < keep; i++){
             result.xy(newx[i], newy[i]);
