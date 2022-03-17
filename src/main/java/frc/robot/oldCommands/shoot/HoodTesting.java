@@ -22,11 +22,6 @@ public class HoodTesting extends CommandBase {
     this.container = container;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(hood);
-    SmartDashboard.putNumber("hood kf", 0);
-    SmartDashboard.putNumber("hood kp", 0);
-    SmartDashboard.putNumber("hood ki", 0);
-    SmartDashboard.putNumber("hood kd", 0);
-    SmartDashboard.putNumber("hood setpoint", 0);
   }
 
   // Called when the command is initially scheduled.
@@ -39,13 +34,6 @@ public class HoodTesting extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // hood.configTalonGains(
-    //     SmartDashboard.getNumber("hood kf", 0),
-    //     SmartDashboard.getNumber("hood kp", 0),
-    //     SmartDashboard.getNumber("hood ki", 0),
-    //     SmartDashboard.getNumber("hood kd", 0)
-    // );
-    // hood.setHoodAngle(Rotation2d.fromDegrees(SmartDashboard.getNumber("hood setpoint", 0)));
     hood.setHoodAngle(Rotation2d.fromDegrees(SmartDashboard.getNumber("hood setpoint", 0)));
   }
 

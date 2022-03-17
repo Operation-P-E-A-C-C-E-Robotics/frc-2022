@@ -4,7 +4,6 @@
 
 package frc.robot.commands.shooter;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Flywheel;
@@ -12,7 +11,7 @@ import frc.robot.subsystems.Flywheel;
 public class ShooterSetpoint2 extends CommandBase {
   private final Flywheel shooter;
   private final Hood hood;
-  private double veloctiy_default = 6700;
+  private double veloctiy = 6700;
   /** Creates a new ShooterControl. */
   public ShooterSetpoint2(Flywheel shooter, Hood hood) {
     this.shooter = shooter;
@@ -25,14 +24,13 @@ public class ShooterSetpoint2 extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    SmartDashboard.putNumber("flywheel velocity 1", veloctiy_default);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     //Replace with PID Control
-    shooter.flywheelVelocity(SmartDashboard.getNumber("flywheel velocity 1", veloctiy_default));
+    shooter.flywheelVelocity(veloctiy);
     hood.setHoodPosition(32);
 
   }

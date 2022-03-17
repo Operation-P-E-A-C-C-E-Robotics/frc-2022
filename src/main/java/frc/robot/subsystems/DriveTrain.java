@@ -186,10 +186,6 @@ public class DriveTrain extends SubsystemBase {
     }
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("drivetrain l1 temp", leftMasterController.getTemperature());
-        SmartDashboard.putNumber("drivetrain l2 temp", leftSlaveController.getTemperature());
-        SmartDashboard.putNumber("drivetrain r1 temp", rightMasterController.getTemperature());
-        SmartDashboard.putNumber("drivetrain r2 temp", rightSlaveController.getTemperature());
         SmartDashboard.putNumber("drivetrain left current", leftMasterController.getSupplyCurrent() + leftSlaveController.getSupplyCurrent());
         SmartDashboard.putNumber("drivetrain right current", rightMasterController.getSupplyCurrent() + rightSlaveController.getSupplyCurrent());
         dDrive.feed();

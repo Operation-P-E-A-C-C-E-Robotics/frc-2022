@@ -4,9 +4,7 @@
 
 package frc.robot.commands.shooter;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.lib.Limelight;
 import frc.lib.util.TargetTracker;
 import frc.robot.subsystems.Turret;
 
@@ -42,7 +40,6 @@ public class AutoTurret extends CommandBase {
       // double deltaX = limelight.getTargetOffsetX() / 360;
       // double newTargetTurretPosition = curretTurretPosition + deltaX; //todo figure out what's flipped
       double newTargetTurretPosition = target.getTargetAngle();
-      SmartDashboard.putNumber("target angle", target.getTargetAngle());
       if(Double.isNaN(targetTurretPosition)){
         targetTurretPosition = newTargetTurretPosition;
       } else {

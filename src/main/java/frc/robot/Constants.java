@@ -54,7 +54,11 @@ public final class Constants {
         public static final double ENCODER_COUNTS_PER_CM = 2.5/100,
                                     FULLY_EXTENDED_COUNTS = 267,
                                     ATTACHMENT_POINT_RADIUS = 18,
-                                    LOWEST_ANGLE = 18;
+                                    LOWEST_ANGLE = 18,
+                                    kF = 0,
+                                    kP = 100,
+                                    kI = 0,
+                                    kD = 0;
         public static final int     HOOD_CONTROLLER_PORT = 15;
     }
     
@@ -74,4 +78,9 @@ public final class Constants {
                                 ARM_CONTORLLER_PORT = 18;
     }
 
+    public static final double[][] AIM_DATA = {
+        {0.2,   2.8,    3.5,    6}, //distances
+        {6700,  7400,   8000,   10000}, //flywheel velocities
+        {50,    170,    200,    226}, //hood angles
+    };
 }

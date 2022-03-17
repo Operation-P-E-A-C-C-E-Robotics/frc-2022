@@ -4,7 +4,6 @@
 
 package frc.robot.commands.shooter;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.Limelight;
 import frc.robot.subsystems.Turret;
@@ -14,7 +13,7 @@ import frc.robot.subsystems.Flywheel;
 public class ShooterSetpoint1 extends CommandBase {
   private final Flywheel shooter;
   private final Hood hood;
-  private double veloctiy_default = 8000;
+  private double velocity = 8000;
 
   private double curretTurretPosition, 
   targetTurretPosition = Double.NaN;
@@ -39,14 +38,13 @@ public class ShooterSetpoint1 extends CommandBase {
     limelight.setModeVision();
       limelight.setLedOn();
     targetTurretPosition = Double.NaN;
-    SmartDashboard.putNumber("flywheel velocity 1", veloctiy_default);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     //Replace with PID Control
-    shooter.flywheelVelocity(SmartDashboard.getNumber("flywheel velocity 1", veloctiy_default));
+    shooter.flywheelVelocity(velocity);
     hood.setHoodPosition(200);
 
     if(limelight.hasTarget() == 1){

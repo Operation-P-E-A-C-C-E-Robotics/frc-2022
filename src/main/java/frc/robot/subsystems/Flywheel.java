@@ -16,6 +16,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import static frc.robot.Constants.Shooter.*;
+import static frc.robot.Constants.AIM_DATA;
 
 public class Flywheel extends SubsystemBase {
   private final WPI_TalonFX flywheelMasterController = new WPI_TalonFX(FLYWHEEL_MASTER_PORT);
@@ -33,12 +34,8 @@ public class Flywheel extends SubsystemBase {
 
   /** Creates a new Shooter. */
   public Flywheel() {
-    //furthest distance: 12,000; 39
-    double[] distances = {0.2,2.8,3.5, 6};
-    //
-    double[] velocities = {6700,7400,8000, 10000};
 
-    distanceToVelocity.setSamples(distances, velocities);
+    distanceToVelocity.setSamples(AIM_DATA[0], AIM_DATA[1]);
 
     flywheelSlaveController.follow(flywheelMasterController);
 
@@ -50,12 +47,6 @@ public class Flywheel extends SubsystemBase {
 
     flywheelMasterController.setNeutralMode(NeutralMode.Coast);
     // flywheelMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 40, 40, 10));
-
-
-    SmartDashboard.putNumber("shooter kp", FLYWHEEL_kP);
-    SmartDashboard.putNumber("shooter ki", FLYWHEEL_kI);
-    SmartDashboard.putNumber("shooter kd", FLYWHEEL_kD);
-    SmartDashboard.putNumber("shooter kf", FLYWHEEL_kF);
   }
   
   /**
@@ -95,29 +86,26 @@ public class Flywheel extends SubsystemBase {
   /**
    * set pidf gains for talons
    */
-  private void configTalonGains(double kF, double kP, double kI, double kD){
+  public void configTalonGains(double kF, double kP, double kI, double kD){
     flywheelMasterController.config_kF(0, kF);
     flywheelMasterController.config_kP(0, kP);
     flywheelMasterController.config_kI(0, kI);
     flywheelMasterController.config_kD(0, kD);
     flywheelMasterController.configClosedloopRamp(2);
   }
+
+  public double getFlywheelVelocity(){
+    return flywheelMasterController.getSelectedSensorVelocity();
+  }
+
+  public double getFlywheelError(){
+    return flywheelMasterController.getClosedLoopError();
+  }
   
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("shooter velocity", flywheelMasterController.getSelectedSensorVelocity());
-    SmartDashboard.putNumber("shooter motor 1 current", flywheelMasterController.getSupplyCurrent());
-    SmartDashboard.putNumber("shooter motor 2 current", flywheelSlaveController.getSupplyCurrent());
-    SmartDashboard.putNumber("shooter velocity error", flywheelMasterController.getClosedLoopError());
-
     SmartDashboard.putBoolean("shooter ready", ready());
-
-    configTalonGains(SmartDashboard.getNumber("shooter kf", FLYWHEEL_kF),
-              SmartDashboard.getNumber("shooter kp", FLYWHEEL_kP),
-              SmartDashboard.getNumber("shooter ki", FLYWHEEL_kI),
-              SmartDashboard.getNumber("shooter kd", FLYWHEEL_kD));
-
     for(int i = 0; i < history.length - 1; i++){
       history[i] = history[i + 1];
     }

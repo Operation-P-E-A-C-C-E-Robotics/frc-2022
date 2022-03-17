@@ -5,7 +5,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.Limelight;
 import frc.lib.debloating.Pigeon;
 import frc.lib.util.TargetTracker;
@@ -36,7 +35,6 @@ public class Odometry {
         target.update();
         pigeon.update(getHeading());
         odometry.update(Rotation2d.fromDegrees(getHeading()), driveTrain.lEncoderPosition(), driveTrain.rEncoderPosition());
-        SmartDashboard.putNumber("target angle 2", target.getTargetAngle());
     }
 
     public DifferentialDriveKinematics getKinematics() {

@@ -21,6 +21,7 @@ import frc.robot.commands.intake.Intake;
 import frc.robot.commands.intake.IntakeDown;
 import frc.robot.commands.intake.POVIntake;
 import frc.robot.commands.shooter.AutoShoot;
+import frc.robot.commands.shooter.AutoTurret;
 import frc.robot.commands.shooter.ManualAim;
 import frc.robot.commands.shooter.RampFlywheel;
 import frc.robot.commands.shooter.ReverseTrigger;
@@ -28,6 +29,7 @@ import frc.robot.commands.shooter.RunTrigger;
 import frc.robot.commands.shooter.ShooterSetpoint1;
 import frc.robot.commands.shooter.ShooterSetpoint2;
 import frc.robot.commands.drivetrain.ArcadeDrive;
+import frc.robot.commands.helpers.SetpointHelper;
 import frc.robot.subsystems.BallHandler;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveTrain;
@@ -130,6 +132,12 @@ public class RobotContainer {
       intake));
     // new JoystickButton(operatorJoystick, 3).whileHeld(() -> {hood.setEncoderZero();});
     // new JoystickButton(operatorJoystick, 4).whileHeld(new HoodTesting(hood, limelight, this));
+  }
+
+  public void testModeButtonBindings(){
+    Joystick testJoystick = new Joystick(3);
+    JoystickButton b1 = new JoystickButton(testJoystick, 1);
+    b1.toggleWhenPressed(new SetpointHelper(shooter, hood, limelight, testJoystick).alongWith(new AutoTurret(turret, odometry.getTarget())));
   }
 
   //access functions:

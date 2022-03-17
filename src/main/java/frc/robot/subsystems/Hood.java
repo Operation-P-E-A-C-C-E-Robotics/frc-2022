@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.math.CubicSplineInterpolate;
 import static frc.robot.Constants.Hood.*;
+import static frc.robot.Constants.AIM_DATA;
 
 public class Hood extends SubsystemBase {
     private final WPI_TalonSRX hoodMotor = new WPI_TalonSRX(15); //todo port number
@@ -22,11 +23,9 @@ public class Hood extends SubsystemBase {
 
     /** Creates a new Hood. */
     public Hood() {
-        double[] distances = {0.2, 2.8, 3.5, 6};
-        double[] angles = {50,170, 200, 226};
-        distanceToAngle.setSamples(distances, angles);
+        distanceToAngle.setSamples(AIM_DATA[0], AIM_DATA[2]);
         hoodMotor.setInverted(true); //change so positive = forward
-        configTalonGains(0, 100, 0, 10); //todo change duh
+        configTalonGains(kF, kP, kI, kD); //todo change duh
     }
 
     /**
@@ -101,6 +100,10 @@ public class Hood extends SubsystemBase {
         hoodMotor.setSelectedSensorPosition(0);
     }
 
+    public double getHoodPosition(){
+        return hoodMotor.getSelectedSensorPosition();
+    }
+
     // private double countsToCM(double counts){
     //     return counts * ENCODER_COUNTS_PER_CM;
     // }
@@ -115,7 +118,5 @@ public class Hood extends SubsystemBase {
             hoodMotor.setSelectedSensorPosition(0);
             //hoodMotor.set(0);
         }
-        SmartDashboard.putNumber("Hood position", hoodMotor.getSelectedSensorPosition());
-
     }
 }
