@@ -37,16 +37,14 @@ public class CheesyDrive extends CommandBase {
   @Override
   public void execute() {
     Joystick driverJoystick = container.getDriverJoystick();
+
     if(driverJoystick.getRawButtonPressed(3)) driveTrain.shift(Gear.LOW_GEAR);
     else driveTrain.shift(Gear.HIGH_GEAR);
+
     double spd = driverJoystick.getY();
     double rot = driverJoystick.getX();
-    boolean quickturn = false;
-    if(driverJoystick.getRawButton(7)){
-      quickturn = true;
-    }else{
-      quickturn = false;
-    }
+
+    boolean quickturn = driverJoystick.getRawButton(7);
     driveTrain.arcadeDrive(cheesyDriveHelper.cheesyDrive(spd, rot, quickturn,  driveTrain.getGear() == Gear.HIGH_GEAR)); //todo implement ishighgear
   }
 
