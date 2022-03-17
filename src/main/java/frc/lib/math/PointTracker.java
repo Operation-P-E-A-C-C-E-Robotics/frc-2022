@@ -1,5 +1,6 @@
 package frc.lib.math;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import frc.lib.util.Util;
 
 public class PointTracker {
@@ -87,8 +88,8 @@ public class PointTracker {
 
     public static void main(String args[]){
         PointTracker test = new PointTracker(2);
-        test.xy(0,0);
-        test.xy(1,1);
-        System.out.println(test.getFuture().x());
+        test.pr(-Rotation2d.fromDegrees(90).getRadians(),1);
+        System.out.println(test.x());
+        System.out.println(test.y());
     }
 }

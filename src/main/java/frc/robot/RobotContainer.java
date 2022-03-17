@@ -20,15 +20,14 @@ import frc.robot.commands.climber.JoystickClimber;
 import frc.robot.commands.intake.Intake;
 import frc.robot.commands.intake.IntakeDown;
 import frc.robot.commands.intake.POVIntake;
+import frc.robot.commands.shooter.AutoShoot;
+import frc.robot.commands.shooter.ManualAim;
 import frc.robot.commands.shooter.RampFlywheel;
+import frc.robot.commands.shooter.ReverseTrigger;
+import frc.robot.commands.shooter.RunTrigger;
 import frc.robot.commands.shooter.ShooterSetpoint1;
 import frc.robot.commands.shooter.ShooterSetpoint2;
-import frc.robot.oldCommands.drive.ArcadeDrive;
-import frc.robot.oldCommands.shoot.AutoShoot;
-import frc.robot.oldCommands.shoot.ManualHood;
-import frc.robot.oldCommands.shoot.ManualTrigger;
-import frc.robot.oldCommands.shoot.ManualTurret;
-import frc.robot.oldCommands.shoot.ShooterReverse;
+import frc.robot.commands.drivetrain.ArcadeDrive;
 import frc.robot.subsystems.BallHandler;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveTrain;
@@ -70,11 +69,10 @@ public class RobotContainer {
   // commands:
   private final Command 
     arcadeDrive  = new ArcadeDrive(driveTrain, this),
-    joystickAim  = new ManualTurret(turret, this),
+    joystickAim  = new ManualAim(turret, hood, this),
     povIntake    = new POVIntake(intake, shooter, this, true),
     flywheel1    = new ShooterSetpoint1(shooter, hood, turret, limelight),
     flywheel2    = new ShooterSetpoint2(shooter, hood),
-    manualHood   = new ManualHood(hood, this),
     manualClimb  = new JoystickClimber(climber, this);
   
   // OI:
@@ -103,16 +101,16 @@ public class RobotContainer {
     driveTrain.setDefaultCommand(arcadeDrive);
     intake.setDefaultCommand(povIntake);
     turret.setDefaultCommand(joystickAim);
-    hood.setDefaultCommand(manualHood);
+    hood.setDefaultCommand(joystickAim);
     climber.setDefaultCommand(manualClimb);
   
-    autoshootButton.whileHeld(new AutoShoot(turret, hood, shooter, intake, limelight, this));
-    autoshootButton2.whileHeld(new AutoShoot(turret, hood, shooter, intake, limelight, this));
+    autoshootButton.whileHeld(new AutoShoot(shooter, hood, turret, intake, limelight, this));
+    autoshootButton2.whileHeld(new AutoShoot(shooter, hood, turret, intake, limelight, this));
 
     layupShot.whileHeld(flywheel2);
     protectedShot.whileHeld(flywheel1);
-    reverseTrigger.whileHeld(new ShooterReverse(shooter, intake));
-    triggerButton.whileHeld(new ManualTrigger(intake, turret, limelight));
+    reverseTrigger.whileHeld(new ReverseTrigger(shooter, intake));
+    triggerButton.whileHeld(new RunTrigger(intake));
     intakeButton.whileHeld(
       new Intake(intake).alongWith(
       new IntakeDown(intake),
