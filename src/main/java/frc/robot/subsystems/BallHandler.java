@@ -4,27 +4,20 @@
 
 package frc.robot.subsystems;
 
-import static frc.robot.Constants.Intake.INTAKE_CONTROLLER_PORT;
-import static frc.robot.Constants.Traversal.TRAVERSAL_CONTROLLER_PORT;
-import static frc.robot.Constants.Traversal.TRIGGER_CONTROLLER_PORT;
-
-import com.ctre.phoenix.motorcontrol.ControlMode;
+import static frc.robot.Constants.BallHandlerConstants.*;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.debloating.ColorSensor;
+import frc.lib.sensors.ColorSensor;
 
 public class BallHandler extends SubsystemBase {
   private final WPI_TalonSRX intakeMotor = new WPI_TalonSRX(INTAKE_CONTROLLER_PORT);
   private final WPI_TalonSRX traversalMotor = new WPI_TalonSRX(TRAVERSAL_CONTROLLER_PORT);
   private final WPI_TalonSRX triggerMotor = new WPI_TalonSRX(TRIGGER_CONTROLLER_PORT); //todo do port number in constants
-  //TODO this wont work for now because need to add multiple color sensors support
-  private final ColorSensor traversalBallSensor = new ColorSensor(); 
-  private final ColorSensor triggerBallSensor = new ColorSensor();
+
   private boolean canRunIntake = false,
                   armsDown = false;
   private double armsLoweredTimer = 0;
@@ -37,99 +30,65 @@ public class BallHandler extends SubsystemBase {
   public BallHandler() {
     traversalMotor.setInverted(true);
     intakeMotor.setInverted(true);
-    setMotorConstants(intakeMotor, 0, 0, 0);
-    setMotorConstants(traversalMotor, 0, 0, 0);
-    setMotorConstants(triggerMotor, 0, 0, 0);
     traversalMotor.configContinuousCurrentLimit(5);
     armsUp();
   }
 
-  private void setMotorConstants(WPI_TalonSRX m, double kp, double ki, double kd){
-    m.config_kP(0, kp);
-    m.config_kI(0, ki);
-    m.config_kD(0, kd);
+  /**
+   * set the intake percent
+   * @param speed percent (-1 to 1), positive forward
+   */
+  public void setIntake(double speed){
+    if (canRunIntake) intakeMotor.set(speed);
+    else intakeMotor.set(0);
   }
 
-  public void setIntake(double speed){
-    //System.out.println(speed);
-    if (canRunIntake) {intakeMotor.set(speed);}
-    else {intakeMotor.set(0);}
-    }
-
+  /**
+   * set the traversal percent
+   * @param speed percent (-1 to 1), positive forward
+   */
   public void setTraversal(double speed){
     traversalMotor.set(speed);
   }
 
+  /**
+   * set the trigger percent
+   * @param speed percent (-1 to 1), positive forward
+   */
   public void setTrigger(double speed){
     triggerMotor.set(speed);
   }
 
+  /**
+   * set intake, traversal, and trigger to the same speed
+   * @param speed percent (-1 to 1)
+   */
   public void setAll(double speed){
-    setIntake(speed * 1);
-    setTraversal(speed * 0.5);
-    setTrigger(speed * 0.2);
-  }
-  
-  public void setIntakePosition(double position){
-    intakeMotor.set(ControlMode.Position, position);
+    setIntake(speed);
+    setTraversal(speed);
+    setTrigger(speed);
   }
 
-  public void setTraversalPosition(double position){
-    traversalMotor.set(ControlMode.Position, position);
-  }
-
-  public void setTriggerPosition(double position){
-    triggerMotor.set(ControlMode.Position, position);
-  }
-
-  public boolean ballInTraversal(){
-    return traversalBallSensor.objPresent();
-  }
-
-
+  /**
+   * raise intake arms
+   */
   public void armsUp() {
     armsDown = false;
     arms.set(Value.kReverse);
   }
 
+  /**
+   * lower intake arms
+   */
   public void armsDown() {
     if(!armsDown) armsLoweredTimer = Timer.getFPGATimestamp();
     armsDown = true;
     arms.set(Value.kForward);
   }
-
-  // public void armsToggle() {
-  //   arms.toggle();
-  // }
-
-  public boolean ballInTrigger(){
-    return triggerBallSensor.objPresent();
-  }
-
-  public boolean getTraversalBallColor(){
-    return traversalBallSensor.isRedNotBlue();
-  }
-
-  public boolean getTriggerBallColor(){
-    return triggerBallSensor.isRedNotBlue();
-  }
   
   @Override
   public void periodic() {
+    //only allow the intake to run if the arms have had 0.4 secs to lower
     canRunIntake = (armsDown && (Timer.getFPGATimestamp() - armsLoweredTimer) > 0.4);
-
   }
-
-  public double getIntakePosition() {
-    return intakeMotor.getSelectedSensorPosition();
-  }
-
-  public double getTraversalPosition() {
-    return traversalMotor.getSelectedSensorPosition();
-  }
-
-  public void initialize() {
-    armsUp();
-  }
-
 }

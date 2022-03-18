@@ -5,7 +5,7 @@
 
 package frc.robot.subsystems;
 
-import static frc.robot.Constants.Climber.*;
+import static frc.robot.Constants.ClimberConstants.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
@@ -15,8 +15,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Climber extends SubsystemBase {
   private WPI_TalonFX liftMasterController = new WPI_TalonFX(CLIMBER_TOP_CONTROLLER_PORT); 
   private WPI_TalonFX liftSlaveController = new WPI_TalonFX(CLIMBER_BOTTOM_CONTROLLER_PORT);
-  //private DoubleSolenoid  leftArmWhich = new DoubleSolenoid(1, PneumaticsModuleType.REVPH, 4, 5);
-    //private DoubleSolenoid secondaryArmSolenoid = new DoubleSolenoid(1, PneumaticsModuleType.REVPH, 6, 7);
+
   private WPI_TalonFX armWinch = new WPI_TalonFX(ARM_CONTORLLER_PORT);
   private final double liftRaisedCounts = 0;
 
@@ -49,22 +48,9 @@ public class Climber extends SubsystemBase {
     liftMasterController.set(ControlMode.MotionMagic, 0);
   }
 
-
   public void setArmPercent(double percent){
     armWinch.set(percent);
   }
-
-  // public void extendArm(){
-  //   armWinch.set(1);
-  // }
-
-  // public void retractArm(){
-  //   armWinch.set(-1);
-  // }
-
-  // public void stopArm() {
-  //   armWinch.set(0);
-  // }
 
   @Override
   public void periodic() {

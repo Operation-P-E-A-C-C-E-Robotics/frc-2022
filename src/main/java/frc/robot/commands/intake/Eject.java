@@ -5,31 +5,21 @@ import frc.robot.subsystems.BallHandler;
 
 public class Eject extends CommandBase{
 
-    private BallHandler intake;
+  private BallHandler intake;
 
-    public Eject(BallHandler intake){
-        this.intake = intake;
-    }
-      // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
+  public Eject(BallHandler intake){
+    this.intake = intake;
   }
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      intake.armsUp();
-      intake.setTraversal(-0.2);
+    intake.armsUp();
+    intake.setTraversal(-0.2);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-      intake.setTraversal(0);
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
+    intake.setTraversal(0);
   }
 }

@@ -18,19 +18,15 @@ public class CheesyDrive extends CommandBase {
   /**
    * Creates a new CheesyDrive.
    */
-  private DriveTrain driveTrain;
-  private RobotContainer container;
-  CheesyDriveHelper cheesyDriveHelper = new CheesyDriveHelper();
+  private final DriveTrain driveTrain;
+  private final RobotContainer container;
+
+  private final CheesyDriveHelper cheesyDriveHelper = new CheesyDriveHelper();
   public CheesyDrive(DriveTrain driveTrain, RobotContainer container) {
     this.container = container;
     this.driveTrain = driveTrain;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(driveTrain);
-  }
-
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -46,16 +42,5 @@ public class CheesyDrive extends CommandBase {
 
     boolean quickturn = driverJoystick.getRawButton(7);
     driveTrain.arcadeDrive(cheesyDriveHelper.cheesyDrive(spd, rot, quickturn,  driveTrain.getGear() == Gear.HIGH_GEAR)); //todo implement ishighgear
-  }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
   }
 }

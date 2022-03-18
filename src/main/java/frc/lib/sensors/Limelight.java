@@ -1,4 +1,4 @@
-package frc.lib;
+package frc.lib.sensors;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;

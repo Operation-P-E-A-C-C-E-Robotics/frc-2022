@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Flywheel;
-import static frc.robot.Constants.Shooter.*;
+import static frc.robot.Constants.FlywheelConstants.*;
 
 public class FlywheelTuner extends CommandBase{
     private Flywheel flywheel;

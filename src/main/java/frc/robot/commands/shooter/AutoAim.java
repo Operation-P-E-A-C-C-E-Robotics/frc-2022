@@ -1,7 +1,7 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import frc.lib.Limelight;
+import frc.lib.sensors.Limelight;
 import frc.lib.util.TargetTracker;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Hood;

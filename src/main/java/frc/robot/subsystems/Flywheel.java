@@ -15,38 +15,38 @@ import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
-import static frc.robot.Constants.Shooter.*;
+import static frc.robot.Constants.FlywheelConstants.*;
 import static frc.robot.Constants.AIM_DATA;
 
 public class Flywheel extends SubsystemBase {
   private final WPI_TalonFX flywheelMasterController = new WPI_TalonFX(FLYWHEEL_MASTER_PORT);
   private final WPI_TalonFX flywheelSlaveController = new WPI_TalonFX(FLYWHEEL_SLAVE_PORT);
-
-  private CubicSplineInterpolate distanceToVelocity = new CubicSplineInterpolate();
+  
+  //interpolates distances with datapoints
+  private final CubicSplineInterpolate distanceToVelocity = new CubicSplineInterpolate();
 
   double shooterSetpoint = 0;
 
+  //acceptable errors (to tell when the flywheel is up to speed)
   private final double velocityRange = 500,
                         accelerationRange = 100,
                         jerkRange = 100;
 
+  //holds previous 3 flywheel velocities, for flywheel up to speed calculations
   double[] history = new double[3];
 
   /** Creates a new Shooter. */
   public Flywheel() {
-
     distanceToVelocity.setSamples(AIM_DATA[0], AIM_DATA[1]);
 
     flywheelSlaveController.follow(flywheelMasterController);
 
-    //CHANGE IF FIGHTING
     flywheelMasterController.setInverted(true);
     flywheelSlaveController.setInverted(InvertType.OpposeMaster);
 
     configTalonGains(FLYWHEEL_kF, FLYWHEEL_kP, FLYWHEEL_kI, FLYWHEEL_kD);
 
     flywheelMasterController.setNeutralMode(NeutralMode.Coast);
-    // flywheelMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 40, 40, 10));
   }
   
   /**
@@ -56,6 +56,7 @@ public class Flywheel extends SubsystemBase {
   public void flywheelPercent(double speed) {
     flywheelMasterController.set(speed);
   }
+
   /**
    * set the flywheel velocity with the built in pidf control
    * @param velocity the velocity to set to in sensor units/100ms
@@ -65,6 +66,10 @@ public class Flywheel extends SubsystemBase {
     shooterSetpoint = velocity;
   }
 
+  /**
+   * use interpolation to set the flywheel speed for a target
+   * @param distanceMeters the distance to the target
+   */
   public void setVelcityForDistance(double distanceMeters){
     try{
       flywheelVelocity(distanceToVelocity.cubicSplineInterpolate(distanceMeters));
@@ -73,6 +78,10 @@ public class Flywheel extends SubsystemBase {
     }
   }
 
+  /**
+   * tell if the flywheel is up to speed
+   * @return the flywheel speed
+   */
   public boolean ready(){
     double[] decomposition = Sequencer.compute(history);
     return (
@@ -94,18 +103,25 @@ public class Flywheel extends SubsystemBase {
     flywheelMasterController.configClosedloopRamp(2);
   }
 
+  /**
+   * @return flywheel speed in counts/100ms
+   */
   public double getFlywheelVelocity(){
     return flywheelMasterController.getSelectedSensorVelocity();
   }
 
+  /**
+   * @return the difference between the target and current velocity
+   */
   public double getFlywheelError(){
     return flywheelMasterController.getClosedLoopError();
   }
   
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    SmartDashboard.putBoolean("shooter ready", ready());
+    SmartDashboard.putBoolean("flywheel up to speed", ready());
+
+    //shift shooter velocity into history array
     for(int i = 0; i < history.length - 1; i++){
       history[i] = history[i + 1];
     }

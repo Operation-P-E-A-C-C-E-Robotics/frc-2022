@@ -5,7 +5,7 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.lib.Limelight;
+import frc.lib.sensors.Limelight;
 import frc.robot.subsystems.BallHandler;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Flywheel;
@@ -18,7 +18,7 @@ public class TriggerWhenReady extends CommandBase {
   private final Limelight limelight;
   private BallHandler intake;
 
-  /** Creates a new AutoAim. */
+  /** Run the trigger once everything is in position to shoot */
   public TriggerWhenReady(Turret turret, Hood hood, Flywheel shooter, BallHandler intake, Limelight limelight) {
     this.turret = turret;
     this.hood = hood;
@@ -29,36 +29,21 @@ public class TriggerWhenReady extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intake);
   }
-
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-  }
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(limelight.hasTarget() == 1){
-      if(turret.ready() && shooter.ready() && hood.ready()){
-        intake.setTrigger(1);
-        intake.setTraversal(0.5);
-      } else{
-        intake.setTrigger(0);
-        intake.setTraversal(0);
-      }
+    if(limelight.hasTarget() == 1 && turret.ready() && shooter.ready() && hood.ready()){
+      intake.setTrigger(1);
+      intake.setTraversal(0.5);
     } else{
-        intake.setTrigger(0);
-        intake.setTraversal(0);
+      intake.setTrigger(0);
+      intake.setTraversal(0.3);
     }
   }
-
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
+    intake.setTrigger(0);
+    intake.setTraversal(0);
   }
 }

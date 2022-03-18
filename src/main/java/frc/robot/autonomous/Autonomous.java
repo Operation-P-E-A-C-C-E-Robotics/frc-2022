@@ -5,7 +5,7 @@
 package frc.robot.autonomous;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.lib.Limelight;
+import frc.lib.sensors.Limelight;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.BallHandler;
 import frc.robot.subsystems.Turret;

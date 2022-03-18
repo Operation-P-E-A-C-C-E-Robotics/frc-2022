@@ -8,22 +8,18 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Flywheel;
 
-public class ShooterSetpoint2 extends CommandBase {
+public class LayupShotSetpoint extends CommandBase {
   private final Flywheel shooter;
   private final Hood hood;
   private double veloctiy = 6700;
+  
   /** Creates a new ShooterControl. */
-  public ShooterSetpoint2(Flywheel shooter, Hood hood) {
+  public LayupShotSetpoint(Flywheel shooter, Hood hood) {
     this.shooter = shooter;
     this.hood = hood;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
     addRequirements(hood);
-  }
-
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -40,11 +36,5 @@ public class ShooterSetpoint2 extends CommandBase {
   public void end(boolean interrupted) {
     shooter.flywheelPercent(0);
     hood.zero();
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
   }
 }

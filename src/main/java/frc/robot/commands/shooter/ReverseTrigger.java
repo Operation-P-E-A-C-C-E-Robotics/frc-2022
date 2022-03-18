@@ -5,18 +5,14 @@ import frc.robot.subsystems.BallHandler;
 import frc.robot.subsystems.Flywheel;
 
 public class ReverseTrigger extends CommandBase{
-    private BallHandler intake;
-    private Flywheel flywheel;
+  private BallHandler intake;
+  private Flywheel flywheel;
 
-    public ReverseTrigger(Flywheel flywheel, BallHandler intake){
-        this.intake = intake;
-        this.flywheel = flywheel;
+  public ReverseTrigger(Flywheel flywheel, BallHandler intake){
+    this.intake = intake;
+    this.flywheel = flywheel;
 
-        addRequirements(intake, flywheel);
-    }
-    // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
+    addRequirements(intake, flywheel);
   }
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -32,11 +28,5 @@ public class ReverseTrigger extends CommandBase{
       intake.setTrigger(0);
       intake.setTraversal(0);
       flywheel.flywheelPercent(0);
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
   }
 }

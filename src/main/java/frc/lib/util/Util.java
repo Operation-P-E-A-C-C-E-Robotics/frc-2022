@@ -79,6 +79,10 @@ public class Util {
         return ar.get(ar.size() - 1 - i);
     }
 
+    public static double last(double[] ar, int i){
+        return ar[ar.length - 1 - i];
+    }
+
     public static double[] shiftLeft(double[] ar, double newv){
         int i = 0;
         for (;i < ar.length - 1; i++){
@@ -87,6 +91,4 @@ public class Util {
         ar[i] = newv;
         return ar;
     }
-
-    // public static PointTracker getTargetPos()
 }

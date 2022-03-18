@@ -13,8 +13,10 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.lib.Limelight;
-import frc.lib.debloating.Pigeon;
+import frc.lib.sensors.Limelight;
+import frc.lib.sensors.Pigeon;
+import frc.robot.OI.DriverMappings;
+import frc.robot.OI.Mappings;
 import frc.robot.autonomous.RealAuto;
 import frc.robot.commands.climber.JoystickClimber;
 import frc.robot.commands.intake.Intake;
@@ -26,8 +28,8 @@ import frc.robot.commands.shooter.ManualAim;
 import frc.robot.commands.shooter.RampFlywheel;
 import frc.robot.commands.shooter.ReverseTrigger;
 import frc.robot.commands.shooter.RunTrigger;
-import frc.robot.commands.shooter.ShooterSetpoint1;
-import frc.robot.commands.shooter.ShooterSetpoint2;
+import frc.robot.commands.shooter.ProtectedShotSetpoint;
+import frc.robot.commands.shooter.LayupShotSetpoint;
 import frc.robot.commands.drivetrain.ArcadeDrive;
 import frc.robot.commands.helpers.SetpointHelper;
 import frc.robot.subsystems.BallHandler;
@@ -45,53 +47,61 @@ import frc.robot.subsystems.Turret;
  */
 public class RobotContainer {
   //declare robot components
+  private final Robot robot = new Robot();
+
   //utilities:
   private final Limelight limelight = new Limelight(2.62, 0.9, 30);
   private final Pigeon pigeon = new Pigeon(new PigeonIMU(20));
   private final PneumaticHub pneumaticHub = new PneumaticHub();
-  private Robot robot = new Robot();
+  
   // subsystems:
   private final DriveTrain driveTrain = new DriveTrain();
-  private final Flywheel shooter = new Flywheel();
+  private final Flywheel flywheel = new Flywheel();
   private final BallHandler intake = new BallHandler();
   private final Turret turret = new Turret();
   private final Climber climber = new Climber();
-
+  private final Hood hood = new Hood();
+  
   private final Odometry odometry = new Odometry(driveTrain, turret, pigeon, limelight);
   
-  private final Hood hood = new Hood();
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
-    //set default commands
-    
-    // Configure the button bindings
-    configureButtonBindings();
-  }
   
   // commands:
   private final Command 
-    arcadeDrive  = new ArcadeDrive(driveTrain, this),
-    joystickAim  = new ManualAim(turret, hood, this),
-    povIntake    = new POVIntake(intake, shooter, this, true),
-    flywheel1    = new ShooterSetpoint1(shooter, hood, turret, limelight),
-    flywheel2    = new ShooterSetpoint2(shooter, hood),
-    manualClimb  = new JoystickClimber(climber, this);
-  
-  // OI:
-  private final Joystick driverJoystick = new Joystick(0);
-  private final Joystick operatorJoystick = new Joystick(1);
-
-  private final JoystickButton 
-    autoshootButton   = new JoystickButton(driverJoystick, 2), 
-    layupShot         = new JoystickButton(operatorJoystick, 1), 
-    protectedShot     = new JoystickButton(operatorJoystick, 2), 
-    reverseTrigger    = new JoystickButton(operatorJoystick, 3), 
-    triggerButton     = new JoystickButton(operatorJoystick, 4), 
-    intakeButton      = new JoystickButton(operatorJoystick, 5), 
-    autoshootButton2  = new JoystickButton(operatorJoystick, 6), 
-    traversalButton   = new JoystickButton(operatorJoystick, 7), 
-    travtrigButton     = new JoystickButton(operatorJoystick, 8);
-  
+    arcadeDrive     = new ArcadeDrive(driveTrain, this),
+    joystickAim     = new ManualAim(turret, hood, this),
+    povIntake       = new POVIntake(intake, flywheel, this, true),
+    protectedShot   = new ProtectedShotSetpoint(flywheel, hood, turret, limelight),
+    layupShot       = new LayupShotSetpoint(flywheel, hood),
+    manualClimb     = new JoystickClimber(climber, this),
+    reverseTrigger  = new ReverseTrigger(flywheel, intake),
+    runTrigger      = new RunTrigger(intake),
+    autoShoot       = new AutoShoot(flywheel, hood, turret, intake, limelight, this),
+    runIntake       = new Intake(intake).alongWith(
+                        new IntakeDown(intake),
+                        new RampFlywheel(flywheel).withTimeout(10)
+                      ),
+    runTraversal    = new StartEndCommand(
+                        () -> intake.setTraversal(1), 
+                        () -> intake.setTraversal(0), 
+                        intake
+                        ),
+    runTraversalAndTrigger = new StartEndCommand(
+      () -> {intake.setTraversal(1); intake.setTrigger(1);}, 
+      () -> {intake.setTraversal(0);intake.setTrigger(0);}, 
+      intake
+      );
+      
+    // OI:
+    private final Joystick driverJoystick = new Joystick(0);
+    private final Joystick operatorJoystick = new Joystick(1);
+    
+    private final OI operatorOI = new OI(operatorJoystick);
+    private final OI driverOI = new OI(driverJoystick);
+    
+    /** The container for the robot. Contains subsystems, OI devices, and commands. */
+    public RobotContainer() {
+      configureButtonBindings();
+    }
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
@@ -105,45 +115,31 @@ public class RobotContainer {
     turret.setDefaultCommand(joystickAim);
     hood.setDefaultCommand(joystickAim);
     climber.setDefaultCommand(manualClimb);
-  
-    autoshootButton.whileHeld(new AutoShoot(shooter, hood, turret, intake, limelight, this));
-    autoshootButton2.whileHeld(new AutoShoot(shooter, hood, turret, intake, limelight, this));
 
-    layupShot.whileHeld(flywheel2);
-    protectedShot.whileHeld(flywheel1);
-    reverseTrigger.whileHeld(new ReverseTrigger(shooter, intake));
-    triggerButton.whileHeld(new RunTrigger(intake));
-    intakeButton.whileHeld(
-      new Intake(intake).alongWith(
-      new IntakeDown(intake),
-      new RampFlywheel(shooter).withTimeout(10)));
-    traversalButton.whileHeld(new StartEndCommand(
-      () -> intake.setTraversal(1), 
-      () -> intake.setTraversal(0), 
-      intake));
-    triggerButton.whileHeld(new StartEndCommand(
-      () -> intake.setTrigger(1), 
-      () -> intake.setTrigger(0), 
-      intake));
+    operatorOI.bind(Mappings.LAYUP_SHOT, layupShot)
+              .bind(Mappings.PROTECTED_SHOT, protectedShot)
+              .bind(Mappings.REVERSE_TRIGGER, reverseTrigger)
+              .bind(Mappings.RUN_TRIGGER, runTrigger)
+              .bind(Mappings.RUN_INTAKE, runIntake)
+              .bind(Mappings.AUTO_SHOOT, autoShoot)
+              .bind(Mappings.RUN_TRAVERSAL, runTraversal)
+              .bind(Mappings.RUN_TRAVERSAL_AND_TRIGGER, runTraversalAndTrigger);
     
-    travtrigButton.whileHeld(new StartEndCommand(
-      () -> {intake.setTraversal(1); intake.setTrigger(1);}, 
-      () -> {intake.setTraversal(0);intake.setTrigger(0);}, 
-      intake));
-    // new JoystickButton(operatorJoystick, 3).whileHeld(() -> {hood.setEncoderZero();});
-    // new JoystickButton(operatorJoystick, 4).whileHeld(new HoodTesting(hood, limelight, this));
+    driverOI.bind(DriverMappings.AUTO_SHOOT, autoShoot)
+            .bind(DriverMappings.RUN_INTAKE, runIntake);
   }
 
   public void testModeButtonBindings(){
     Joystick testJoystick = new Joystick(3);
     JoystickButton b1 = new JoystickButton(testJoystick, 1);
-    b1.toggleWhenPressed(new SetpointHelper(shooter, hood, limelight, testJoystick).alongWith(new AutoTurret(turret, odometry.getTarget())));
+    b1.toggleWhenPressed(new SetpointHelper(flywheel, hood, limelight, testJoystick).alongWith(new AutoTurret(turret, odometry.getTarget())));
   }
 
   //access functions:
   public Odometry getOdometry() {
     return odometry;
   }
+
   /**
    * @return the operator joystick
    */
@@ -151,7 +147,7 @@ public class RobotContainer {
     return operatorJoystick;
   }
 
-  public PneumaticHub gPneumaticHub(){
+  public PneumaticHub getPneumaicsHub(){
     return pneumaticHub;
   }
   
@@ -172,12 +168,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    // try {
-      return new RealAuto(driveTrain, shooter, hood, intake, turret, limelight, this);
-    // } catch (IOException e) {
-    //   e.printStackTrace();
-    //   return null;
-    // } //todo change to command when written
+    return new RealAuto(driveTrain, flywheel, hood, intake, turret, limelight, this);
   }
 }

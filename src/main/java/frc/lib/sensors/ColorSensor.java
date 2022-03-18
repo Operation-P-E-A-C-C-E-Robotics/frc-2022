@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.lib.debloating;
+package frc.lib.sensors;
 
 import com.revrobotics.ColorSensorV3;
 

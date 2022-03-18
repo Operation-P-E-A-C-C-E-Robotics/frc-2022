@@ -5,12 +5,12 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.lib.Limelight;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Hood;
+import frc.lib.sensors.Limelight;
 import frc.robot.subsystems.Flywheel;
 
-public class ShooterSetpoint1 extends CommandBase {
+public class ProtectedShotSetpoint extends CommandBase {
   private final Flywheel shooter;
   private final Hood hood;
   private double velocity = 8000;
@@ -21,8 +21,8 @@ public class ShooterSetpoint1 extends CommandBase {
   private Turret turret;
 
 
-  /** Creates a new ShooterControl. */
-  public ShooterSetpoint1(Flywheel shooter, Hood hood, Turret turret, Limelight camera) {
+  /** Setpoint for shooting from the protected shot */
+  public ProtectedShotSetpoint(Flywheel shooter, Hood hood, Turret turret, Limelight camera) {
     this.shooter = shooter;
     this.hood = hood;
     this.limelight = camera;
@@ -36,14 +36,13 @@ public class ShooterSetpoint1 extends CommandBase {
   @Override
   public void initialize() {
     limelight.setModeVision();
-      limelight.setLedOn();
+    limelight.setLedOn();
     targetTurretPosition = Double.NaN;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //Replace with PID Control
     shooter.flywheelVelocity(velocity);
     hood.setHoodPosition(200);
 
@@ -71,11 +70,5 @@ public class ShooterSetpoint1 extends CommandBase {
     limelight.setLedOff();
     turret.turretPercent(0.0);
     hood.zero();
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
   }
 }

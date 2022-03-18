@@ -6,8 +6,8 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.Climber;
 
 public class JoystickClimber extends CommandBase{
-    Climber climber;
-    private RobotContainer container;
+  Climber climber;
+  private RobotContainer container;
 
   public JoystickClimber(Climber climber, RobotContainer container) {
     this.climber = climber;
@@ -17,27 +17,11 @@ public class JoystickClimber extends CommandBase{
     addRequirements(climber);
   }
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-  }
-
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
       Joystick operatorJoystick = container.getOperatorJoystick();
       climber.setLiftPercent(operatorJoystick.getRawAxis(3));
       climber.setArmPercent(operatorJoystick.getRawAxis(2));
-  }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
   }
 }

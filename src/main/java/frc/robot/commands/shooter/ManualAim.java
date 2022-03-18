@@ -21,7 +21,7 @@ public class ManualAim extends CommandBase {
 
   private double timer = 0;
   boolean hasControl = false;
-  /** Creates a new manualShooter. */
+  /** Aim with joystick. */
   public ManualAim(Turret shooter, Hood hood, RobotContainer container) {
     this.turret = shooter;
     this.hood = hood;
@@ -59,16 +59,6 @@ public class ManualAim extends CommandBase {
       hasControl = false;
     }
     if (hasControl) hood.setHoodSpeed(-container.getOperatorJoystick().getY() / 3);
-  }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
   }
 }
 

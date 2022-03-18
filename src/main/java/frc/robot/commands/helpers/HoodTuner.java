@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Hood;
-import static frc.robot.Constants.Hood.*;
+import static frc.robot.Constants.HoodConstants.*;
 
 public class HoodTuner extends CommandBase{
     private Hood hood;

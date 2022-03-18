@@ -34,7 +34,6 @@ public class POVIntake extends CommandBase {
   @Override
   public void execute() {
     int pov = container.getOperatorJoystick().getPOV();
-    //System.out.println(pov);
     if (pov == 180) {
       //intake
       intake.armsDown();
@@ -42,9 +41,14 @@ public class POVIntake extends CommandBase {
       if(revshooter){
         CommandScheduler.getInstance().schedule(new RampFlywheel(flywheel).withTimeout(10));
       }
-      // intake.setTraversal(1);
-    } else if (pov == 0) {
-      //reverse
+    } else if (pov == 135 || pov == 225){
+      intake.setTraversal(1);
+      intake.setIntake(1);
+      if(revshooter){
+        CommandScheduler.getInstance().schedule(new RampFlywheel(flywheel).withTimeout(10));
+      }
+    }else if (pov == 0) {
+      //raise arms
       intake.armsUp();
       intake.setAll(0);
     } else {
@@ -52,22 +56,6 @@ public class POVIntake extends CommandBase {
       intake.setTraversal(0);
       intake.setTrigger(0);
     }
-
-    // if (container.getOperatorJoystick().getRawButton(5) || container.getDriverJoystick().getRawButton(1)) {
-    //   intake.armsDown();
-    //   intake.setIntake(1);
-    //   intake.setTraversal(1);
-    // } else if(container.getOperatorJoystick().getRawButtonReleased(7) || container.getDriverJoystick().getRawButtonReleased(1)) {
-    //   intake.armsUp();
-    // }
-
-    // if(container.getOperatorJoystick().getRawButton(7)){
-    //   intake.setTraversal(1);
-    // }
-
-    // if(container.getOperatorJoystick().getRawButton(8)){
-    //   intake.setTrigger(1);
-    // }
 
   }
 

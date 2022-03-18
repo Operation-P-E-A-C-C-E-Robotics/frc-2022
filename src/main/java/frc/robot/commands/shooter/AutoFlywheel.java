@@ -5,7 +5,7 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.lib.Limelight;
+import frc.lib.sensors.Limelight;
 import frc.robot.subsystems.Flywheel;
 
 public class AutoFlywheel extends CommandBase {

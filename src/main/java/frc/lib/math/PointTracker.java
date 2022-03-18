@@ -60,15 +60,11 @@ public class PointTracker {
         return this;
     }
 
-    public PointTracker getFuture(){
-        Lookaheader lx = new Lookaheader(x[0]);
-        Lookaheader ly = new Lookaheader(y[0]);
-        for (int i = 0; i < keep; i++){
-            lx.add(x[i]);
-            ly.add(y[i]);
-        }
-        double[] newx = Util.shiftLeft(x, lx.compute(10, keep));
-        double[] newy = Util.shiftLeft(y, ly.compute(10, keep));
+    public PointTracker getFuture(int steps){
+        double xPrediction = Util.last(Sequencer.predict(Sequencer.compute(x), steps + keep - 1), 0);
+        double yPrediction = Util.last(Sequencer.predict(Sequencer.compute(y), steps + keep - 1), 0);
+        double[] newx = Util.shiftLeft(x, xPrediction);
+        double[] newy = Util.shiftLeft(y, yPrediction);
         PointTracker result = new PointTracker(keep);
         for (int i = 0; i < keep; i++){
             result.xy(newx[i], newy[i]);
@@ -86,10 +82,15 @@ public class PointTracker {
         y = Util.shiftLeft(y, r() * Math.sin(p()));
     }
 
+    public String toString(){
+        return "PointTracker x:" + x() + " y:" + y() + " p:" + p() + " r:" + r();
+    }
+
     public static void main(String args[]){
         PointTracker test = new PointTracker(2);
-        test.pr(-Rotation2d.fromDegrees(90).getRadians(),1);
-        System.out.println(test.x());
-        System.out.println(test.y());
+        test.xy(0,0);
+        test.xy(1,1);
+        System.out.println(test);
+        System.out.println(test.getFuture(1));
     }
 }

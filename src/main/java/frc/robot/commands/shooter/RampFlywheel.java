@@ -11,18 +11,12 @@ public class RampFlywheel extends CommandBase {
 
   private Flywheel flywheel;
 
-/** Creates a new ShooterControl. */
+/** Creates a new rev the flywheel to a fixed percentage. */
   public RampFlywheel(Flywheel flywheel) {
       this.flywheel = flywheel;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements();
   }
-
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-  }
-
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
@@ -33,12 +27,5 @@ public class RampFlywheel extends CommandBase {
   @Override
   public void end(boolean interrupted) {
       flywheel.flywheelPercent(0);
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    // return (Timer.getFPGATimestamp() - timer) > 10;
-    return false;
   }
 }
