@@ -1,5 +1,7 @@
 package frc.lib.math;
 
+import java.util.Arrays;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.lib.util.Util;
 
@@ -61,8 +63,8 @@ public class PointTracker {
     }
 
     public PointTracker getFuture(int steps){
-        double xPrediction = Util.last(Sequencer.predict(Sequencer.compute(x), steps + keep - 1), 0);
-        double yPrediction = Util.last(Sequencer.predict(Sequencer.compute(y), steps + keep - 1), 0);
+        double xPrediction = Util.last(Sequencer.predict(Sequencer.compute(x), steps), 0);
+        double yPrediction = Util.last(Sequencer.predict(Sequencer.compute(y), steps), 0);
         double[] newx = Util.shiftLeft(x, xPrediction);
         double[] newy = Util.shiftLeft(y, yPrediction);
         PointTracker result = new PointTracker(keep);
@@ -83,14 +85,25 @@ public class PointTracker {
     }
 
     public String toString(){
-        return "PointTracker x:" + x() + " y:" + y() + " p:" + p() + " r:" + r();
+        return "PointTracker:\n\tx:" 
+                + x() + 
+                " y:" + y() + 
+                "\n\tp:" + p() + 
+                " r:" + r() + 
+                "\n\thistory - x:" + Arrays.toString(x) + " y:" + Arrays.toString(y);
     }
 
     public static void main(String args[]){
-        PointTracker test = new PointTracker(2);
+        PointTracker test = new PointTracker(3);
         test.xy(0,0);
         test.xy(1,1);
+        test.xy(2,3);
+        test.xy(3,5);
+        test.xy(4,7);
+        test.xy(5,10);
+        test.xy(6,5);
+        test.xy(7, 10);
         System.out.println(test);
-        System.out.println(test.getFuture(1));
+        System.out.println(test.getFuture(2));
     }
 }

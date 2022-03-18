@@ -79,10 +79,22 @@ public class Util {
         return ar.get(ar.size() - 1 - i);
     }
 
+    /**
+     * index an array from the end
+     * @param ar double array
+     * @param i index from back of array
+     * @return array element
+     */
     public static double last(double[] ar, int i){
         return ar[ar.length - 1 - i];
     }
 
+    /**
+     * shift an element into the left side of a double array, moving all elements one step
+     * @param ar
+     * @param newv
+     * @return
+     */
     public static double[] shiftLeft(double[] ar, double newv){
         int i = 0;
         for (;i < ar.length - 1; i++){

@@ -1,15 +1,20 @@
 package frc.lib.math;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+
+import frc.lib.util.Util;
 
 public class Sequencer {
     public static double[] predict(double[] computed, int numpredictions){
         double[] current = new double[numpredictions + 1];
         for(int i = 0; i < numpredictions; i++){
-            current[i] = computed[computed.length - 1];
+            current[i] = Util.last(computed, 0);// computed[computed.length - 1];
         }
         for(int i = computed.length - 2; i >= 0; i--){
+            System.out.println(Arrays.toString(current));
             current = stepUp(current, computed[i]);
+            System.out.println(Arrays.toString(current));
         }
         return current;
     }
@@ -32,7 +37,7 @@ public class Sequencer {
         }
         return result;
     }
-    
+
     public static double[] stepDown(double[] in){
         double[] result = new double[in.length - 1];
         for (int i = 1; i < in.length; i++){
@@ -41,8 +46,8 @@ public class Sequencer {
         return result;
     }
     public static void main(String args[]){
-        double[] test = {1,4,9,16};
-        double[] res = Sequencer.predict(Sequencer.compute(test), 50);
+        double[] test = {0,3,3};
+        double[] res = Sequencer.predict(Sequencer.compute(test), 5);
         for (double i : res) System.out.println(i);
     }
 }
