@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.math.PointTracker;
 import frc.lib.sensors.Limelight;
 import frc.lib.sensors.Pigeon;
@@ -35,7 +36,7 @@ public class TargetTracker {
      */
     public PointTracker getTargetRelativeToRobotLimelight(){
         double dist = limelight.getTargetDistance();
-        double rot = - (turret.getPosition() * 2 * Math.PI) - ((limelight.getTargetOffsetX() / 360) * 2 * Math.PI);
+        double rot = - (turret.getPosition() * 2 * Math.PI) - ((limelight.getTargetOffsetX() / 360) * 2 * Math.PI) + ((pigeon.getHeading() / 360) * 2 * Math.PI);
         PointTracker point = new PointTracker(1).pr(rot, dist); //TODO check rotation negative
         return point;
     }
@@ -47,18 +48,21 @@ public class TargetTracker {
     public Pose2d getRobotPoseLimelight(){
         PointTracker robot = getTargetRelativeToRobotLimelight();
         robot.xy(robot.x() + targetPosition.getX(), robot.y() + targetPosition.getY());
-        double rot = - (turret.getPosition() * 2 * Math.PI) - ((limelight.getTargetOffsetX() / 360) * 2 * Math.PI);
-        return new Pose2d(robot.x(), robot.y(), new Rotation2d(robot.p() - rot)); //TODO check rotation math
+        // double rot = //- (turret.getPosition() * 2 * Math.PI) - ((limelight.getTargetOffsetX() / 360) * 2 * Math.PI);
+        return new Pose2d(robot.x(), robot.y(), Rotation2d.fromDegrees(pigeon.getHeading()));//new Rotation2d(robot.p() - rot)); //TODO check rotation math
     }
 
     public void update(){
         Pose2d odoPose = odometry.getPoseMeters();
         if(limelight.hasTarget() == 1){
             Pose2d llPose = getRobotPoseLimelight();
+            SmartDashboard.putNumber("ll pose x", llPose.getX());
+            SmartDashboard.putNumber("ll pose y", llPose.getY());
+            SmartDashboard.putNumber("ll pose rot", llPose.getRotation().getDegrees());
             Pose2d odoReset = new Pose2d(
-                llPose.getX() - odoPose.getX(),
-                llPose.getY() - odoPose.getY(),
-                new Rotation2d(llPose.getRotation().getRadians() - odoPose.getRotation().getRadians())
+                odoPose.getX() - llPose.getX(),
+                odoPose.getY() - llPose.getY(),
+                new Rotation2d(odoPose.getRotation().getRadians() - llPose.getRotation().getRadians())
             );
             odometry.resetPosition(odoReset, Rotation2d.fromDegrees(pigeon.getHeading()));
         }

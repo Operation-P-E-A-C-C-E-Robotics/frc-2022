@@ -32,10 +32,10 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
 
-    UsbCamera armCam = CameraServer.startAutomaticCapture();
-      armCam.setResolution(640, 480);
-      armCam.setPixelFormat(PixelFormat.kYUYV);
-      armCam.setFPS(25);
+    // UsbCamera armCam = CameraServer.startAutomaticCapture();
+    //   armCam.setResolution(640, 480);
+    //   armCam.setPixelFormat(PixelFormat.kYUYV);
+    //   armCam.setFPS(25);
   }
 
   /**

@@ -10,8 +10,8 @@ import frc.robot.subsystems.Turret;
 public class AutoAim extends ParallelCommandGroup{
     public AutoAim(Flywheel flywheel, Hood hood, Turret turret, Limelight limelight, TargetTracker target){
         addCommands(new AutoFlywheel(flywheel, limelight), 
-                    new AutoHood(hood, target),
-                    new AutoTurret(turret, target));
+                    new AutoHood(hood, limelight),
+                    new AutoTurret(turret, limelight));
     }
 }
 

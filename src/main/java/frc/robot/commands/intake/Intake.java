@@ -1,6 +1,11 @@
 package frc.robot.commands.intake;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.BallHandler;
 
 public class Intake extends CommandBase{
@@ -24,5 +29,7 @@ public class Intake extends CommandBase{
   public void end(boolean interrupted) {
     intake.setIntake(0);
     intake.setTraversal(0);
+    intake.armsUp();
+    // CommandScheduler.getInstance().schedule(new SequentialCommandGroup(new WaitCommand(2), new InstantCommand(() -> intake.armsUp(), intake)));
   }
 }

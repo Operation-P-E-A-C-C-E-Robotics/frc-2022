@@ -29,7 +29,7 @@ public class ArcadeDrive extends CommandBase {
   public void execute() {
     Joystick driverJoystick = container.getDriverJoystick();
 
-    if(driverJoystick.getRawButtonPressed(3)) driveTrain.shift(Gear.LOW_GEAR);
+    if(driverJoystick.getRawButton(3)) driveTrain.shift(Gear.LOW_GEAR);
     else driveTrain.shift(Gear.HIGH_GEAR);
 
     double x = driverJoystick.getX();

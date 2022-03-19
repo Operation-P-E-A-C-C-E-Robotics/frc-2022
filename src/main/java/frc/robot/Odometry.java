@@ -25,7 +25,7 @@ public class Odometry {
         this.pigeon = pigeon;
         // this.camera = camera;
         odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getHeading()));
-        target = new TargetTracker(camera, pigeon, odometry, turret, new Translation2d(0,0));
+        target = new TargetTracker(camera, pigeon, odometry, turret, new Translation2d(0.3,0));
     }
 
     public TargetTracker getTarget(){

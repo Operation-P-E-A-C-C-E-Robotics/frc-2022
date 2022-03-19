@@ -6,12 +6,13 @@ package frc.robot;
 
 import com.ctre.phoenix.sensors.PigeonIMU;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -23,10 +24,8 @@ import frc.robot.autonomous.RealAuto;
 import frc.robot.commands.climber.JoystickClimber;
 import frc.robot.commands.intake.Intake;
 import frc.robot.commands.intake.IntakeDown;
-import frc.robot.commands.intake.IntakeUp;
 import frc.robot.commands.intake.POVIntake;
 import frc.robot.commands.shooter.AutoShoot;
-import frc.robot.commands.shooter.AutoTurret;
 import frc.robot.commands.shooter.ManualAim;
 import frc.robot.commands.shooter.RampFlywheel;
 import frc.robot.commands.shooter.ReverseTrigger;
@@ -93,6 +92,7 @@ public class RobotContainer {
       () -> {intake.setTraversal(0);intake.setTrigger(0);}, 
       intake
       );
+    // climbArmToggle = new InstantCommand(() -> climber.armsToggle(), climber);
       
     // OI:
     private final Joystick driverJoystick = new Joystick(0);
@@ -119,6 +119,7 @@ public class RobotContainer {
     climber.setDefaultCommand(manualClimb);
 
     new JoystickButton(operatorJoystick, Mappings.RUN_INTAKE).whenReleased(new RampFlywheel(flywheel).withTimeout(10));
+    new JoystickButton(operatorJoystick, 10).whenPressed(new InstantCommand(() -> odometry.resetOdometry(new Pose2d(0,0,new Rotation2d(0)))));
 
     operatorOI.bind(Mappings.LAYUP_SHOT, layupShot)
               .bind(Mappings.PROTECTED_SHOT, protectedShot)
@@ -132,7 +133,7 @@ public class RobotContainer {
     driverOI.bind(DriverMappings.AUTO_SHOOT, autoShoot)
             .bind(DriverMappings.RUN_INTAKE, runIntake);
   
-            b1.whileHeld(new SetpointHelper(flywheel, hood, limelight, testJoystick));//.alongWith(new AutoTurret(turret, odometry.getTarget())));
+            b1.toggleWhenPressed(new SetpointHelper(flywheel, hood, limelight, testJoystick));//.alongWith(new AutoTurret(turret, odometry.getTarget())));
   }
 
   Joystick testJoystick = new Joystick(3);

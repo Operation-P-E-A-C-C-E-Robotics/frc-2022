@@ -78,8 +78,8 @@ public final class Constants {
     }
 
     public static final double[][] AIM_DATA = {
-        {0.2,   2.8,    3.5,    6}, //distances
-        {6700,  7400,   8000,   10000}, //flywheel velocities
-        {50,    170,    200,    226}, //hood angles
+        {/*0.2,*/   1.4, 2.56, 3.6,  6}, //distances
+        {/*6200,*/  5850, 6600,7200, 9800}, //flywheel velocities
+        {/*75,*/    130, 220, 220, 220}, //hood angles
     };
 }

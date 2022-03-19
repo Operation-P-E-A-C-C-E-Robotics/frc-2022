@@ -5,15 +5,16 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.lib.sensors.Limelight;
 import frc.lib.util.TargetTracker;
 import frc.robot.subsystems.Hood;
 
 public class AutoHood extends CommandBase {
   private final Hood hood;
-  private TargetTracker target;
+  private Limelight target;
 
   /** Creates a new AutoAim. */
-  public AutoHood(Hood hood, TargetTracker target) {
+  public AutoHood(Hood hood, Limelight target) {
     this.hood = hood;
     this.target = target;
 

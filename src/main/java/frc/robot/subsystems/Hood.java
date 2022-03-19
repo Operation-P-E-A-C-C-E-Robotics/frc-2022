@@ -26,6 +26,7 @@ public class Hood extends SubsystemBase {
         distanceToAngle.setSamples(AIM_DATA[0], AIM_DATA[2]);
 
         hoodMotor.setInverted(true);
+        hoodMotor.configPeakCurrentLimit(5);
 
         configTalonGains(kF, kP, kI, kD);
     }
@@ -43,7 +44,7 @@ public class Hood extends SubsystemBase {
      * @return true if hood is ready to shoot
      */
     public boolean ready(){
-        return (hoodMotor.getClosedLoopError()) < 3;
+        return (hoodMotor.getClosedLoopError()) < 3 || hoodMotor.isFwdLimitSwitchClosed() == 1;
       }
 
     /**

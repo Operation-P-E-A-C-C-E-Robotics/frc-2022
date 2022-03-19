@@ -45,8 +45,9 @@ public class ManualAim extends CommandBase {
     //   turret.zero();
     // }
     if(Math.abs(container.getOperatorJoystick().getX()) > 0.2) {
-      turretRotations += curve.get(container.getOperatorJoystick().getX()) * 0.4;
-      turret.turretRotations(turretRotations);
+      // turretRotations += curve.get(container.getOperatorJoystick().getX()) * 0.1;
+      // turret.turretRotations(turretRotations);
+      turret.turretPercent(curve.get(container.getOperatorJoystick().getX()));
     }
     else {
       turret.turretPercent(0.0);

@@ -10,13 +10,18 @@ import static frc.robot.Constants.ClimberConstants.*;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Climber extends SubsystemBase {
   private WPI_TalonFX liftMasterController = new WPI_TalonFX(CLIMBER_TOP_CONTROLLER_PORT); 
   private WPI_TalonFX liftSlaveController = new WPI_TalonFX(CLIMBER_BOTTOM_CONTROLLER_PORT);
 
-  private WPI_TalonFX armWinch = new WPI_TalonFX(ARM_CONTORLLER_PORT);
+  // private WPI_TalonFX armWinch = new WPI_TalonFX(ARM_CONTORLLER_PORT);
+  // private DoubleSolenoid armSolenoid = new DoubleSolenoid(0, PneumaticsModuleType.REVPH, 0, 0); //TODO numbers
   private final double liftRaisedCounts = 0;
 
   /** Creates a new Climber. */
@@ -48,9 +53,21 @@ public class Climber extends SubsystemBase {
     liftMasterController.set(ControlMode.MotionMagic, 0);
   }
 
-  public void setArmPercent(double percent){
-    armWinch.set(percent);
-  }
+  // public void setArmPercent(double percent){
+  //   armWinch.set(percent);
+  // }
+
+  // public void armsOut(){
+  //   armSolenoid.set(Value.kForward);
+  // }
+
+  // public void armsIn(){
+  //   armSolenoid.set(Value.kReverse);
+  // }
+
+  // public void armsToggle(){
+  //   armSolenoid.toggle();
+  // }
 
   @Override
   public void periodic() {

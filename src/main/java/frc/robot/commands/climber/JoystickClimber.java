@@ -22,6 +22,6 @@ public class JoystickClimber extends CommandBase{
   public void execute() {
       Joystick operatorJoystick = container.getOperatorJoystick();
       climber.setLiftPercent(operatorJoystick.getRawAxis(3));
-      climber.setArmPercent(operatorJoystick.getRawAxis(2));
+      // climber.setArmPercent(operatorJoystick.getRawAxis(2));
   }
 }
