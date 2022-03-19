@@ -28,6 +28,7 @@ public class LayupShotSetpoint extends CommandBase {
     //Replace with PID Control
     shooter.flywheelVelocity(veloctiy);
     hood.setHoodPosition(32);
+    System.out.println("ITS WORKING IG");
 
   }
 
@@ -36,5 +37,10 @@ public class LayupShotSetpoint extends CommandBase {
   public void end(boolean interrupted) {
     shooter.flywheelPercent(0);
     hood.zero();
+  }
+
+  @Override
+  public boolean isFinished(){
+    return false;
   }
 }

@@ -12,9 +12,7 @@ public class Sequencer {
             current[i] = Util.last(computed, 0);// computed[computed.length - 1];
         }
         for(int i = computed.length - 2; i >= 0; i--){
-            System.out.println(Arrays.toString(current));
             current = stepUp(current, computed[i]);
-            System.out.println(Arrays.toString(current));
         }
         return current;
     }
@@ -46,7 +44,7 @@ public class Sequencer {
         return result;
     }
     public static void main(String args[]){
-        double[] test = {0,3,3};
+        double[] test = {0,1,2};
         double[] res = Sequencer.predict(Sequencer.compute(test), 5);
         for (double i : res) System.out.println(i);
     }

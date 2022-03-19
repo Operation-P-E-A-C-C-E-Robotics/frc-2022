@@ -15,7 +15,7 @@ public class RampFlywheel extends CommandBase {
   public RampFlywheel(Flywheel flywheel) {
       this.flywheel = flywheel;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements();
+    addRequirements(flywheel);
   }
   // Called every time the scheduler runs while the command is scheduled.
   @Override

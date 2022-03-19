@@ -38,16 +38,18 @@ public class POVIntake extends CommandBase {
       //intake
       intake.armsDown();
       intake.setIntake(1);
-      if(revshooter){
+      if(revshooter && CommandScheduler.getInstance().requiring(flywheel) == null){
         CommandScheduler.getInstance().schedule(new RampFlywheel(flywheel).withTimeout(10));
       }
     } else if (pov == 135 || pov == 225){
       intake.setTraversal(1);
       intake.setIntake(1);
-      if(revshooter){
+      if(revshooter && CommandScheduler.getInstance().requiring(flywheel) == null){
         CommandScheduler.getInstance().schedule(new RampFlywheel(flywheel).withTimeout(10));
       }
-    }else if (pov == 0) {
+    } else if (pov == 90 || pov == 270){
+      intake.setTraversal(1);
+    } else if (pov == 0) {
       //raise arms
       intake.armsUp();
       intake.setAll(0);

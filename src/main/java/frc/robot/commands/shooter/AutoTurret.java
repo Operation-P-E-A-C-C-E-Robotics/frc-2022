@@ -12,7 +12,7 @@ public class AutoTurret extends CommandBase {
   private final Turret turret;
   // private final Limelight limelight;
 
-  private double curretTurretPosition, 
+  private double /*curretTurretPosition, */
   targetTurretPosition = Double.NaN;
   private TargetTracker target;
 
@@ -30,13 +30,13 @@ public class AutoTurret extends CommandBase {
   public void initialize() {
     // limelight.setModeVision();
     // limelight.setLedOn();
-    targetTurretPosition = Double.NaN;
+    // targetTurretPosition = Double.NaN;
   }
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     // if(limelight.hasTarget() == 1){
-      curretTurretPosition = turret.getPosition();
+      // curretTurretPosition = turret.getPosition();
       // double deltaX = limelight.getTargetOffsetX() / 360;
       // double newTargetTurretPosition = curretTurretPosition + deltaX; //todo figure out what's flipped
       double newTargetTurretPosition = target.getTargetAngle();

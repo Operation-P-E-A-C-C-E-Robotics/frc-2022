@@ -19,6 +19,8 @@ public class ManualAim extends CommandBase {
   private double turretRotations = 0;
   private Hood hood;
 
+  private double hoodCounts = 0;
+
   private double timer = 0;
   boolean hasControl = false;
   /** Aim with joystick. */
@@ -49,6 +51,7 @@ public class ManualAim extends CommandBase {
     else {
       turret.turretPercent(0.0);
       turretRotations = turret.getPosition();
+      hoodCounts = hood.getHoodPosition();
     }
 
     if(Math.abs(container.getOperatorJoystick().getY()) > 0.2){
@@ -58,7 +61,14 @@ public class ManualAim extends CommandBase {
     } else if ((Timer.getFPGATimestamp() - timer) > 1){
       hasControl = false;
     }
-    if (hasControl) hood.setHoodSpeed(-container.getOperatorJoystick().getY() / 3);
+    if (hasControl) {
+      hood.setHoodSpeed(-container.getOperatorJoystick().getY() / 2);
+    }
+  }
+
+  @Override
+  public boolean isFinished(){
+    return false;
   }
 }
 

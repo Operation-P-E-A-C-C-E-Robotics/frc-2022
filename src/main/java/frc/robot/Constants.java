@@ -29,8 +29,8 @@ public final class Constants {
         public static final int FLYWHEEL_MASTER_PORT = 5,
                                 FLYWHEEL_SLAVE_PORT = 4;  
         
-        public static final double FLYWHEEL_kF = 0.05,
-                                    FLYWHEEL_kP = 0.1,
+        public static final double FLYWHEEL_kF = 0.055,
+                                    FLYWHEEL_kP = 0.15,
                                     FLYWHEEL_kI = 0,
                                     FLYWHEEL_kD = 0;
     }
