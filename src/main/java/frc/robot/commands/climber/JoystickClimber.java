@@ -22,7 +22,15 @@ public class JoystickClimber extends CommandBase{
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      climber.setLiftPercent(joystick.getRawAxis(3));
+      climber.setLiftPercent(joystick.getY());
+      double pov = joystick.getPOV();
+
+      if(pov == 0){
+        climber.armsOut();
+      } 
+      if(pov == 180){
+        climber.armsIn();
+      }
       // climber.setArmPercent(operatorJoystick.getRawAxis(2));
   }
 }

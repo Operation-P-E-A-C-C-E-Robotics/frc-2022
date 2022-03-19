@@ -12,7 +12,8 @@ public class Limelight {
   private final double tHeight;
   private final double cHeight;
   private final double cAngle;
-  private PointTracker fancy = new PointTracker(3);
+
+  private double pipeline = 0;
 
   /**
    * @param targetHeight the height of the target for calculating distance
@@ -49,6 +50,16 @@ public class Limelight {
     double distance = 0;
     distance = (tHeight - cHeight) / Math.tan(Math.toRadians(cAngle) + Math.toRadians(targetOffsetY));
     return distance;
+  }
+
+  public void update(){
+    if(getTargetOffsetX() < 5 && getTargetOffsetY() < 5){
+      setPipeline(3);
+    } else if (getTargetOffsetX() < 10 && getTargetOffsetY() < 10){
+      setPipeline(2);
+    }  else {
+      setPipeline(0);
+    }
   }
   /**
    * get the targets x offset from the camera
