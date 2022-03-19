@@ -6,7 +6,6 @@ package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.sensors.Limelight;
-import frc.lib.util.TargetTracker;
 import frc.robot.subsystems.Hood;
 
 public class AutoHood extends CommandBase {
@@ -25,7 +24,7 @@ public class AutoHood extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    hood.setHoodForDistance(target.getTargetDistance());
+    if(target.hasTarget() == 1) hood.setHoodForDistance(target.getTargetDistance());
   }
 
   // Called once the command ends or is interrupted.

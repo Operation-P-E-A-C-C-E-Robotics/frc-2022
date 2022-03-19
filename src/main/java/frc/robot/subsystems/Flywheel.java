@@ -119,7 +119,7 @@ public class Flywheel extends SubsystemBase {
   
   @Override
   public void periodic() {
-    SmartDashboard.putBoolean("flywheel up to speed", ready());
+    SmartDashboard.putBoolean("flywheel ready", ready());
 
     //shift shooter velocity into history array
     for(int i = 0; i < history.length - 1; i++){

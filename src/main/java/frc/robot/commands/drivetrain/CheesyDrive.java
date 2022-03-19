@@ -37,10 +37,10 @@ public class CheesyDrive extends CommandBase {
     if(driverJoystick.getRawButtonPressed(3)) driveTrain.shift(Gear.LOW_GEAR);
     else driveTrain.shift(Gear.HIGH_GEAR);
 
-    double spd = driverJoystick.getY();
+    double spd = -driverJoystick.getY();
     double rot = driverJoystick.getX();
 
-    boolean quickturn = driverJoystick.getRawButton(7);
+    boolean quickturn = driverJoystick.getRawButton(4);
     driveTrain.arcadeDrive(cheesyDriveHelper.cheesyDrive(spd, rot, quickturn,  driveTrain.getGear() == Gear.HIGH_GEAR)); //todo implement ishighgear
   }
 }

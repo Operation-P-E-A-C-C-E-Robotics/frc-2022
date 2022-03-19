@@ -82,7 +82,7 @@ public class SetpointHelper extends CommandBase{
     public void end(boolean i){
         SmartDashboard.putNumber("hood setpoint", hoodSetpointOffset);
         SmartDashboard.putNumber("flywheel setpoint", flywheelSetpointOffset);
-        hood.setHoodSpeed(0);
+        hood.setHoodPercent(0);
         flywheel.flywheelPercent(0);
     }
 }

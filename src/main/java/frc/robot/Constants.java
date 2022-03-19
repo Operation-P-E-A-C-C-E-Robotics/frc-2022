@@ -22,7 +22,7 @@ public final class Constants {
         
         public static final double DRIVE_HIGH_GEAR_RATIO = 9.1,
                                     DRIVE_LOW_GEAR_RATIO = 24,
-                                    WHEEL_DIAMETER_METERS = 0.1524; //TODO!!!
+                                    WHEEL_DIAMETER_METERS = 0.1524;
     }
 
     public static final class FlywheelConstants{
@@ -49,8 +49,6 @@ public final class Constants {
     }
 
     public static final class HoodConstants{
-        //39 degrees max
-        //TODO these are all wrong
         public static final double ENCODER_COUNTS_PER_CM = 2.5/100,
                                     FULLY_EXTENDED_COUNTS = 267,
                                     ATTACHMENT_POINT_RADIUS = 18,

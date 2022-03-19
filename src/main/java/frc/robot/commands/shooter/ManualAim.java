@@ -16,10 +16,10 @@ public class ManualAim extends CommandBase {
   private final RobotContainer container;
   private final NiceCurve curve = NiceCurve.preset1();
 
-  private double turretRotations = 0;
+  // private double turretRotations = 0;
   private Hood hood;
 
-  private double hoodCounts = 0;
+  // private double hoodCounts = 0;
 
   private double timer = 0;
   boolean hasControl = false;
@@ -35,7 +35,7 @@ public class ManualAim extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-      turretRotations = turret.getPosition();
+      // turretRotations = turret.getPosition();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -47,12 +47,12 @@ public class ManualAim extends CommandBase {
     if(Math.abs(container.getOperatorJoystick().getX()) > 0.2) {
       // turretRotations += curve.get(container.getOperatorJoystick().getX()) * 0.1;
       // turret.turretRotations(turretRotations);
-      turret.turretPercent(curve.get(container.getOperatorJoystick().getX()));
+      turret.setTurretPercent(curve.get(container.getOperatorJoystick().getX()));
     }
     else {
-      turret.turretPercent(0.0);
-      turretRotations = turret.getPosition();
-      hoodCounts = hood.getHoodPosition();
+      turret.setTurretPercent(0.0);
+      // turretRotations = turret.getPosition();
+      // hoodCounts = hood.getHoodPosition();
     }
 
     if(Math.abs(container.getOperatorJoystick().getY()) > 0.2){
@@ -63,7 +63,7 @@ public class ManualAim extends CommandBase {
       hasControl = false;
     }
     if (hasControl) {
-      hood.setHoodSpeed(-container.getOperatorJoystick().getY() / 2);
+      hood.setHoodPercent(-container.getOperatorJoystick().getY() / 2);
     }
   }
 

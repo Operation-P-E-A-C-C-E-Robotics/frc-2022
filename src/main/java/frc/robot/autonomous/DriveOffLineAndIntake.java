@@ -12,7 +12,7 @@ import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.*;
 
-public class Autonomous extends CommandBase {
+public class DriveOffLineAndIntake extends CommandBase {
   //private final DriveTrain driveTrain;
   @SuppressWarnings("FieldCanBeLocal")
   // private final Flywheel shooter;
@@ -26,7 +26,7 @@ public class Autonomous extends CommandBase {
   private double timer = Timer.getFPGATimestamp();
   private boolean isfinished = false;
   /** Creates a new autonomous. */
-  public Autonomous(DriveTrain driveTrain, Flywheel shooter, Hood hood, BallHandler intake, Turret turret, Limelight limelight, RobotContainer container) {
+  public DriveOffLineAndIntake(DriveTrain driveTrain, Flywheel shooter, Hood hood, BallHandler intake, Turret turret, Limelight limelight, RobotContainer container) {
     this.driveTrain = driveTrain;
     // this.shooter = shooter;
     // this.hood = hood;

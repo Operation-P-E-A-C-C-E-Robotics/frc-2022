@@ -2,6 +2,7 @@ package frc.lib.sensors;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import frc.lib.math.PointTracker;
 
 /*
  *Simple class for interfacing with the limelight camera.
@@ -11,6 +12,7 @@ public class Limelight {
   private final double tHeight;
   private final double cHeight;
   private final double cAngle;
+  private PointTracker fancy = new PointTracker(3);
 
   /**
    * @param targetHeight the height of the target for calculating distance

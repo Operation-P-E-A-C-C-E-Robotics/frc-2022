@@ -45,7 +45,7 @@ public class Turret extends SubsystemBase {
         return new GainSetter(pidController);
     }
 
-    public void turretRotations(double rotations){
+    public void setTurretRotations(double rotations){
         //limit rotations to += 180 degrees, and if value greater than that, rotate around the other way
         rotations = ((rotations + 0.5) % 1) - 0.5;
         rotations *= MOTOR_ROTS_PER_TURRET_ROT; //convert from motor rotations to turret rotations
@@ -56,7 +56,7 @@ public class Turret extends SubsystemBase {
     /**
      * UNTESTED turret velocity control
      */
-    public void turretVelocity(double velocity){
+    public void setTurretVelocity(double velocity){
         pidController.setReference(velocity, CANSparkMax.ControlType.kVelocity);
     }
 
@@ -64,7 +64,7 @@ public class Turret extends SubsystemBase {
      * set the turret motor power
      * @param speed the speed (-1 to 1)
      */
-    public void turretPercent(Double speed) {
+    public void setTurretPercent(Double speed) {
         turretMotor.set(speed);
     }
 

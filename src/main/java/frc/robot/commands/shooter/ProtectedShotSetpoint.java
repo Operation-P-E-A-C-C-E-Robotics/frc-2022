@@ -58,7 +58,7 @@ public class ProtectedShotSetpoint extends CommandBase {
         targetTurretPosition += (newTargetTurretPosition - targetTurretPosition) / 10;
       }
 
-      turret.turretRotations(targetTurretPosition);
+      turret.setTurretRotations(targetTurretPosition);
     }
   }
 
@@ -68,7 +68,7 @@ public class ProtectedShotSetpoint extends CommandBase {
     shooter.flywheelPercent(0);
     limelight.setModeDrive();
     limelight.setLedOff();
-    turret.turretPercent(0.0);
+    turret.setTurretPercent(0.0);
     hood.zero();
   }
 }

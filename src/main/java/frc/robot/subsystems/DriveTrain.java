@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.DriveSignal;
 import static frc.robot.Constants.DriveTrainConstants.*;
@@ -124,7 +123,8 @@ public class DriveTrain extends SubsystemBase {
      */
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
         return new DifferentialDriveWheelSpeeds(
-            leftMasterController.getSelectedSensorVelocity(0) / DRIVE_ENCODER_CPR / DRIVE_HIGH_GEAR_RATIO * wheelCircumference, rightMasterController.getSelectedSensorVelocity(0) / DRIVE_ENCODER_CPR / DRIVE_HIGH_GEAR_RATIO * wheelCircumference
+            leftMasterController.getSelectedSensorVelocity(0) / DRIVE_ENCODER_CPR / DRIVE_HIGH_GEAR_RATIO * wheelCircumference, 
+            rightMasterController.getSelectedSensorVelocity(0) / DRIVE_ENCODER_CPR / DRIVE_HIGH_GEAR_RATIO * wheelCircumference
         );
     }
 
@@ -186,8 +186,8 @@ public class DriveTrain extends SubsystemBase {
     }
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("drivetrain left current", leftMasterController.getSupplyCurrent() + leftSlaveController.getSupplyCurrent());
-        SmartDashboard.putNumber("drivetrain right current", rightMasterController.getSupplyCurrent() + rightSlaveController.getSupplyCurrent());
+        // SmartDashboard.putNumber("drivetrain left current", leftMasterController.getSupplyCurrent() + leftSlaveController.getSupplyCurrent());
+        // SmartDashboard.putNumber("drivetrain right current", rightMasterController.getSupplyCurrent() + rightSlaveController.getSupplyCurrent());
         dDrive.feed();
     }
 

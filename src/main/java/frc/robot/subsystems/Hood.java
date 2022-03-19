@@ -6,8 +6,6 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.math.CubicSplineInterpolate;
 import static frc.robot.Constants.HoodConstants.*;
@@ -35,7 +33,7 @@ public class Hood extends SubsystemBase {
      * set hood motor percentage of power
      * @param percent percentage of full speed (-1 to 1)
      */
-    public void setHoodSpeed(double percent){
+    public void setHoodPercent(double percent){
         hoodMotor.set(percent);
     }
 
@@ -46,36 +44,6 @@ public class Hood extends SubsystemBase {
     public boolean ready(){
         return (hoodMotor.getClosedLoopError()) < 3 || hoodMotor.isFwdLimitSwitchClosed() == 1;
       }
-
-    /**
-     * set the hood position as a percentage of position
-     * @param percent where to move to (0 to 1)
-     */
-    public void setHoodPosition(double percent){
-        double counts = percent;
-        setpoint = percent;
-        setMotorPosition(counts);
-    }
-
-    /**
-     * set hood extension in centimeters
-     * @param cm (cm > 0)
-     */
-    public void setHoodExtension(double cm){
-        double counts = cmToCounts(cm);
-        setMotorPosition(counts);
-    }
-
-    /**
-     * set the angle of the hood with 0 being streight up
-     * @param angle
-     */
-    public void setHoodAngle(Rotation2d angle){
-        double degreesFromZero = angle.getDegrees() - LOWEST_ANGLE;
-        double rotations = degreesFromZero / 360;
-        double cm = rotations * (2 * Math.PI * ATTACHMENT_POINT_RADIUS);
-        setHoodExtension(cm);
-    }
 
     /**
      * use interpolated data points to set the hood angle
@@ -93,7 +61,7 @@ public class Hood extends SubsystemBase {
      * run the hood backwards till it zeroes
      */
     public void zero(){
-        setHoodSpeed(-0.5); //limit switch should stop, zero when hits
+        setHoodPercent(-0.5); //limit switch should stop, zero when hits
     }
 
     /**
@@ -110,10 +78,10 @@ public class Hood extends SubsystemBase {
      * set the motor position as encoder counts
      * @param counts the counts to set the motor to
      */
-    public void setMotorPosition(double counts){
-        counts = counts > FULLY_EXTENDED_COUNTS ? FULLY_EXTENDED_COUNTS : counts;
-        counts = counts < 0 ? 0 : counts;
-        if(counts == 0);// zero();
+    public void setHoodPosition(double counts){
+        // counts = counts > FULLY_EXTENDED_COUNTS ? FULLY_EXTENDED_COUNTS : counts;
+        // counts = counts < 0 ? 0 : counts;
+        if(counts <= 0) zero();
         else hoodMotor.set(ControlMode.Position, counts);
     }
 
@@ -129,10 +97,6 @@ public class Hood extends SubsystemBase {
      */
     public double getHoodPosition(){
         return hoodMotor.getSelectedSensorPosition();
-    }
-
-    private double cmToCounts(double cm){
-        return cm / ENCODER_COUNTS_PER_CM;
     }
 
     @Override

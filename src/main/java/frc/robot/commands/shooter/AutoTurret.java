@@ -48,10 +48,10 @@ public class AutoTurret extends CommandBase {
       }
 
 
-      turret.turretRotations(newTargetTurretPosition);
+      turret.setTurretRotations(newTargetTurretPosition);
     } else{
       targetTurretPosition = Double.NaN;
-      turret.turretPercent(0.0);
+      turret.setTurretPercent(0.0);
     }
   }
 

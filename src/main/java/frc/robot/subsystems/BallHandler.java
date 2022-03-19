@@ -88,6 +88,6 @@ public class BallHandler extends SubsystemBase {
   @Override
   public void periodic() {
     //only allow the intake to run if the arms have had 0.4 secs to lower
-    canRunIntake = (armsDown && (Timer.getFPGATimestamp() - armsLoweredTimer) > 0.4);
+    canRunIntake = (armsDown && (Timer.getFPGATimestamp() - armsLoweredTimer) > 0.3);
   }
 }

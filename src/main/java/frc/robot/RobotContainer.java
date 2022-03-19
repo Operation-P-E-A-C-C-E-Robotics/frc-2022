@@ -20,7 +20,7 @@ import frc.lib.sensors.Limelight;
 import frc.lib.sensors.Pigeon;
 import frc.robot.OI.DriverMappings;
 import frc.robot.OI.Mappings;
-import frc.robot.autonomous.RealAuto;
+import frc.robot.autonomous.TwoBallAuto;
 import frc.robot.commands.climber.JoystickClimber;
 import frc.robot.commands.intake.Intake;
 import frc.robot.commands.intake.IntakeDown;
@@ -33,6 +33,7 @@ import frc.robot.commands.shooter.RunTrigger;
 import frc.robot.commands.shooter.ProtectedShotSetpoint;
 import frc.robot.commands.shooter.LayupShotSetpoint;
 import frc.robot.commands.drivetrain.ArcadeDrive;
+import frc.robot.commands.drivetrain.CheesyDrive;
 import frc.robot.commands.helpers.SetpointHelper;
 import frc.robot.subsystems.BallHandler;
 import frc.robot.subsystems.Climber;
@@ -78,7 +79,6 @@ public class RobotContainer {
     reverseTrigger  = new ReverseTrigger(flywheel, intake),
     runTrigger      = new RunTrigger(intake),
     autoShoot       = new AutoShoot(flywheel, hood, turret, intake, limelight, this),
-    // raiseIntake     = new IntakeUp(intake),
     runIntake       = new Intake(intake).alongWith(new IntakeDown(intake),
                         new RampFlywheel(flywheel).withTimeout(10)
     ),
@@ -92,7 +92,6 @@ public class RobotContainer {
       () -> {intake.setTraversal(0);intake.setTrigger(0);}, 
       intake
       );
-    // climbArmToggle = new InstantCommand(() -> climber.armsToggle(), climber);
       
     // OI:
     private final Joystick driverJoystick = new Joystick(0);
@@ -104,6 +103,8 @@ public class RobotContainer {
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
       configureButtonBindings();
+      limelight.setLedOff();
+      limelight.setModeDrive();
     }
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
@@ -119,13 +120,13 @@ public class RobotContainer {
     climber.setDefaultCommand(manualClimb);
 
     new JoystickButton(operatorJoystick, Mappings.RUN_INTAKE).whenReleased(new RampFlywheel(flywheel).withTimeout(10));
-    new JoystickButton(operatorJoystick, 10).whenPressed(new InstantCommand(() -> odometry.resetOdometry(new Pose2d(0,0,new Rotation2d(0)))));
 
     operatorOI.bind(Mappings.LAYUP_SHOT, layupShot)
               .bind(Mappings.PROTECTED_SHOT, protectedShot)
               .bind(Mappings.REVERSE_TRIGGER, reverseTrigger)
               .bind(Mappings.RUN_TRIGGER, runTrigger)
               .bind(Mappings.RUN_INTAKE, runIntake)
+
               .bind(Mappings.AUTO_SHOOT, autoShoot)
               .bind(Mappings.RUN_TRAVERSAL, runTraversal)
               .bind(Mappings.RUN_TRAVERSAL_AND_TRIGGER, runTraversalAndTrigger);
@@ -133,11 +134,12 @@ public class RobotContainer {
     driverOI.bind(DriverMappings.AUTO_SHOOT, autoShoot)
             .bind(DriverMappings.RUN_INTAKE, runIntake);
   
-            b1.toggleWhenPressed(new SetpointHelper(flywheel, hood, limelight, testJoystick));//.alongWith(new AutoTurret(turret, odometry.getTarget())));
+    //setpoint creation helper
+    testButton1.toggleWhenPressed(new SetpointHelper(flywheel, hood, limelight, testJoystick));//.alongWith(new AutoTurret(turret, odometry.getTarget())));
   }
 
   Joystick testJoystick = new Joystick(3);
-  JoystickButton b1 = new JoystickButton(testJoystick, 1);
+  JoystickButton testButton1 = new JoystickButton(testJoystick, 1);
   public void testModeButtonBindings(){
   }
 
@@ -174,6 +176,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new RealAuto(driveTrain, flywheel, hood, intake, turret, limelight, this);
+    return new TwoBallAuto(driveTrain, flywheel, hood, intake, turret, limelight, this);
   }
 }
