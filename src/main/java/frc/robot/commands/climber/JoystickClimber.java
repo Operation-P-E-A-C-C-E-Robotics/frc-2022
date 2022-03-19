@@ -8,10 +8,12 @@ import frc.robot.subsystems.Climber;
 public class JoystickClimber extends CommandBase{
   Climber climber;
   private RobotContainer container;
+  private Joystick joystick;
 
-  public JoystickClimber(Climber climber, RobotContainer container) {
+  public JoystickClimber(Climber climber, Joystick joystick, RobotContainer container) {
     this.climber = climber;
     this.container = container;
+    this.joystick = joystick;
     
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(climber);
@@ -20,8 +22,7 @@ public class JoystickClimber extends CommandBase{
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      Joystick operatorJoystick = container.getOperatorJoystick();
-      climber.setLiftPercent(operatorJoystick.getRawAxis(3));
+      climber.setLiftPercent(joystick.getRawAxis(3));
       // climber.setArmPercent(operatorJoystick.getRawAxis(2));
   }
 }

@@ -64,14 +64,14 @@ public class SetpointHelper extends CommandBase{
         hoodSetpointOffset += joystick.getRawAxis(3);
         distance = camera.getTargetDistance();
 
-        // hoodSetpoint = hoodInterp.cubicSplineInterpolate(distance);
-        // flywheelSetpoint = flywheelInterp.cubicSplineInterpolate(distance);
+        hoodSetpoint = hoodInterp.cubicSplineInterpolate(distance);
+        flywheelSetpoint = flywheelInterp.cubicSplineInterpolate(distance);
 
         // hoodSetpoint += hoodSetpointOffset;
         // flywheelSetpoint += flywheelSetpointOffset;
 
-        // SmartDashboard.putNumber("interp hood setpoint", hoodSetpoint);
-        // SmartDashboard.putNumber("interp flywheel setpoint", flywheelSetpoint);
+        SmartDashboard.putNumber("interp hood setpoint", hoodSetpoint);
+        SmartDashboard.putNumber("interp flywheel setpoint", flywheelSetpoint);
         hood.setHoodPosition(SmartDashboard.getNumber("hood setpoint", 0));
         flywheel.flywheelVelocity(SmartDashboard.getNumber("flywheel setpoint", 0));
         
@@ -82,7 +82,7 @@ public class SetpointHelper extends CommandBase{
     public void end(boolean i){
         SmartDashboard.putNumber("hood setpoint", hoodSetpointOffset);
         SmartDashboard.putNumber("flywheel setpoint", flywheelSetpointOffset);
-        hood.setHoodPercent(0);
+        // hood.setHoodSpeed(0);
         flywheel.flywheelPercent(0);
     }
 }

@@ -67,6 +67,14 @@ public class RobotContainer {
   
   private final Odometry odometry = new Odometry(driveTrain, turret, pigeon, limelight);
   
+  // OI:
+  private final Joystick driverJoystick = new Joystick(0);
+  private final Joystick mainOperatorJoystick = new Joystick(1);
+  private final Joystick climbOperatorJoystick = new Joystick(2);
+  
+  private final OI mainOperatorOI = new OI(mainOperatorJoystick);
+  private final OI climbOperatorOI = new OI(climbOperatorJoystick);
+  private final OI driverOI = new OI(driverJoystick);
   
   // commands:
   private final Command 
@@ -75,7 +83,7 @@ public class RobotContainer {
     povIntake       = new POVIntake(intake, flywheel, this, true),
     protectedShot   = new ProtectedShotSetpoint(flywheel, hood, turret, limelight),
     layupShot       = new LayupShotSetpoint(flywheel, hood),
-    manualClimb     = new JoystickClimber(climber, this),
+    manualClimb     = new JoystickClimber(climber, climbOperatorJoystick, this),
     reverseTrigger  = new ReverseTrigger(flywheel, intake),
     runTrigger      = new RunTrigger(intake),
     autoShoot       = new AutoShoot(flywheel, hood, turret, intake, limelight, this),
@@ -93,12 +101,6 @@ public class RobotContainer {
       intake
       );
       
-    // OI:
-    private final Joystick driverJoystick = new Joystick(0);
-    private final Joystick operatorJoystick = new Joystick(1);
-    
-    private final OI operatorOI = new OI(operatorJoystick);
-    private final OI driverOI = new OI(driverJoystick);
     
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -119,9 +121,9 @@ public class RobotContainer {
     hood.setDefaultCommand(joystickAim);
     climber.setDefaultCommand(manualClimb);
 
-    new JoystickButton(operatorJoystick, Mappings.RUN_INTAKE).whenReleased(new RampFlywheel(flywheel).withTimeout(10));
+    new JoystickButton(mainOperatorJoystick, Mappings.RUN_INTAKE).whenReleased(new RampFlywheel(flywheel).withTimeout(10));
 
-    operatorOI.bind(Mappings.LAYUP_SHOT, layupShot)
+    mainOperatorOI.bind(Mappings.LAYUP_SHOT, layupShot)
               .bind(Mappings.PROTECTED_SHOT, protectedShot)
               .bind(Mappings.REVERSE_TRIGGER, reverseTrigger)
               .bind(Mappings.RUN_TRIGGER, runTrigger)
@@ -152,7 +154,7 @@ public class RobotContainer {
    * @return the operator joystick
    */
   public Joystick getOperatorJoystick(){
-    return operatorJoystick;
+    return mainOperatorJoystick;
   }
 
   public PneumaticHub getPneumaicsHub(){

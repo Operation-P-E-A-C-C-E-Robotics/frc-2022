@@ -21,7 +21,8 @@ public class OI {
                                 RUN_INTAKE = 5,
                                 AUTO_SHOOT = 6,
                                 RUN_TRAVERSAL = 7,
-                                RUN_TRAVERSAL_AND_TRIGGER = 8;
+                                RUN_TRAVERSAL_AND_TRIGGER = 8,
+                                CLIMBER_ARM_TOGGLE = 10;
     }
 
 

@@ -28,9 +28,9 @@ public class Flywheel extends SubsystemBase {
   double shooterSetpoint = 0;
 
   //acceptable errors (to tell when the flywheel is up to speed)
-  private final double velocityRange = 500,
-                        accelerationRange = 100,
-                        jerkRange = 100;
+  private final double velocityRange = 200,
+                        accelerationRange = 15,
+                        jerkRange = 15;
 
   //holds previous 3 flywheel velocities, for flywheel up to speed calculations
   double[] history = new double[3];

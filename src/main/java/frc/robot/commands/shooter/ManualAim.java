@@ -55,7 +55,7 @@ public class ManualAim extends CommandBase {
       // hoodCounts = hood.getHoodPosition();
     }
 
-    if(Math.abs(container.getOperatorJoystick().getY()) > 0.2){
+    if(Math.abs(container.getOperatorJoystick().getRawAxis(2)) > 0.2){
       // hood.setHoodSpeed(-container.getOperatorJoystick().getY() / 3);
       timer = Timer.getFPGATimestamp();  
       hasControl = true;
@@ -63,7 +63,7 @@ public class ManualAim extends CommandBase {
       hasControl = false;
     }
     if (hasControl) {
-      hood.setHoodPercent(-container.getOperatorJoystick().getY() / 2);
+      hood.setHoodPercent(-container.getOperatorJoystick().getRawAxis(2) / 2);
     }
   }
 

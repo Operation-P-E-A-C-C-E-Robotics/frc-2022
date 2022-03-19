@@ -20,7 +20,7 @@ public class RampFlywheel extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      flywheel.flywheelPercent(0.3);
+      flywheel.flywheelPercent(0.45);
   }
 
   // Called once the command ends or is interrupted.
