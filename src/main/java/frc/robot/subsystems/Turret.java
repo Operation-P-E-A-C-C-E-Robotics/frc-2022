@@ -4,23 +4,18 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
-import static frc.robot.Constants.Turret.*;
+import static frc.robot.Constants.TurretConstants.*;
 
 public class Turret extends SubsystemBase {
     private final CANSparkMax turretMotor;
     private final RelativeEncoder encoder;
     private final SparkMaxPIDController pidController;
-    private final DigitalInput zeroSwitch;
+    // private final DigitalInput zeroSwitch;
 
     private double setpoint = 0;
     // private final double TURRET_RATIO = (1/20) * (1/11); //todo get ratio
@@ -29,13 +24,14 @@ public class Turret extends SubsystemBase {
     /** Creates a new Shooter. */
     public Turret() {
         turretMotor = new CANSparkMax(TURRET_CONTROLLER_PORT, MotorType.kBrushless);
+        
         encoder = turretMotor.getEncoder();
+        
         pidController = turretMotor.getPIDController();
-        turretMotor.setInverted(false); //TODO i want positive numbers to make clockwise rotation
-        turretMotor.setSoftLimit(SoftLimitDirection.kForward, (float)(0.25 * MOTOR_ROTS_PER_TURRET_ROT));
-        turretMotor.setSoftLimit(SoftLimitDirection.kReverse, 0);
+        
+        turretMotor.setInverted(false);
         turretMotor.setSmartCurrentLimit(10);
-        pidController.setSmartMotionAllowedClosedLoopError(40.0, 0);
+
         new GainSetter(pidController)
         .ff(kFF)
         .p(kP)
@@ -43,26 +39,24 @@ public class Turret extends SubsystemBase {
         .d(kD)
         .iz(kIz)
         .outputRange(MIN_OUTPUT, MAX_OUTPUT);
-
-        zeroSwitch = new DigitalInput(0); //todo set up
     }
 
     public GainSetter getGainSetter(){
         return new GainSetter(pidController);
     }
 
-    public void turretRotations(double rotations){
-        // if(encoder.getPosition() - rotations < 40) rotations = encoder.getPosition();
-        // rotations = rotations < 0.5 ? rotations : 0.5;
-        // rotations = rotations > -0.5 ? rotations : -0.5;
+    public void setTurretRotations(double rotations){
+        //limit rotations to += 180 degrees, and if value greater than that, rotate around the other way
         rotations = ((rotations + 0.5) % 1) - 0.5;
         rotations *= MOTOR_ROTS_PER_TURRET_ROT; //convert from motor rotations to turret rotations
         pidController.setReference(rotations, CANSparkMax.ControlType.kPosition);
         setpoint = rotations;
     }
 
-    //DONT KNOW IF THIS WILL WORKEY
-    public void turretVelocity(double velocity){
+    /**
+     * UNTESTED turret velocity control
+     */
+    public void setTurretVelocity(double velocity){
         pidController.setReference(velocity, CANSparkMax.ControlType.kVelocity);
     }
 
@@ -70,35 +64,39 @@ public class Turret extends SubsystemBase {
      * set the turret motor power
      * @param speed the speed (-1 to 1)
      */
-    public void turretPercent(Double speed) {
+    public void setTurretPercent(Double speed) {
         turretMotor.set(speed);
     }
 
+    /**
+     * get turret position in rotations
+     */
     public double getPosition(){
         return encoder.getPosition() / MOTOR_ROTS_PER_TURRET_ROT; //should it be / or *??
     }
 
+    /**
+     * zero the turret encoder
+     */
     public void zero(){
         encoder.setPosition(0);
     }
 
+    /**
+     * tell if the turret is ready to shoot
+     * @return whether the turret is in position
+     */
     public boolean ready(){
         return (Math.abs(setpoint) - Math.abs(encoder.getPosition())) < 3;
     }
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("turret current", turretMotor.getOutputCurrent());
-        SmartDashboard.putNumber("turret temperature", turretMotor.getMotorTemperature());
-        SmartDashboard.putNumber("turret position", getPosition());
-        SmartDashboard.putNumber("turret position error", setpoint - getPosition());
-
-        SmartDashboard.putBoolean("turret ready", ready());
-        // if(zeroSwitch.get()){
-        //     encoder.setPosition(0);
-        // }
     }
 
+    /**
+     * allows nice syntax for setting spark max pid gains
+     */
     public static class GainSetter {
         public SparkMaxPIDController controller;
 

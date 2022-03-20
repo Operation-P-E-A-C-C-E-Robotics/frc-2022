@@ -2,35 +2,42 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.lib.Limelight;
-import frc.lib.debloating.Pigeon;
+import frc.lib.sensors.Limelight;
+import frc.lib.sensors.Pigeon;
+import frc.lib.util.TargetTracker;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Turret;
 
 public class Odometry {
     private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(0.6);
     private final DifferentialDriveOdometry odometry;
     private final Pigeon pigeon;
+    private TargetTracker target;
     private final DriveTrain driveTrain;
     // private Limelight camera;
 
-    public Odometry (DriveTrain driveTrain, Pigeon pigeon, Limelight camera){
+    public Odometry (DriveTrain driveTrain, Turret turret, Pigeon pigeon, Limelight camera){
         this.driveTrain = driveTrain;
         this.pigeon = pigeon;
         // this.camera = camera;
-
         odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getHeading()));
+        target = new TargetTracker(camera, pigeon, odometry, turret, new Translation2d(0.3,0));
+    }
+
+    public TargetTracker getTarget(){
+        return target;
     }
 
     public void update() {
+        // target.update();
         pigeon.update(getHeading());
         odometry.update(Rotation2d.fromDegrees(getHeading()), driveTrain.lEncoderPosition(), driveTrain.rEncoderPosition());
-        SmartDashboard.putNumber("robot x", odometry.getPoseMeters().getX());
-        SmartDashboard.putNumber("robot y", odometry.getPoseMeters().getY());
-        SmartDashboard.putNumber("robot dist", driveTrain.getAverageEncoderDistance());
-        SmartDashboard.putNumber("headin", odometry.getPoseMeters().getRotation().getDegrees());
+        // SmartDashboard.putNumber("robot x", getCurrentPose().getX());
+        // SmartDashboard.putNumber("robot y", getCurrentPose().getY());
+        // SmartDashboard.putNumber("robot heading", getCurrentPose().getRotation().getDegrees());
     }
 
     public DifferentialDriveKinematics getKinematics() {

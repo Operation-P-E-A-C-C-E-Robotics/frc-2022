@@ -6,72 +6,49 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.math.CubicSplineInterpolate;
-import static frc.robot.Constants.Hood.*;
+import static frc.robot.Constants.HoodConstants.*;
+import static frc.robot.Constants.AIM_DATA;
 
 public class Hood extends SubsystemBase {
-    private final WPI_TalonSRX hoodMotor = new WPI_TalonSRX(15); //todo port number
+    private final WPI_TalonSRX hoodMotor = new WPI_TalonSRX(HOOD_CONTROLLER_PORT);
 
     private CubicSplineInterpolate distanceToAngle = new CubicSplineInterpolate();
 
-    double setpoint = 0; //177
+    double setpoint = 0;
 
     /** Creates a new Hood. */
     public Hood() {
-        double[] distances = {0.2, 2.8, 3.5, 6};
-        double[] angles = {50,170, 200, 226};
-        distanceToAngle.setSamples(distances, angles);
-        hoodMotor.setInverted(true); //change so positive = forward
-        configTalonGains(0, 100, 0, 10); //todo change duh
+        //to interpolate distances with data points
+        distanceToAngle.setSamples(AIM_DATA[0], AIM_DATA[2]);
+
+        hoodMotor.setInverted(true);
+        hoodMotor.configPeakCurrentLimit(5);
+
+        configTalonGains(kF, kP, kI, kD);
     }
 
     /**
      * set hood motor percentage of power
      * @param percent percentage of full speed (-1 to 1)
      */
-    public void setHoodSpeed(double percent){
+    public void setHoodPercent(double percent){
         hoodMotor.set(percent);
     }
 
+    /**
+     * get whether the hood is in position to shoot
+     * @return true if hood is ready to shoot
+     */
     public boolean ready(){
-        return (hoodMotor.getClosedLoopError()) < 3;
+        return (hoodMotor.getClosedLoopError()) < 3 || hoodMotor.isFwdLimitSwitchClosed() == 1;
       }
 
     /**
-     * set the hood position as a percentage of position
-     * @param percent where to move to (0 to 1)
+     * use interpolated data points to set the hood angle
+     * @param distanceMeters distance to target
      */
-    public void setHoodPosition(double percent){
-        double counts = percent;
-        setpoint = percent;
-        setMotorPosition(counts);
-    }
-
-    /**
-     * set hood extension in centimeters
-     * @param cm (cm > 0)
-     */
-    public void setHoodExtension(double cm){
-        double counts = cmToCounts(cm);
-        setMotorPosition(counts);
-    }
-
-    /**
-     * set the angle of the hood with 0 being streight up
-     * @param angle
-     */
-    public void setHoodAngle(Rotation2d angle){
-        SmartDashboard.putNumber("hood angle setpoint", angle.getDegrees());
-        double degreesFromZero = angle.getDegrees() - LOWEST_ANGLE;
-        double rotations = degreesFromZero / 360;
-        double cm = rotations * (2 * Math.PI * ATTACHMENT_POINT_RADIUS);
-        setHoodExtension(cm);
-    }
-
     public void setHoodForDistance(double distanceMeters){
         try{
             setHoodPosition((distanceToAngle.cubicSplineInterpolate(distanceMeters)));
@@ -80,10 +57,16 @@ public class Hood extends SubsystemBase {
         }
     }
 
+    /**
+     * run the hood backwards till it zeroes
+     */
     public void zero(){
-        setHoodSpeed(-0.5); //limit switch should stop, zero when hits
+        setHoodPercent(-0.5); //limit switch should stop, zero when hits
     }
 
+    /**
+     * set pid gains for the hood controller
+     */
     public void configTalonGains(double kF, double kP, double kI, double kD){
         hoodMotor.config_kF(0, kF);
         hoodMotor.config_kP(0, kP);
@@ -91,35 +74,36 @@ public class Hood extends SubsystemBase {
         hoodMotor.config_kD(0, kD);
     }
 
-    public void setMotorPosition(double counts){
-        counts = counts > FULLY_EXTENDED_COUNTS ? FULLY_EXTENDED_COUNTS : counts;
-        counts = counts < 0 ? 0 : counts;
-        if(counts == 0);// zero();
+    /**
+     * set the motor position as encoder counts
+     * @param counts the counts to set the motor to
+     */
+    public void setHoodPosition(double counts){
+        // counts = counts > FULLY_EXTENDED_COUNTS ? FULLY_EXTENDED_COUNTS : counts;
+        // counts = counts < 0 ? 0 : counts;
+        if(counts <= 0) zero();
         else hoodMotor.set(ControlMode.Position, counts);
     }
 
+    /**
+     * zero the encoder
+     */
     public void setEncoderZero(){
         hoodMotor.setSelectedSensorPosition(0);
     }
 
-    // private double countsToCM(double counts){
-    //     return counts * ENCODER_COUNTS_PER_CM;
-    // }
-
-    private double cmToCounts(double cm){
-        return cm / ENCODER_COUNTS_PER_CM;
+    /**
+     * @return encoder counts from hood motor
+     */
+    public double getHoodPosition(){
+        return hoodMotor.getSelectedSensorPosition();
     }
 
     @Override
     public void periodic() {
+        //zero hood if limit switch closed
         if(hoodMotor.isRevLimitSwitchClosed() == 1) {
             hoodMotor.setSelectedSensorPosition(0);
-            //hoodMotor.set(0);
         }
-        SmartDashboard.putNumber("Hood setpoint", setpoint);
-        SmartDashboard.putBoolean("hood ready", ready());
-        SmartDashboard.putNumber("Hood position", hoodMotor.getSelectedSensorPosition());
-        //setHoodPercent(container.getOperatorJoystick().getY());
-        // SmartDashboard.putNumber("dist to target", limelight.)
     }
 }

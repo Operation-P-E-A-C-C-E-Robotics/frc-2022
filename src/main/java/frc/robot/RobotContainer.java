@@ -4,39 +4,42 @@
 
 package frc.robot;
 
-import java.io.IOException;
-
 import com.ctre.phoenix.sensors.PigeonIMU;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.lib.Limelight;
-import frc.lib.debloating.Pigeon;
-import frc.robot.commands.auto.Autonomous;
-import frc.robot.commands.auto.RealAuto;
-import frc.robot.commands.auto.paths.PathBase;
-import frc.robot.commands.auto.paths.TestPath;
-import frc.robot.commands.climb.ManualClimb;
-import frc.robot.commands.drive.ArcadeDrive;
-import frc.robot.commands.intake.ManualIntake;
-import frc.robot.commands.shoot.AutoShoot;
-import frc.robot.commands.shoot.ShooterSetpoint1;
-import frc.robot.commands.shoot.ShooterSetpoint2;
-import frc.robot.commands.shoot.HoodTesting;
-import frc.robot.commands.shoot.LimelightTurret;
-import frc.robot.commands.shoot.ManualHood;
-import frc.robot.commands.shoot.ManualTrigger;
-import frc.robot.commands.shoot.ManualTurret;
-import frc.robot.commands.shoot.ShooterReverse;
+import frc.lib.sensors.Limelight;
+import frc.lib.sensors.Pigeon;
+import frc.robot.OI.DriverMappings;
+import frc.robot.OI.Mappings;
+import frc.robot.autonomous.TwoBallAuto;
+import frc.robot.commands.climber.JoystickClimber;
+import frc.robot.commands.intake.Intake;
+import frc.robot.commands.intake.IntakeDown;
+import frc.robot.commands.intake.POVIntake;
+import frc.robot.commands.shooter.AutoShoot;
+import frc.robot.commands.shooter.ManualAim;
+import frc.robot.commands.shooter.RampFlywheel;
+import frc.robot.commands.shooter.ReverseTrigger;
+import frc.robot.commands.shooter.RunTrigger;
+import frc.robot.commands.shooter.ProtectedShotSetpoint;
+import frc.robot.commands.shooter.LayupShotSetpoint;
+import frc.robot.commands.drivetrain.ArcadeDrive;
+import frc.robot.commands.drivetrain.CheesyDrive;
+import frc.robot.commands.helpers.SetpointHelper;
 import frc.robot.subsystems.BallHandler;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Hood;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Turret;
 
 /**
@@ -47,51 +50,64 @@ import frc.robot.subsystems.Turret;
  */
 public class RobotContainer {
   //declare robot components
+  private final Robot robot = new Robot();
+
   //utilities:
   private final Limelight limelight = new Limelight(2.62, 0.9, 30);
-  private final Pigeon pigeon = new Pigeon(new PigeonIMU(7));
+  private final Pigeon pigeon = new Pigeon(new PigeonIMU(20));
   private final PneumaticHub pneumaticHub = new PneumaticHub();
-  private Robot robot = new Robot();
+  
   // subsystems:
   private final DriveTrain driveTrain = new DriveTrain();
-  private final Shooter shooter = new Shooter();
+  private final Flywheel flywheel = new Flywheel();
   private final BallHandler intake = new BallHandler();
   private final Turret turret = new Turret();
   private final Climber climber = new Climber();
-
-  private final Odometry odometry = new Odometry(driveTrain, pigeon, limelight);
-  
   private final Hood hood = new Hood();
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
-    //set default commands
-    
-    // Configure the button bindings
-    configureButtonBindings();
-  }
   
-  // commands:
-  private final ArcadeDrive arcadeDrive = new ArcadeDrive(driveTrain, this);
-  private final ManualTurret joystickAim = new ManualTurret(turret, this);
-  private final ManualIntake runIntake = new ManualIntake(intake, this);
-  private final ShooterSetpoint1 flywheel1 = new ShooterSetpoint1(shooter, hood, turret, limelight);
-  private final ShooterSetpoint2 flywheel2 = new ShooterSetpoint2(shooter, hood);
-  private final LimelightTurret autoAim = new LimelightTurret(turret, limelight);
-  private final ManualHood manualHood = new ManualHood(hood, this);
-  private final ManualClimb manualClimb = new ManualClimb(climber, this);
+  private final Odometry odometry = new Odometry(driveTrain, turret, pigeon, limelight);
+  
   // OI:
   private final Joystick driverJoystick = new Joystick(0);
-  private final Joystick operatorJoystick = new Joystick(1);
-  private final JoystickButton autoshootButton = new JoystickButton(driverJoystick, 2);
-  private final JoystickButton layupShot = new JoystickButton(operatorJoystick, 1);
-  private final JoystickButton protectedShot = new JoystickButton(operatorJoystick, 2);
-  private final JoystickButton reverseTrigger = new JoystickButton(operatorJoystick, 3);
-  private final JoystickButton triggerButton = new JoystickButton(operatorJoystick, 4);
-  private final JoystickButton intakeButton = new JoystickButton(operatorJoystick, 5);
-  private final JoystickButton autoshootButton2 = new JoystickButton(operatorJoystick, 6);
-  private final JoystickButton traversalButton = new JoystickButton(operatorJoystick, 7);
-  private final JoystickButton tirggerButton = new JoystickButton(operatorJoystick, 8);
+  private final Joystick mainOperatorJoystick = new Joystick(1);
+  private final Joystick climbOperatorJoystick = new Joystick(2);
   
+  private final OI mainOperatorOI = new OI(mainOperatorJoystick);
+  private final OI climbOperatorOI = new OI(climbOperatorJoystick);
+  private final OI driverOI = new OI(driverJoystick);
+  
+  // commands:
+  private final Command 
+    arcadeDrive     = new ArcadeDrive(driveTrain, this),
+    joystickAim     = new ManualAim(turret, hood, this),
+    povIntake       = new POVIntake(intake, flywheel, this, true),
+    protectedShot   = new ProtectedShotSetpoint(flywheel, hood, turret, limelight),
+    layupShot       = new LayupShotSetpoint(flywheel, hood),
+    manualClimb     = new JoystickClimber(climber, climbOperatorJoystick, this),
+    reverseTrigger  = new ReverseTrigger(flywheel, intake),
+    runTrigger      = new RunTrigger(intake),
+    autoShoot       = new AutoShoot(flywheel, hood, turret, intake, limelight, this),
+    runIntake       = new Intake(intake).alongWith(new IntakeDown(intake),
+                        new RampFlywheel(flywheel).withTimeout(10)
+    ),
+    runTraversal    = new StartEndCommand(
+                        () -> intake.setTraversal(1), 
+                        () -> intake.setTraversal(0), 
+                        intake
+                        ),
+    runTraversalAndTrigger = new StartEndCommand(
+      () -> {intake.setTraversal(1); intake.setTrigger(1);}, 
+      () -> {intake.setTraversal(0);intake.setTrigger(0);}, 
+      intake
+      );
+      
+    
+    /** The container for the robot. Contains subsystems, OI devices, and commands. */
+    public RobotContainer() {
+      configureButtonBindings();
+      limelight.setLedOff();
+      limelight.setModeDrive();
+    }
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
@@ -101,34 +117,47 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     driveTrain.setDefaultCommand(arcadeDrive);
-    intake.setDefaultCommand(runIntake);
-    turret.setDefaultCommand(joystickAim);
-    hood.setDefaultCommand(manualHood);
+    intake.setDefaultCommand(povIntake);
+    hood.setDefaultCommand(joystickAim);
     climber.setDefaultCommand(manualClimb);
-  
-    autoshootButton.whileHeld(new AutoShoot(turret, hood, shooter, intake, limelight, this));
-    autoshootButton2.whileHeld(new AutoShoot(turret, hood, shooter, intake, limelight, this));
 
-    layupShot.whileHeld(flywheel2);
-    protectedShot.whileHeld(flywheel1);
-    reverseTrigger.whileHeld(new ShooterReverse(shooter, intake));
-    triggerButton.whileHeld(new ManualTrigger(intake, turret, limelight));
-    new JoystickButton(operatorJoystick, 3).whileHeld(() -> {hood.setEncoderZero();});
-    new JoystickButton(operatorJoystick, 4).whileHeld(new HoodTesting(hood, limelight, this));
+    new JoystickButton(mainOperatorJoystick, Mappings.RUN_INTAKE).whenReleased(new RampFlywheel(flywheel).withTimeout(10));
+
+    mainOperatorOI.bind(Mappings.LAYUP_SHOT, layupShot)
+              .bind(Mappings.PROTECTED_SHOT, protectedShot)
+              .bind(Mappings.REVERSE_TRIGGER, reverseTrigger)
+              .bind(Mappings.RUN_TRIGGER, runTrigger)
+              .bind(Mappings.RUN_INTAKE, runIntake)
+
+              .bind(Mappings.AUTO_SHOOT, autoShoot)
+              .bind(Mappings.RUN_TRAVERSAL, runTraversal)
+              .bind(Mappings.RUN_TRAVERSAL_AND_TRIGGER, runTraversalAndTrigger);
+    
+    driverOI.bind(DriverMappings.AUTO_SHOOT, autoShoot)
+            .bind(DriverMappings.RUN_INTAKE, runIntake);
+  
+    //setpoint creation helper
+    testButton1.toggleWhenPressed(new SetpointHelper(flywheel, hood, limelight, testJoystick));//.alongWith(new AutoTurret(turret, odometry.getTarget())));
+  }
+
+  Joystick testJoystick = new Joystick(3);
+  JoystickButton testButton1 = new JoystickButton(testJoystick, 1);
+  public void testModeButtonBindings(){
   }
 
   //access functions:
   public Odometry getOdometry() {
     return odometry;
   }
+
   /**
    * @return the operator joystick
    */
   public Joystick getOperatorJoystick(){
-    return operatorJoystick;
+    return mainOperatorJoystick;
   }
 
-  public PneumaticHub gPneumaticHub(){
+  public PneumaticHub getPneumaicsHub(){
     return pneumaticHub;
   }
   
@@ -149,12 +178,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    // try {
-      return new RealAuto(driveTrain, shooter, hood, intake, turret, limelight, this);
-    // } catch (IOException e) {
-    //   e.printStackTrace();
-    //   return null;
-    // } //todo change to command when written
+    return new TwoBallAuto(driveTrain, flywheel, hood, intake, turret, limelight, this);
   }
 }

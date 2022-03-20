@@ -6,6 +6,34 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Launch NiceCurve",
+      "request": "launch",
+      "mainClass": "frc.lib.math.NiceCurve",
+      "projectName": "2022-robot"
+    },
+    {
+      "type": "java",
+      "name": "Launch PointTracker",
+      "request": "launch",
+      "mainClass": "frc.lib.math.PointTracker",
+      "projectName": "2022-robot"
+    },
+    {
+      "type": "java",
+      "name": "Launch Lookaheader",
+      "request": "launch",
+      "mainClass": "frc.lib.math.Lookaheader",
+      "projectName": "2022-robot"
+    },
+    {
+      "type": "java",
+      "name": "Launch Sequencer",
+      "request": "launch",
+      "mainClass": "frc.lib.math.Sequencer",
+      "projectName": "2022-robot"
+    },
+    {
+      "type": "java",
       "name": "Launch Ball",
       "request": "launch",
       "mainClass": "frc.lib.debloating.Ball",
