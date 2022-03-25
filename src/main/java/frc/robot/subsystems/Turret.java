@@ -4,12 +4,23 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
+import static frc.robot.Constants.TurretConstants.MAX_OUTPUT;
+import static frc.robot.Constants.TurretConstants.MIN_OUTPUT;
+import static frc.robot.Constants.TurretConstants.TURRET_CONTROLLER_PORT;
+import static frc.robot.Constants.TurretConstants.kD;
+import static frc.robot.Constants.TurretConstants.kFF;
+import static frc.robot.Constants.TurretConstants.kI;
+import static frc.robot.Constants.TurretConstants.kIz;
+import static frc.robot.Constants.TurretConstants.kP;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import static frc.robot.Constants.TurretConstants.*;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
+
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.util.Util;
+
 
 public class Turret extends SubsystemBase {
     private final CANSparkMax turretMotor;
@@ -20,6 +31,9 @@ public class Turret extends SubsystemBase {
     private double setpoint = 0;
     // private final double TURRET_RATIO = (1/20) * (1/11); //todo get ratio
     private final double MOTOR_ROTS_PER_TURRET_ROT = 242;
+
+
+
 
     /** Creates a new Shooter. */
     public Turret() {
@@ -39,6 +53,8 @@ public class Turret extends SubsystemBase {
         .d(kD)
         .iz(kIz)
         .outputRange(MIN_OUTPUT, MAX_OUTPUT);
+    
+        
     }
 
     public GainSetter getGainSetter(){
@@ -47,7 +63,8 @@ public class Turret extends SubsystemBase {
 
     public void setTurretRotations(double rotations){
         //limit rotations to += 180 degrees, and if value greater than that, rotate around the other way
-        rotations = ((rotations + 0.5) % 1) - 0.5;
+        // rotations = ((rotations + 0.5) % 1) - 0.5;
+        rotations = Util.limit(rotations, 0.5);
         rotations *= MOTOR_ROTS_PER_TURRET_ROT; //convert from motor rotations to turret rotations
         pidController.setReference(rotations, CANSparkMax.ControlType.kPosition);
         setpoint = rotations;
@@ -92,6 +109,7 @@ public class Turret extends SubsystemBase {
 
     @Override
     public void periodic() {
+        
     }
 
     /**

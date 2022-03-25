@@ -6,14 +6,11 @@ package frc.robot;
 
 import com.ctre.phoenix.sensors.PigeonIMU;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.lib.sensors.Limelight;
@@ -22,14 +19,18 @@ import frc.robot.OI.DriverMappings;
 import frc.robot.OI.Mappings;
 import frc.robot.autonomous.TwoBallAuto;
 import frc.robot.commands.climber.JoystickClimber;
+import frc.robot.commands.intake.Eject;
 import frc.robot.commands.intake.Intake;
 import frc.robot.commands.intake.IntakeDown;
+import frc.robot.commands.intake.IntakeNoTraversal;
+import frc.robot.commands.intake.IntakeUp;
 import frc.robot.commands.intake.POVIntake;
 import frc.robot.commands.shooter.AutoShoot;
 import frc.robot.commands.shooter.ManualAim;
 import frc.robot.commands.shooter.RampFlywheel;
 import frc.robot.commands.shooter.ReverseTrigger;
 import frc.robot.commands.shooter.RunTrigger;
+import frc.robot.commands.shooter.setpoints.SetpointBase;
 import frc.robot.commands.shooter.ProtectedShotSetpoint;
 import frc.robot.commands.shooter.LayupShotSetpoint;
 import frc.robot.commands.drivetrain.ArcadeDrive;
@@ -81,13 +82,18 @@ public class RobotContainer {
     arcadeDrive     = new ArcadeDrive(driveTrain, this),
     joystickAim     = new ManualAim(turret, hood, this),
     povIntake       = new POVIntake(intake, flywheel, this, true),
-    protectedShot   = new ProtectedShotSetpoint(flywheel, hood, turret, limelight),
-    layupShot       = new LayupShotSetpoint(flywheel, hood),
-    manualClimb     = new JoystickClimber(climber, climbOperatorJoystick, this),
+    protectedShot   = new SetpointBase(flywheel, hood, turret, limelight, 7300, 210, true),
+    layupShot       = new SetpointBase(flywheel, hood, turret, limelight, 6200, 60, false),
+    insideLine       = new SetpointBase(flywheel, hood, turret, limelight, 6200, 170, true),
+    outsideLine       = new SetpointBase(flywheel, hood, turret, limelight, 7200, 220, true),
+    manualClimb     = new JoystickClimber(climber, climbOperatorJoystick, driverJoystick, this),
     reverseTrigger  = new ReverseTrigger(flywheel, intake),
-    runTrigger      = new RunTrigger(intake),
+    // runTrigger      = new RunTrigger(intake),
     autoShoot       = new AutoShoot(flywheel, hood, turret, intake, limelight, this),
     runIntake       = new Intake(intake).alongWith(new IntakeDown(intake),
+                        new RampFlywheel(flywheel).withTimeout(10)
+    ),
+    runIntakeNoTraversal       = new IntakeNoTraversal(intake).alongWith(new IntakeDown(intake),
                         new RampFlywheel(flywheel).withTimeout(10)
     ),
     runTraversal    = new StartEndCommand(
@@ -95,6 +101,7 @@ public class RobotContainer {
                         () -> intake.setTraversal(0), 
                         intake
                         ),
+    eject = new Eject(intake),
     runTraversalAndTrigger = new StartEndCommand(
       () -> {intake.setTraversal(1); intake.setTrigger(1);}, 
       () -> {intake.setTraversal(0);intake.setTrigger(0);}, 
@@ -121,13 +128,17 @@ public class RobotContainer {
     hood.setDefaultCommand(joystickAim);
     climber.setDefaultCommand(manualClimb);
 
-    new JoystickButton(mainOperatorJoystick, Mappings.RUN_INTAKE).whenReleased(new RampFlywheel(flywheel).withTimeout(10));
+    new JoystickButton(mainOperatorJoystick, Mappings.RUN_INTAKE).whenReleased(new IntakeUp(intake).alongWith(new RampFlywheel(flywheel).withTimeout(10)));
+    new JoystickButton(driverJoystick, DriverMappings.RUN_INTAKE).whenReleased(new IntakeUp(intake).alongWith(new RampFlywheel(flywheel).withTimeout(10)));
 
     mainOperatorOI.bind(Mappings.LAYUP_SHOT, layupShot)
               .bind(Mappings.PROTECTED_SHOT, protectedShot)
+              .bind(Mappings.INSIDE_LINE_SHOT, insideLine)
+              .bind(Mappings.OUTSIDE_LINE_SHOT, outsideLine)
               .bind(Mappings.REVERSE_TRIGGER, reverseTrigger)
-              .bind(Mappings.RUN_TRIGGER, runTrigger)
-              .bind(Mappings.RUN_INTAKE, runIntake)
+              // .bind(Mappings.RUN_TRIGGER, runTrigger)
+              .bind(Mappings.EJECT_BALL, eject)
+              .bind(Mappings.RUN_INTAKE, runIntakeNoTraversal)
 
               .bind(Mappings.AUTO_SHOOT, autoShoot)
               .bind(Mappings.RUN_TRAVERSAL, runTraversal)
@@ -143,7 +154,7 @@ public class RobotContainer {
   Joystick testJoystick = new Joystick(3);
   JoystickButton testButton1 = new JoystickButton(testJoystick, 1);
   public void testModeButtonBindings(){
-  }
+ }
 
   //access functions:
   public Odometry getOdometry() {

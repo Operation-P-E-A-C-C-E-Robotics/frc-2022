@@ -14,15 +14,15 @@ import frc.robot.subsystems.Turret;
 public class ManualAim extends CommandBase {
   private final Turret turret;
   private final RobotContainer container;
-  private final NiceCurve curve = NiceCurve.preset1();
-
-  // private double turretRotations = 0;
   private Hood hood;
-
-  // private double hoodCounts = 0;
-
+  
+  private double turretRotations = 0;
+  private double hoodCounts = 0;
   private double timer = 0;
   boolean hasControl = false;
+  
+  private final NiceCurve curve = NiceCurve.preset1();
+
   /** Aim with joystick. */
   public ManualAim(Turret shooter, Hood hood, RobotContainer container) {
     this.turret = shooter;
@@ -35,7 +35,7 @@ public class ManualAim extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-      // turretRotations = turret.getPosition();
+      turretRotations = turret.getPosition();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -45,14 +45,14 @@ public class ManualAim extends CommandBase {
     //   turret.zero();
     // }
     if(Math.abs(container.getOperatorJoystick().getX()) > 0.2) {
-      // turretRotations += curve.get(container.getOperatorJoystick().getX()) * 0.1;
-      // turret.turretRotations(turretRotations);
-      turret.setTurretPercent(curve.get(container.getOperatorJoystick().getX()));
+      turretRotations += curve.get(container.getOperatorJoystick().getX()) * 0.03;
+      turret.setTurretRotations(turretRotations);
+      // turret.setTurretPercent(curve.get(container.getOperatorJoystick().getX()));
     }
     else {
-      turret.setTurretPercent(0.0);
-      // turretRotations = turret.getPosition();
-      // hoodCounts = hood.getHoodPosition();
+      // turret.setTurretPercent(0.0);
+      turretRotations = turret.getPosition();
+      hoodCounts = hood.getHoodPosition();
     }
 
     if(Math.abs(container.getOperatorJoystick().getRawAxis(2)) > 0.2){

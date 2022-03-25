@@ -16,6 +16,7 @@ public class POVIntake extends CommandBase {
   private final RobotContainer container;
   private final boolean revshooter;
   private Flywheel flywheel;
+  private boolean hasControl = false;
   /** Creates a new ShooterControl. */
   public POVIntake(BallHandler intake, Flywheel flywheel, RobotContainer container, boolean revshooter) {
     this.intake = intake;
@@ -34,29 +35,47 @@ public class POVIntake extends CommandBase {
   @Override
   public void execute() {
     int pov = container.getOperatorJoystick().getPOV();
-    if (pov == 180) {
-      //intake
-      intake.armsDown();
-      intake.setIntake(1);
-      if(revshooter && CommandScheduler.getInstance().requiring(flywheel) == null){
-        CommandScheduler.getInstance().schedule(new RampFlywheel(flywheel).withTimeout(10));
+    // if (pov == 180) {
+    //   //intake
+    //   intake.armsDown();
+    //   intake.setIntake(1);
+    //   if(revshooter && CommandScheduler.getInstance().requiring(flywheel) == null){
+    //     CommandScheduler.getInstance().schedule(new RampFlywheel(flywheel).withTimeout(10));
+    //   }
+    // } else if (pov == 135 || pov == 225){
+    //   intake.setTraversal(1);
+    //   intake.setIntake(1);
+    //   if(revshooter && CommandScheduler.getInstance().requiring(flywheel) == null){
+    //     CommandScheduler.getInstance().schedule(new RampFlywheel(flywheel).withTimeout(10));
+    //   }
+    // } else if (pov == 90 || pov == 270){
+    //   intake.setTraversal(1);
+    // } else if (pov == 0) {
+    //   //raise arms
+    //   intake.armsUp();
+    //   intake.setAll(0);
+    // } else {
+    //   intake.setIntake(0);
+    //   intake.setTraversal(0);
+    //   intake.setTrigger(0);
+    // }
+
+    if(pov == 180){
+      intake.setIntake(-1);
+      intake.setTraversal(-1);
+      intake.setTrigger(-1);
+      flywheel.flywheelVelocity(-400);
+      hasControl = true;
+    } else if(pov == 0){
+      intake.setTrigger(-1);
+      flywheel.flywheelVelocity(-400);
+      hasControl = true;
+    } else{
+      if(hasControl){
+        intake.setAll(0);
+        flywheel.flywheelPercent(0);
+        hasControl = false;
       }
-    } else if (pov == 135 || pov == 225){
-      intake.setTraversal(1);
-      intake.setIntake(1);
-      if(revshooter && CommandScheduler.getInstance().requiring(flywheel) == null){
-        CommandScheduler.getInstance().schedule(new RampFlywheel(flywheel).withTimeout(10));
-      }
-    } else if (pov == 90 || pov == 270){
-      intake.setTraversal(1);
-    } else if (pov == 0) {
-      //raise arms
-      intake.armsUp();
-      intake.setAll(0);
-    } else {
-      intake.setIntake(0);
-      intake.setTraversal(0);
-      intake.setTrigger(0);
     }
 
   }

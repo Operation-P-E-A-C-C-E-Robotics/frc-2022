@@ -6,7 +6,6 @@ package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.sensors.Limelight;
-import frc.lib.util.TargetTracker;
 import frc.robot.subsystems.Turret;
 
 public class AutoTurret extends CommandBase {
@@ -15,6 +14,8 @@ public class AutoTurret extends CommandBase {
 
   private double curretTurretPosition, 
   targetTurretPosition = Double.NaN;
+
+  private boolean smoothing = false;
   // private TargetTracker target;
 
   /** Creates a new AutoAim. */
@@ -32,6 +33,7 @@ public class AutoTurret extends CommandBase {
     limelight.setModeVision();
     limelight.setLedOn();
     targetTurretPosition = Double.NaN;
+    smoothing = false;
   }
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -41,12 +43,14 @@ public class AutoTurret extends CommandBase {
       double deltaX = limelight.getTargetOffsetX() / 360;
       double newTargetTurretPosition = curretTurretPosition + deltaX; //todo figure out what's flipped
       // double newTargetTurretPosition = target.getTargetAngle();
-      if(Double.isNaN(targetTurretPosition)){
+      if(deltaX < 0.05) smoothing = true;
+
+      if(Double.isNaN(targetTurretPosition) || !smoothing){
         targetTurretPosition = newTargetTurretPosition;
       } else {
         targetTurretPosition += (newTargetTurretPosition - targetTurretPosition) / 10;
       }
-
+      
 
       turret.setTurretRotations(newTargetTurretPosition);
     } else{
