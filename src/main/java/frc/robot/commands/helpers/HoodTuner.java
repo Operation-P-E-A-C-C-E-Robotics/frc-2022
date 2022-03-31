@@ -36,8 +36,8 @@ public class HoodTuner extends CommandBase{
             SmartDashboard.getNumber("hood ki", kI), 
             SmartDashboard.getNumber("hood kd", kD)
         );
-        if(joystick.getRawAxis(4) > 0.1) joystickControl = true;
-        if(SmartDashboard.getNumber("hood setpoint", setpoint) != setpoint) joystickControl = false;
+        // if(joystick.getRawAxis(4) > 0.1) joystickControl = true;
+        // if(SmartDashboard.getNumber("hood setpoint", setpoint) != setpoint) joystickControl = false;
         
         if(joystickControl) {
             setpoint += joystick.getRawAxis(4); //TODO get correct axis

@@ -59,8 +59,15 @@ public class Climber extends SubsystemBase {
     armSolenoid.toggle();
   }
 
+  public double getLiftPosition(){
+    return liftMasterController.getSelectedSensorPosition();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if(liftMasterController.isFwdLimitSwitchClosed() == 1){
+      liftMasterController.setSelectedSensorPosition(0);
+    }
   }
 }

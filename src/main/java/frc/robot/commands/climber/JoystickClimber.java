@@ -1,6 +1,7 @@
 package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Climber;
@@ -33,11 +34,18 @@ public class JoystickClimber extends CommandBase{
         climber.armsIn();
       }
 
-      if((-joystick.getY()) < 0.01){
-        climber.armsOut();
-      } else {
+      if((-joystick.getY()) > 0.01){
         climber.armsIn();
+      } else {
+        climber.armsOut();
       }
+
+      // SmartDashboard.putNumber("lift position", climber.getLiftPosition());
+      // if(climber.getLiftPosition() > -135000){
+      //   climber.armsOut();
+      // } else {
+      //   climber.armsIn();
+      // }
 
       // if(!joystick.getRawButton(7) && !driverJoystick.getRawButton(8)){
       //   climber.armsOut();

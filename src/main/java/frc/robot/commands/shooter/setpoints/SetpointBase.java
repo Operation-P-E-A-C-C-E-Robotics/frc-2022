@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.sensors.Limelight;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Hood;
-import frc.robot.subsystems.Turret;
+import frc.robot.subsystems.OldTurret;
 
 public class SetpointBase extends CommandBase{
     private double velocity;
@@ -16,9 +16,9 @@ public class SetpointBase extends CommandBase{
     private Flywheel shooter;
     private Hood hood;
     private Limelight limelight;
-    private Turret turret;
+    private OldTurret turret;
 
-    public SetpointBase(Flywheel shooter, Hood hood, Turret turret, Limelight camera, double velocity, double angle, boolean withLimelight){
+    public SetpointBase(Flywheel shooter, Hood hood, OldTurret turret, Limelight camera, double velocity, double angle, boolean withLimelight){
         this.shooter = shooter;
         this.hood = hood;
         this.limelight = camera;

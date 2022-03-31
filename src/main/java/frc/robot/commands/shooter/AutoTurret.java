@@ -6,10 +6,10 @@ package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.sensors.Limelight;
-import frc.robot.subsystems.Turret;
+import frc.robot.subsystems.OldTurret;
 
 public class AutoTurret extends CommandBase {
-  private final Turret turret;
+  private final OldTurret turret;
   private final Limelight limelight;
 
   private double curretTurretPosition, 
@@ -19,7 +19,7 @@ public class AutoTurret extends CommandBase {
   // private TargetTracker target;
 
   /** Creates a new AutoAim. */
-  public AutoTurret(Turret turret, Limelight limelight) {
+  public AutoTurret(OldTurret turret, Limelight limelight) {
     this.turret = turret;
     // this.target = target;
     this.limelight = limelight;

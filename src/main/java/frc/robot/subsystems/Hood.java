@@ -109,5 +109,6 @@ public class Hood extends SubsystemBase {
         }
 
         SmartDashboard.putBoolean("Hood Ready", ready());
+        SmartDashboard.putNumber("Hood Position", getHoodPosition());
     }
 }

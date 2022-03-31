@@ -9,7 +9,7 @@ import frc.lib.sensors.Limelight;
 import frc.lib.sensors.Pigeon;
 import frc.lib.util.TargetTracker;
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.Turret;
+import frc.robot.subsystems.OldTurret;
 
 public class Odometry {
     private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(0.6);
@@ -19,7 +19,7 @@ public class Odometry {
     private final DriveTrain driveTrain;
     // private Limelight camera;
 
-    public Odometry (DriveTrain driveTrain, Turret turret, Pigeon pigeon, Limelight camera){
+    public Odometry (DriveTrain driveTrain, OldTurret turret, Pigeon pigeon, Limelight camera){
         this.driveTrain = driveTrain;
         this.pigeon = pigeon;
         // this.camera = camera;

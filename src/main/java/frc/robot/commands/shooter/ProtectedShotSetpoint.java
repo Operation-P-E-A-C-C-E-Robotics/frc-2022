@@ -5,7 +5,7 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Turret;
+import frc.robot.subsystems.OldTurret;
 import frc.robot.subsystems.Hood;
 import frc.lib.sensors.Limelight;
 import frc.robot.subsystems.Flywheel;
@@ -18,11 +18,11 @@ public class ProtectedShotSetpoint extends CommandBase {
   private double curretTurretPosition, 
   targetTurretPosition = Double.NaN;
   private Limelight limelight;
-  private Turret turret;
+  private OldTurret turret;
 
 
   /** Setpoint for shooting from the protected shot */
-  public ProtectedShotSetpoint(Flywheel shooter, Hood hood, Turret turret, Limelight camera) {
+  public ProtectedShotSetpoint(Flywheel shooter, Hood hood, OldTurret turret, Limelight camera) {
     this.shooter = shooter;
     this.hood = hood;
     this.limelight = camera;

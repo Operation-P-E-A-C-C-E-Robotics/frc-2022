@@ -22,7 +22,13 @@ public final class Constants {
         
         public static final double DRIVE_HIGH_GEAR_RATIO = 9.1,
                                     DRIVE_LOW_GEAR_RATIO = 24,
-                                    WHEEL_DIAMETER_METERS = 0.1524;
+                                    WHEEL_DIAMETER_METERS = 0.1524,
+                                    high_kS = 0,
+                                    high_kV = 0,
+                                    high_kA = 0,
+                                    high_kP = 0,
+                                    high_kI = 0,
+                                    high_kD = 0;
     }
 
     public static final class FlywheelConstants{

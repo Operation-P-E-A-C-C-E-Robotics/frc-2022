@@ -18,12 +18,11 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.Util;
 
 
-public class Turret extends SubsystemBase {
+public class OldTurret extends SubsystemBase {
     private final CANSparkMax turretMotor;
     private final RelativeEncoder encoder;
     private final SparkMaxPIDController pidController;
@@ -37,7 +36,7 @@ public class Turret extends SubsystemBase {
 
 
     /** Creates a new Shooter. */
-    public Turret() {
+    public OldTurret() {
         turretMotor = new CANSparkMax(TURRET_CONTROLLER_PORT, MotorType.kBrushless);
         
         encoder = turretMotor.getEncoder();
@@ -62,11 +61,6 @@ public class Turret extends SubsystemBase {
         return new GainSetter(pidController);
     }
 
-    public void setTurretAngle(Rotation2d angle){
-        double robotRelativeRotations = angle.getDegrees() / 360;
-        setTurretRotations(-robotRelativeRotations + 0.5);
-    }
-
     public void setTurretRotations(double rotations){
         //limit rotations to += 180 degrees, and if value greater than that, rotate around the other way
         // rotations = ((rotations + 0.5) % 1) - 0.5;
@@ -77,15 +71,18 @@ public class Turret extends SubsystemBase {
     }
 
     /**
+     * UNTESTED turret velocity control
+     */
+    public void setTurretVelocity(double velocity){
+        pidController.setReference(velocity, CANSparkMax.ControlType.kVelocity);
+    }
+
+    /**
      * set the turret motor power
      * @param speed the speed (-1 to 1)
      */
     public void setTurretPercent(Double speed) {
         turretMotor.set(speed);
-    }
-
-    public Rotation2d getAngle(){
-        return Rotation2d.fromDegrees(-getPosition() - 0.5 * 360);
     }
 
     /**

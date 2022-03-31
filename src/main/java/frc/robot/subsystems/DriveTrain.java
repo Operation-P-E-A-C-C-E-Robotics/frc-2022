@@ -10,6 +10,8 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -19,6 +21,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.DriveSignal;
 import static frc.robot.Constants.DriveTrainConstants.*;
 
+import java.util.ResourceBundle.Control;
+
 public class DriveTrain extends SubsystemBase {
     private final WPI_TalonFX leftMasterController = new WPI_TalonFX(LEFT_MASTER_PORT);
     private final WPI_TalonFX leftSlaveController = new WPI_TalonFX(LEFT_SLAVE_PORT);
@@ -27,6 +31,11 @@ public class DriveTrain extends SubsystemBase {
     private final DoubleSolenoid shiftSolenoid = new DoubleSolenoid(1, PneumaticsModuleType.REVPH, 0,1);
     
     private final DifferentialDrive dDrive = new DifferentialDrive(leftMasterController, rightMasterController);
+    private final PIDController lPid = new PIDController(high_kP, high_kI, high_kD);
+    private final PIDController rPid = new PIDController(high_kP, high_kI, high_kD);
+    private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(high_kS, high_kV, high_kA);
+
+    //DRIVE RATIOS 54:30, 64:20
 
     private Gear _gear = Gear.LOW_GEAR;
 
@@ -115,6 +124,13 @@ public class DriveTrain extends SubsystemBase {
         leftMasterController.setVoltage(lVolts);
         rightMasterController.setVoltage(rVolts);
         dDrive.feed();
+    }
+
+    public void velocityDrive(double lSpeed, double rSpeed){
+        leftMasterController.setVoltage(feedforward.calculate(lSpeed)
+            + lPid.calculate(leftMasterController.getSelectedSensorVelocity(), lSpeed));
+        rightMasterController.setVoltage(feedforward.calculate(rSpeed)
+            + rPid.calculate(leftMasterController.getSelectedSensorVelocity(), rSpeed));
     }
 
     /**

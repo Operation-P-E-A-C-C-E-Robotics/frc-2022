@@ -9,10 +9,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.math.NiceCurve;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Hood;
-import frc.robot.subsystems.Turret;
+import frc.robot.subsystems.OldTurret;
 
 public class ManualAim extends CommandBase {
-  private final Turret turret;
+  private final OldTurret turret;
   private final RobotContainer container;
   private Hood hood;
   
@@ -24,7 +24,7 @@ public class ManualAim extends CommandBase {
   private final NiceCurve curve = NiceCurve.preset1();
 
   /** Aim with joystick. */
-  public ManualAim(Turret shooter, Hood hood, RobotContainer container) {
+  public ManualAim(OldTurret shooter, Hood hood, RobotContainer container) {
     this.turret = shooter;
     this.hood = hood;
     this.container = container;
@@ -44,16 +44,19 @@ public class ManualAim extends CommandBase {
     // if(container.getOperatorJoystick().getRawButton(3)){
     //   turret.zero();
     // }
-    if(Math.abs(container.getOperatorJoystick().getX()) > 0.2) {
-      turretRotations += curve.get(container.getOperatorJoystick().getX()) * 0.03;
-      turret.setTurretRotations(turretRotations);
-      // turret.setTurretPercent(curve.get(container.getOperatorJoystick().getX()));
-    }
-    else {
-      // turret.setTurretPercent(0.0);
-      turretRotations = turret.getPosition();
-      hoodCounts = hood.getHoodPosition();
-    }
+    // if(Math.abs(container.getOperatorJoystick().getX()) > 0.2) {
+    //   turretRotations += curve.get(container.getOperatorJoystick().getX()) * 0.03;
+    //   turret.setTurretRotations(turretRotations);
+    //   // turret.setTurretPercent(curve.get(container.getOperatorJoystick().getX()));
+    // }
+    // else {
+    //   // turret.setTurretPercent(0.0);
+    //   turretRotations = turret.getPosition();
+    //   hoodCounts = hood.getHoodPosition();
+    // }
+
+      turret.setTurretPercent(container.getOperatorJoystick().getX());
+
 
     if(Math.abs(container.getOperatorJoystick().getRawAxis(2)) > 0.2){
       // hood.setHoodSpeed(-container.getOperatorJoystick().getY() / 3);

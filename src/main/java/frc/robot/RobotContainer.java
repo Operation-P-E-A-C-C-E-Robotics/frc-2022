@@ -34,14 +34,13 @@ import frc.robot.commands.shooter.setpoints.SetpointBase;
 import frc.robot.commands.shooter.ProtectedShotSetpoint;
 import frc.robot.commands.shooter.LayupShotSetpoint;
 import frc.robot.commands.drivetrain.ArcadeDrive;
-import frc.robot.commands.drivetrain.CheesyDrive;
 import frc.robot.commands.helpers.SetpointHelper;
 import frc.robot.subsystems.BallHandler;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Flywheel;
-import frc.robot.subsystems.Turret;
+import frc.robot.subsystems.OldTurret;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -62,7 +61,7 @@ public class RobotContainer {
   private final DriveTrain driveTrain = new DriveTrain();
   private final Flywheel flywheel = new Flywheel();
   private final BallHandler intake = new BallHandler();
-  private final Turret turret = new Turret();
+  private final OldTurret turret = new OldTurret();
   private final Climber climber = new Climber();
   private final Hood hood = new Hood();
   
@@ -82,10 +81,10 @@ public class RobotContainer {
     arcadeDrive     = new ArcadeDrive(driveTrain, this),
     joystickAim     = new ManualAim(turret, hood, this),
     povIntake       = new POVIntake(intake, flywheel, this, true),
-    protectedShot   = new SetpointBase(flywheel, hood, turret, limelight, 7300, 210, true),
+    protectedShot   = new SetpointBase(flywheel, hood, turret, limelight, 7300, 210, false),
     layupShot       = new SetpointBase(flywheel, hood, turret, limelight, 6200, 60, false),
-    insideLine       = new SetpointBase(flywheel, hood, turret, limelight, 6200, 170, true),
-    outsideLine       = new SetpointBase(flywheel, hood, turret, limelight, 7200, 220, true),
+    insideLine       = new SetpointBase(flywheel, hood, turret, limelight, 6200, 170, false),
+    outsideLine       = new SetpointBase(flywheel, hood, turret, limelight, 7200, 220, false),
     manualClimb     = new JoystickClimber(climber, climbOperatorJoystick, driverJoystick, this),
     reverseTrigger  = new ReverseTrigger(flywheel, intake),
     // runTrigger      = new RunTrigger(intake),
@@ -138,7 +137,7 @@ public class RobotContainer {
               .bind(Mappings.REVERSE_TRIGGER, reverseTrigger)
               // .bind(Mappings.RUN_TRIGGER, runTrigger)
               .bind(Mappings.EJECT_BALL, eject)
-              .bind(Mappings.RUN_INTAKE, runIntakeNoTraversal)
+              .bind(Mappings.RUN_INTAKE, runIntake)
 
               .bind(Mappings.AUTO_SHOOT, autoShoot)
               .bind(Mappings.RUN_TRAVERSAL, runTraversal)
@@ -148,13 +147,13 @@ public class RobotContainer {
             .bind(DriverMappings.RUN_INTAKE, runIntake);
   
     //setpoint creation helper
-    testButton1.toggleWhenPressed(new SetpointHelper(flywheel, hood, limelight, testJoystick));//.alongWith(new AutoTurret(turret, odometry.getTarget())));
+    //testButton1.toggleWhenPressed(new SetpointHelper(flywheel, hood, limelight, testJoystick));//.alongWith(new AutoTurret(turret, odometry.getTarget())));
   }
 
-  Joystick testJoystick = new Joystick(3);
-  JoystickButton testButton1 = new JoystickButton(testJoystick, 1);
-  public void testModeButtonBindings(){
- }
+//   Joystick testJoystick = new Joystick(3);
+//   JoystickButton testButton1 = new JoystickButton(testJoystick, 1);
+//   public void testModeButtonBindings(){
+//  }
 
   //access functions:
   public Odometry getOdometry() {
