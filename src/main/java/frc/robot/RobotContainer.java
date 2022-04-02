@@ -10,13 +10,16 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.lib.sensors.Limelight;
 import frc.lib.sensors.Pigeon;
-import frc.robot.OI.DriverMappings;
+//import frc.robot.OI.DriverMappings;
 import frc.robot.OI.Mappings;
+import frc.robot.autonomous.FarHumanPlayerBallAuto;
 import frc.robot.autonomous.TwoBallAuto;
 import frc.robot.commands.climber.JoystickClimber;
 import frc.robot.commands.intake.Eject;
@@ -74,7 +77,7 @@ public class RobotContainer {
   
   private final OI mainOperatorOI = new OI(mainOperatorJoystick);
   private final OI climbOperatorOI = new OI(climbOperatorJoystick);
-  private final OI driverOI = new OI(driverJoystick);
+  //private final OI driverOI = new OI(driverJoystick);
   
   // commands:
   private final Command 
@@ -113,6 +116,8 @@ public class RobotContainer {
       configureButtonBindings();
       limelight.setLedOff();
       limelight.setModeDrive();
+
+
     }
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
@@ -128,7 +133,13 @@ public class RobotContainer {
     climber.setDefaultCommand(manualClimb);
 
     new JoystickButton(mainOperatorJoystick, Mappings.RUN_INTAKE).whenReleased(new IntakeUp(intake).alongWith(new RampFlywheel(flywheel).withTimeout(10)));
-    new JoystickButton(driverJoystick, DriverMappings.RUN_INTAKE).whenReleased(new IntakeUp(intake).alongWith(new RampFlywheel(flywheel).withTimeout(10)));
+    //new JoystickButton(driverJoystick, DriverMappings.RUN_INTAKE).whenReleased(new IntakeUp(intake).alongWith(new RampFlywheel(flywheel).withTimeout(10)));
+
+
+      // Add commands to the autonomous command chooser
+    m_chooser.setDefaultOption("Two Ball", leftSide);
+    m_chooser.addOption("Three Ball", rightSide);
+    SmartDashboard.putData(m_chooser);
 
     mainOperatorOI.bind(Mappings.LAYUP_SHOT, layupShot)
               .bind(Mappings.PROTECTED_SHOT, protectedShot)
@@ -143,8 +154,8 @@ public class RobotContainer {
               .bind(Mappings.RUN_TRAVERSAL, runTraversal)
               .bind(Mappings.RUN_TRAVERSAL_AND_TRIGGER, runTraversalAndTrigger);
     
-    driverOI.bind(DriverMappings.AUTO_SHOOT, autoShoot)
-            .bind(DriverMappings.RUN_INTAKE, runIntake);
+    // driverOI.bind(DriverMappings.AUTO_SHOOT, autoShoot)
+    //         .bind(DriverMappings.RUN_INTAKE, runIntake);
   
     //setpoint creation helper
     //testButton1.toggleWhenPressed(new SetpointHelper(flywheel, hood, limelight, testJoystick));//.alongWith(new AutoTurret(turret, odometry.getTarget())));
@@ -187,7 +198,15 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
-    return new TwoBallAuto(driveTrain, flywheel, hood, intake, turret, limelight, this);
+  public Command getAutonomousCommand() {  
+    return m_chooser.getSelected();
+    //new TwoBallAutoLeftSide(driveTrain, flywheel, hood, intake, turret, limelight, this);
   }
+
+  private Command leftSide = new TwoBallAuto(driveTrain, flywheel, hood, intake, turret, limelight, this);
+
+  private Command rightSide = new FarHumanPlayerBallAuto(driveTrain, flywheel, hood, intake, turret, limelight, this);
+
+  SendableChooser<Command> m_chooser = new SendableChooser<>();
 }
+

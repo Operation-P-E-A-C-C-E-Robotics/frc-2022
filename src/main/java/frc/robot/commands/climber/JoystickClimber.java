@@ -1,7 +1,6 @@
 package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Climber;
@@ -25,14 +24,14 @@ public class JoystickClimber extends CommandBase{
   public void execute() {
       climber.setLiftPercent(joystick.getY());
       double driverPOV = driverJoystick.getPOV();
-      if(driverPOV == 180) {
-        climber.setLiftPercent(0.5);
-        climber.armsOut();
-      }
-      if(driverPOV == 0) {
-        climber.setLiftPercent(-0.5);
-        climber.armsIn();
-      }
+      // if(driverPOV == 180) {
+      //   climber.setLiftPercent(0.5);
+      //   climber.armsOut();
+      // }
+      // if(driverPOV == 0) {
+      //   climber.setLiftPercent(-0.5);
+      //   climber.armsIn();
+      // }
 
       if((-joystick.getY()) > 0.01){
         climber.armsIn();
