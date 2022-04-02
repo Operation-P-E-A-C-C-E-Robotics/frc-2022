@@ -51,7 +51,7 @@ public class TriggerWhenReady extends CommandBase {
   }
 
   private void twosecondtriggerwheel() {
-    timer = Timer.getFPGATimestamp();
+   // timer = Timer.getFPGATimestamp();
 
     intake.setTrigger(1);
     intake.setTraversal(0.6);

@@ -5,6 +5,7 @@ import frc.lib.sensors.Limelight;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.OldTurret;
+import frc.robot.RobotContainer;
 
 public class SetpointBase extends CommandBase{
     private double velocity;
@@ -17,8 +18,9 @@ public class SetpointBase extends CommandBase{
     private Hood hood;
     private Limelight limelight;
     private OldTurret turret;
+    private RobotContainer container;
 
-    public SetpointBase(Flywheel shooter, Hood hood, OldTurret turret, Limelight camera, double velocity, double angle, boolean withLimelight){
+    public SetpointBase(Flywheel shooter, Hood hood, OldTurret turret, Limelight camera, RobotContainer container, double velocity, double angle, boolean withLimelight){
         this.shooter = shooter;
         this.hood = hood;
         this.limelight = camera;
@@ -26,15 +28,17 @@ public class SetpointBase extends CommandBase{
         this.velocity = velocity;
         this.angle = angle;
         this.withLimelight = withLimelight;
-
+        this.container = container;
         addRequirements(shooter, hood);
     }
 
     // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    if (withLimelight == true) {
     limelight.setModeVision();
     limelight.setLedOn();
+    }
     targetTurretPosition = Double.NaN;
   }
 
@@ -57,6 +61,8 @@ public class SetpointBase extends CommandBase{
       }
 
       turret.setTurretRotations(targetTurretPosition);
+    } else {
+    turret.setTurretPercent(container.getOperatorJoystick().getX());
     }
   }
 

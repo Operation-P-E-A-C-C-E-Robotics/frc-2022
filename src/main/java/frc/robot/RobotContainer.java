@@ -81,10 +81,10 @@ public class RobotContainer {
     arcadeDrive     = new ArcadeDrive(driveTrain, this),
     joystickAim     = new ManualAim(turret, hood, this),
     povIntake       = new POVIntake(intake, flywheel, this, true),
-    protectedShot   = new SetpointBase(flywheel, hood, turret, limelight, 7300, 210, false),
-    layupShot       = new SetpointBase(flywheel, hood, turret, limelight, 6200, 60, false),
-    insideLine       = new SetpointBase(flywheel, hood, turret, limelight, 6200, 170, false),
-    outsideLine       = new SetpointBase(flywheel, hood, turret, limelight, 7200, 220, false),
+    protectedShot   = new SetpointBase(flywheel, hood, turret, limelight, this, 7300, 210, false),
+    layupShot       = new SetpointBase(flywheel, hood, turret, limelight, this, 6200, 60, false),
+    insideLine       = new SetpointBase(flywheel, hood, turret, limelight, this, 6200, 170, false),
+    outsideLine       = new SetpointBase(flywheel, hood, turret, limelight, this, 7200, 220, false),
     manualClimb     = new JoystickClimber(climber, climbOperatorJoystick, driverJoystick, this),
     reverseTrigger  = new ReverseTrigger(flywheel, intake),
     // runTrigger      = new RunTrigger(intake),
@@ -137,7 +137,7 @@ public class RobotContainer {
               .bind(Mappings.REVERSE_TRIGGER, reverseTrigger)
               // .bind(Mappings.RUN_TRIGGER, runTrigger)
               .bind(Mappings.EJECT_BALL, eject)
-              .bind(Mappings.RUN_INTAKE, runIntake)
+              .bind(Mappings.RUN_INTAKE, runIntakeNoTraversal)
 
               .bind(Mappings.AUTO_SHOOT, autoShoot)
               .bind(Mappings.RUN_TRAVERSAL, runTraversal)
