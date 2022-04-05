@@ -116,6 +116,7 @@ public class RobotContainer {
       configureButtonBindings();
       limelight.setLedOff();
       limelight.setModeDrive();
+      driveTrain.resetEncoders();
 
 
     }

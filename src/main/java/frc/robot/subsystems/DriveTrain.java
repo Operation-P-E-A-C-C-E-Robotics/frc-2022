@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.DriveSignal;
 import static frc.robot.Constants.DriveTrainConstants.*;
@@ -92,6 +93,8 @@ public class DriveTrain extends SubsystemBase {
     public void percentDrive(double rSpeed, double lSpeed) {
         leftMasterController.set(ControlMode.PercentOutput, lSpeed);
         rightMasterController.set(ControlMode.PercentOutput, rSpeed);
+        //SmartDashboard.putNumber("DT Left Speed", lSpeed);
+        //SmartDashboard.putNumber("DT Right Speed", rSpeed);
         dDrive.feed(); //keep the wpilib arcade drive that we need for auto from freaking out
     }
 
@@ -159,6 +162,18 @@ public class DriveTrain extends SubsystemBase {
         return (lEncoderPosition() + rEncoderPosition()) / 2.0;
     }
 
+    public double getAverageEncoderSimpleDistance() {
+        return (leftMasterController.getSelectedSensorPosition() + rightMasterController.getSelectedSensorPosition()) / 2;
+    }
+
+    public double getLeftEncoderSimple() {
+        return leftMasterController.getSelectedSensorPosition();
+    }
+
+    public double getRightEncoderSimple() {
+        return rightMasterController.getSelectedSensorPosition();
+    }
+
     /**
      * set maximum voltage to motors.
      * for auto, or when somebody else is trying out for drive team
@@ -205,6 +220,8 @@ public class DriveTrain extends SubsystemBase {
         // SmartDashboard.putNumber("drivetrain left current", leftMasterController.getSupplyCurrent() + leftSlaveController.getSupplyCurrent());
         // SmartDashboard.putNumber("drivetrain right current", rightMasterController.getSupplyCurrent() + rightSlaveController.getSupplyCurrent());
         dDrive.feed();
+
+        SmartDashboard.putNumber("DT Avg Enc", getAverageEncoderSimpleDistance());
     }
 
     public enum Gear {
