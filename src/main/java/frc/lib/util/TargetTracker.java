@@ -8,6 +8,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.math.PointTracker;
 import frc.lib.math.Sequencer;
 import frc.lib.sensors.Limelight;
@@ -112,6 +114,7 @@ public class TargetTracker {
         differenceBetweenLimelightAndOdometry = 0;
 
         checkForErrors();
+        handleError();
 
         manualOffset.plus(new Translation2d(
             joystick.getX() * manualSensitivity,
@@ -383,5 +386,36 @@ public class TargetTracker {
         LIMELIGHT_CANT_HOLD_TARGET,
         SUSPECTED_BUMP,
         NOT_REACHING_TARGET, //TODO
+    }
+
+    public void test(boolean aiming){
+        //read dashboard information
+        mode = TrackingMode.values()[(int)SmartDashboard.getNumber("tracking mode", mode.ordinal())];
+        backup = ManualBackupMode.values()[(int)SmartDashboard.getNumber("backup mode", backup.ordinal())];
+        error = ErrorMode.values()[(int)SmartDashboard.getNumber("error mode", error.ordinal())];
+
+        update(aiming);
+        //write dashboard information
+        SmartDashboard.putNumber("odometry x", odometry.getPoseMeters().getX());
+        SmartDashboard.putNumber("odometry y", odometry.getPoseMeters().getY());
+        SmartDashboard.putNumber("odometry heading", odometry.getPoseMeters().getRotation().getDegrees());
+        SmartDashboard.putNumber("pigeon heading", pigeon.getHeading());
+        SmartDashboard.putNumber("odometry offset x", odometryOffset.getX());
+        SmartDashboard.putNumber("odometry offset y", odometryOffset.getY());
+        SmartDashboard.putNumber("tracking mode", mode.ordinal());
+        SmartDashboard.putNumber("backup mode", backup.ordinal());
+        SmartDashboard.putNumber("error mode", error.ordinal());
+        SmartDashboard.putNumber("turret position", turret.getAngle().getDegrees());
+        SmartDashboard.putNumber("limelight raw x", limelight.getTargetOffsetX());
+        SmartDashboard.putNumber("limelight raw y", limelight.getTargetOffsetY());
+        SmartDashboard.putNumberArray("limelight target area graph", limelightTargetAreaBuffer);
+        SmartDashboard.putNumber("limelight frta", fieldRelativeTargetAngleFromLimelight().getDegrees());
+        // SmartDashboard.putBoolean("target in bounds", targetInBounds());
+        // SmartDashboard.putNumber("filtered target x", filterLimelightTarget().x());
+        // SmartDashboard.putNumber("filtered target y", filterLimelightTarget().y());
+        // SmartDashboard.putNumber("manual offset x", manualOffset.getX());
+        // SmartDashboard.putNumber("manual offset y", manualOffset.getY());
+        // SmartDashboard.putNumber("final target offset", getTargetAngle().getDegrees());
+        // SmartDashboard.putNumber("final target distance", getTargetDistance());
     }
 }
