@@ -8,7 +8,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.math.PointTracker;
 import frc.lib.math.Sequencer;
@@ -78,6 +77,10 @@ public class TargetTracker {
         limelightTargetCenterTracker = new PointTracker(3);
     }
 
+    /**
+     * get the target angle relative to the field (a.k.a the pigeon's zero point)
+     * @return a Rotation2d with the angle of the target
+     */
     public Rotation2d getTargetAngle(){
         Translation2d targetTranslation = fieldRelativeTargetFromRobotCombined.getTranslation();
         if(backup == ManualBackupMode.MANUAL_OFFSETS) targetTranslation.plus(manualOffset);
@@ -88,15 +91,28 @@ public class TargetTracker {
         return new Rotation2d(PointTracker.fromTranslation(targetTranslation).p());
     }
 
+    /**
+     * get the distance from the robot to the target
+     * @return the target distance in meters (as long as everything else is meters)
+     */
     public double getTargetDistance(){
         return fieldRelativeTargetFromRobotCombined.p();
     }
 
+    /**
+     * update the tracking
+     * @param mode which things to use while tracking
+     * @param aiming whether or not we're actively aiming. THIS MUST BE SET CORRECTLY.
+     */
     public void update(TrackingMode mode, boolean aiming){
         this.mode = mode;
         update(aiming);
     }
 
+    /**
+     * update the tracking
+     * @param aiming whether or not we're actively aiming. THIS MUST BE SET CORRECTLY.
+     */
     public void update(boolean aiming){
         Pose2d robotPose;
         Rotation2d limelightTargetAngle;
@@ -148,9 +164,10 @@ public class TargetTracker {
             fieldRelativeTargetFromRobotCombined = fieldRelativeTargetFromRobotFromDrivetrain;
         }
 
+        //only continue if there is a valid target and we are using the limelight
         if(!targetInBounds() || mode == TrackingMode.ODOMETRY_ONLY) return;
         
-
+        //get the difference between the limelight odometry and the regular odometry (for error detection)
         PointTracker difference = new PointTracker(1).xy(
             Util.difference(robotPose.getX(),odometryFromLimelight().getX()),
             Util.difference(robotPose.getY(),odometryFromLimelight().getY())
@@ -158,44 +175,51 @@ public class TargetTracker {
 
         differenceBetweenLimelightAndOdometry = difference.r();
 
-        //limelight has a target
         //update odometry from limelight odometry
         odometryOffset = robotPose.relativeTo(odometryFromLimelight());
     }
 
     private final double allowableTimeToSeeTarget = 5; //seconds
-    private final double targetCenteredThreshold = 4; //degrees
+    // private final double targetCenteredThreshold = 4; //degrees
     private final int numberOfTargetLossesToTrip = 10; //times
     private final double allowableDfferenceBetweenLimelightAndOdometry = 1;//meters
 
     private boolean aiming = false;
-    private boolean limelightShouldSeeTarget = false;
+    // private boolean limelightShouldSeeTarget = false;
     private boolean limelightHasSeenTarget = false;
     private int limelightTargetSightingsSinceLoss = 0;
-    private int limelightTargetLossesSinceLastSighting = 0;
+    // private int limelightTargetLossesSinceLastSighting = 0;
     private int limelightLossesSinceTargetFound = 0;
     private double differenceBetweenLimelightAndOdometry = 0;
     private double aimStartTime = 0;
+
+    /**
+     * check to make sure everything is working smoothly!
+     */
     private void checkForErrors(){
         double aimingTime = Timer.getFPGATimestamp() - aimStartTime;
         boolean hasTarget = limelight.hasTarget() == 1;
 
+        //use pigeon to try and detect possible bumps (to give some manual control to drivers)
         if(pigeon.wasBumped()) error = ErrorMode.SUSPECTED_BUMP;
 
+        /**
+         * make sure the limelight and odometry are lining up as expected.
+         * if they don't we'll give some control to the drivers to make sure
+         * things go smoothly
+         */
         if(differenceBetweenLimelightAndOdometry > allowableDfferenceBetweenLimelightAndOdometry)
             error = ErrorMode.UNEXPECTED_DIFFERENCE_BETWEEN_ODOMETRY_AND_LIMELIGHT;
 
-        if(!aiming) return;
-        if(mode == TrackingMode.ODOMETRY_ONLY){
-
-            return;
-        }
+        
+        if(!aiming) return; //only continue if we're trying to aim
+        //active aiming errors:
 
         if(hasTarget) {
             limelightTargetSightingsSinceLoss++;
-            limelightTargetSightingsSinceLoss = 0;
+            // limelightTargetLossesSinceLastSighting = 0;
         }else {
-            limelightTargetLossesSinceLastSighting++;
+            // limelightTargetLossesSinceLastSighting++;
             limelightTargetSightingsSinceLoss = 0;
         }
 
@@ -205,10 +229,15 @@ public class TargetTracker {
 
         if(limelightHasSeenTarget && !hasTarget) limelightLossesSinceTargetFound++;
 
+        //if the limelight repeatedly loses the target, then we give control to the drivers
         if(limelightLossesSinceTargetFound >= numberOfTargetLossesToTrip) error = ErrorMode.LIMELIGHT_CANT_HOLD_TARGET;
 
+        //if the limelight never finds the target, then we give control to the drivers
+        //until the limelight sees a target (in case the odometry gets messed up)
         if(aimingTime > allowableTimeToSeeTarget && !limelightHasSeenTarget) error = ErrorMode.LIMELIGHT_TARGET_NOT_SEEN;
 
+        //if the limelight has found the target, then disable this manual
+        //until limelight backup.
         if(backup == ManualBackupMode.FULL_MANUAL_UNTIL_LIMELIGHT &&
             limelightHasSeenTarget)
                 backup = ManualBackupMode.NONE;
@@ -218,6 +247,9 @@ public class TargetTracker {
         //direction.
     }
 
+    /**
+     * sets the tracking mode and backup mode to handle error modes.
+     */
     private void handleError(){
         switch(error){
             case NORMAL:
@@ -248,12 +280,22 @@ public class TargetTracker {
         }
     }
 
+    /**
+     * get the robot position on the field using the limelight
+     * @return the robots Pose
+     */
     private Pose2d odometryFromLimelight(){
         Translation2d targetTranslation = filterLimelightTarget().getTranslation();
         Translation2d robotTranslationFromTarget = new Translation2d(0,0).minus(targetTranslation);
         return new Pose2d(targetTranslation.minus(robotTranslationFromTarget), Rotation2d.fromDegrees(pigeon.getHeading()));
     }
 
+    /**
+     * get the distance to the target from the limelight.
+     * unlike the function in Limelight.java, this one
+     * uses the fancy smoothing
+     * @return the distance to the target in meters
+     */
     private double limelightTargetDistance(){
         double distance = 0;
         double targetHeight = limelight.getTargetHeight();
@@ -263,6 +305,10 @@ public class TargetTracker {
         return distance;
     }
 
+    /**
+     * get the limelight target X offset with smoothing.
+     * @return the limelight offset, in probably degrees lol
+     */
     private double limelightTargetOffset(){
         return filterLimelightTarget().x();
     }
