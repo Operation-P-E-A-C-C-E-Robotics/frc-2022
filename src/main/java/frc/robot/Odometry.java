@@ -7,7 +7,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import frc.lib.sensors.Limelight;
 import frc.lib.sensors.Pigeon;
-import frc.lib.util.TargetTracker;
+import frc.lib.util.TargetTracker_old;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.OldTurret;
 
@@ -15,7 +15,7 @@ public class Odometry {
     private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(0.6);
     private final DifferentialDriveOdometry odometry;
     private final Pigeon pigeon;
-    private TargetTracker target;
+    private TargetTracker_old target;
     private final DriveTrain driveTrain;
     // private Limelight camera;
 
@@ -24,10 +24,10 @@ public class Odometry {
         this.pigeon = pigeon;
         // this.camera = camera;
         odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getHeading()));
-        target = new TargetTracker(camera, pigeon, odometry, turret, new Translation2d(0.3,0));
+        target = new TargetTracker_old(camera, pigeon, odometry, turret, new Translation2d(0.3,0));
     }
 
-    public TargetTracker getTarget(){
+    public TargetTracker_old getTarget(){
         return target;
     }
 

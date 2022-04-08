@@ -62,6 +62,10 @@ public class Turret extends SubsystemBase {
         return new GainSetter(pidController);
     }
 
+    public void setTurretFieldRelative(Rotation2d angle, Rotation2d heading){
+        setTurretAngle(angle.minus(heading));
+    }
+
     public void setTurretAngle(Rotation2d angle){
         double robotRelativeRotations = angle.getDegrees() / 360;
         setTurretRotations(-robotRelativeRotations + 0.5);

@@ -13,8 +13,6 @@ public class Limelight {
   private final double cHeight;
   private final double cAngle;
 
-  private double pipeline = 0;
-
   /**
    * @param targetHeight the height of the target for calculating distance
    * @param cameraHeight the height of the camera for calculating distance
@@ -23,6 +21,18 @@ public class Limelight {
     tHeight = targetHeight;
     cHeight = cameraHeight;
     cAngle = cameraAngle;
+  }
+
+  public double getTargetHeight(){
+    return tHeight;
+  }
+
+  public double getCameraHeight(){
+    return cHeight;
+  }
+
+  public double getCameraAngle(){
+    return cAngle;
   }
 
   /**
@@ -53,6 +63,9 @@ public class Limelight {
   }
 
   public void update(){
+    //zoom levels with pipelines
+    //TODO change values, X value should be changed so it will only trigger 
+    //when the target is low enough
     if(getTargetOffsetX() < 5 && getTargetOffsetY() < 5){
       setPipeline(3);
     } else if (getTargetOffsetX() < 10 && getTargetOffsetY() < 10){
@@ -60,6 +73,8 @@ public class Limelight {
     }  else {
       setPipeline(0);
     }
+
+
   }
   /**
    * get the targets x offset from the camera
@@ -74,6 +89,10 @@ public class Limelight {
    */
   public double getTargetOffsetY(){
     return limelightTableValue("ty");
+  }
+
+  public double getTargetArea(){
+    return limelightTableValue("ta");
   }
   /**
    * the rotation of the fitted bounding box.

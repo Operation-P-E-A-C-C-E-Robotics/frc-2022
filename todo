@@ -1,3 +1,2 @@
- - test new AutoAiming + debug
- - test drive shifters
- - add autoaim setpoints
+in addition to list there:
+ - make sure target height is correct in code

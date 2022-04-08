@@ -103,4 +103,20 @@ public class Util {
         ar[i] = newv;
         return ar;
     }
+
+    public static double difference(double a, double b){
+        return Math.abs(a - b);
+    }
+
+    /**
+     * fill an array with zeros
+     * @param ar
+     * @return the filled array
+     */
+    public static double[] zeros(double[] ar){
+        for(int i = 0; i < ar.length; i++){
+            ar[i] = 0;
+        }
+        return ar;
+    }
 }
