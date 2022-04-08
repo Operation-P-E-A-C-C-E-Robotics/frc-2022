@@ -1,9 +1,12 @@
 package frc.lib.util;
 
+import org.opencv.core.Point;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 import frc.lib.math.PointTracker;
 import frc.lib.math.Sequencer;
@@ -40,6 +43,11 @@ public class TargetTracker {
                          targetSmoothingFactor = 10, //craycray maths, higher = more smoothing
                          targetSmoothingCeiling = 0; //ceiling on target jerk from logged points (0 forces constant acceleration)
     
+
+    private Joystick joystick;
+    Translation2d manualOffset = new Translation2d(0,0);
+    private final double manualSensitivity = 0.05;
+    
     /**
      * combines odometry and limelight values to track a point on the field.
      * applies filtering and smoothing to limelight targets based on odometry expected values
@@ -50,13 +58,14 @@ public class TargetTracker {
      * @param odometryOffset the offset of the odometry values from the actual robot position. will be changed in code
      * @param targetOffset the location of the target on the field.
      */
-    public TargetTracker(Limelight limelight, Turret turret, Pigeon pigeon, DifferentialDriveOdometry odometry, Pose2d odometryOffset, Translation2d targetOffset){
+    public TargetTracker(Limelight limelight, Turret turret, Pigeon pigeon, DifferentialDriveOdometry odometry, Pose2d odometryOffset, Translation2d targetOffset, Joystick operatorJoystick){
         this.limelight = limelight;
         this.pigeon = pigeon;
         this.odometry = odometry;
         this.turret = turret;
         this.targetOffset = targetOffset;
         this.odometryOffset = odometryOffset;
+        this.joystick = operatorJoystick;
         fieldRelativeTargetFromRobotCombined = new PointTracker(3);
         robotTranslation = new PointTracker(1);
         fieldRelativeTargetFromRobotFromLimelight = new PointTracker(1);
@@ -67,10 +76,14 @@ public class TargetTracker {
         limelightTargetCenterTracker = new PointTracker(3);
     }
 
-    public Rotation2d getTargetAngleFromRobot(){
-        Pose2d robotPose = odometry.getPoseMeters().relativeTo(odometryOffset);//TODO this might have to be fixed
-        Translation2d targetTranslaation = fieldRelativeTargetFromRobotCombined.getTranslation();
-        return getRobotRelativeAngleToPointFromFieldRelativePoint(robotPose, targetTranslaation);
+    public Rotation2d getTargetAngle(){
+        Translation2d targetTranslation = fieldRelativeTargetFromRobotCombined.getTranslation();
+        if(backup == ManualBackupMode.MANUAL_OFFSETS) targetTranslation.plus(manualOffset);
+        if(backup == ManualBackupMode.FULL_MANUAL_TARGET_POSITION ||
+            backup == ManualBackupMode.FULL_MANUAL_UNTIL_LIMELIGHT)
+                targetTranslation = manualOffset;
+        if(mode == TrackingMode.EMERGENCY_LIMELIGHT_RAW) return fieldRelativeTargetAngleFromLimelight();
+        return new Rotation2d(PointTracker.fromTranslation(targetTranslation).p());
     }
 
     public double getTargetDistance(){
@@ -97,6 +110,13 @@ public class TargetTracker {
         //reset in case both numbers aren't available, so it won't 'stick'
         //when the limelight doesn't have a target
         differenceBetweenLimelightAndOdometry = 0;
+
+        checkForErrors();
+
+        manualOffset.plus(new Translation2d(
+            joystick.getX() * manualSensitivity,
+            joystick.getY() * manualSensitivity
+        ));
 
         if(!aiming){
             aimStartTime = Timer.getFPGATimestamp();
@@ -145,14 +165,14 @@ public class TargetTracker {
     private final int numberOfTargetLossesToTrip = 10; //times
     private final double allowableDfferenceBetweenLimelightAndOdometry = 1;//meters
 
-    boolean aiming = false;
-    boolean limelightShouldSeeTarget = false;
-    boolean limelightHasSeenTarget = false;
-    int limelightTargetSightingsSinceLoss = 0;
-    int limelightTargetLossesSinceLastSighting = 0;
-    int limelightLossesSinceTargetFound = 0;
-    double differenceBetweenLimelightAndOdometry = 0;
-    double aimStartTime = 0;
+    private boolean aiming = false;
+    private boolean limelightShouldSeeTarget = false;
+    private boolean limelightHasSeenTarget = false;
+    private int limelightTargetSightingsSinceLoss = 0;
+    private int limelightTargetLossesSinceLastSighting = 0;
+    private int limelightLossesSinceTargetFound = 0;
+    private double differenceBetweenLimelightAndOdometry = 0;
+    private double aimStartTime = 0;
     private void checkForErrors(){
         double aimingTime = Timer.getFPGATimestamp() - aimStartTime;
         boolean hasTarget = limelight.hasTarget() == 1;
@@ -186,9 +206,43 @@ public class TargetTracker {
 
         if(aimingTime > allowableTimeToSeeTarget && !limelightHasSeenTarget) error = ErrorMode.LIMELIGHT_TARGET_NOT_SEEN;
 
+        if(backup == ManualBackupMode.FULL_MANUAL_UNTIL_LIMELIGHT &&
+            limelightHasSeenTarget)
+                backup = ManualBackupMode.NONE;
+
         //TODO when have result functions, do NOT_REACHING_TARGET
         //check whether the turret is angled close enough to the correct
         //direction.
+    }
+
+    private void handleError(){
+        switch(error){
+            case NORMAL:
+                mode = TrackingMode.NORMAL;
+                backup = ManualBackupMode.NONE;
+                break;
+            
+            case LIMELIGHT_TARGET_NOT_SEEN:
+                mode = TrackingMode.EMERGENCY_LIMELIGHT_RAW;
+                backup = ManualBackupMode.FULL_MANUAL_UNTIL_LIMELIGHT;
+                break;
+            
+            case UNEXPECTED_DIFFERENCE_BETWEEN_ODOMETRY_AND_LIMELIGHT:
+                mode = TrackingMode.LIMELIGHT_ONLY;
+                backup = ManualBackupMode.FULL_MANUAL_UNTIL_LIMELIGHT;
+                break;
+            case LIMELIGHT_CANT_HOLD_TARGET:
+                mode = TrackingMode.ODOMETRY_ONLY;
+                backup = ManualBackupMode.MANUAL_OFFSETS;
+                break;
+            case SUSPECTED_BUMP:
+                backup = ManualBackupMode.FULL_MANUAL_UNTIL_LIMELIGHT;
+                break;
+            case NOT_REACHING_TARGET:
+                mode = TrackingMode.EMERGENCY_LIMELIGHT_RAW;
+                backup = ManualBackupMode.FULL_MANUAL_UNTIL_LIMELIGHT;
+                break;
+        }
     }
 
     private Pose2d odometryFromLimelight(){
@@ -312,15 +366,14 @@ public class TargetTracker {
         ODOMETRY_ONLY,
         DISABLE_TARGET_BOUNDARY,
         DISABLE_TARGET_SMOOTHING, 
-        EMERGENCY_LIMELIGHT_FILTERED, //TODO when have result functions plain limelight
-        EMERGENCY_LIMELIGHT_RAW
+        EMERGENCY_LIMELIGHT_RAW //TODO when have result functions plain limelight
     }
 
     private enum ManualBackupMode{
         NONE,
+        FULL_MANUAL_UNTIL_LIMELIGHT,
         MANUAL_OFFSETS,
-        FULL_MANUAL_TARGET_POSITION,
-        FULL_MANUAL_SUBSYSTEM_CONTROLS
+        FULL_MANUAL_TARGET_POSITION
     }
 
     private enum ErrorMode{
