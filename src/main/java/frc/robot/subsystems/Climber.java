@@ -63,6 +63,10 @@ public class Climber extends SubsystemBase {
     return liftMasterController.getSelectedSensorPosition();
   }
 
+  public boolean liftFullyRetracted(){
+    return liftMasterController.isFwdLimitSwitchClosed() == 1;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

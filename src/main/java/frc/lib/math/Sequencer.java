@@ -46,13 +46,13 @@ public class Sequencer {
     }
     public static void main(String args[]){
         double[] test = {25,25,1};
-        double[] comp = Sequencer.compute(test);
-        // for (int i = 0; i < comp.length; i++){
-        //     comp[i] /= 2;
-        // }
-        comp[1]/=10;
-        comp[2]/=10;
-        System.out.println(Arrays.toString(comp));
+        // double[] comp = Sequencer.compute(test);
+        // // for (int i = 0; i < comp.length; i++){
+        // //     comp[i] /= 2;
+        // // }
+        // comp[1]/=10;
+        // comp[2]/=10;
+        // System.out.println(Arrays.toString(comp));
         double[] res = Sequencer.predict(comp, 5);
         for (double i : res) System.out.println(i);
     }

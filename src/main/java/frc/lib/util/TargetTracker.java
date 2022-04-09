@@ -1,7 +1,5 @@
 package frc.lib.util;
 
-import org.opencv.core.Point;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
