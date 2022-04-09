@@ -8,6 +8,7 @@ import static frc.robot.Constants.BallHandlerConstants.*;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -110,6 +111,8 @@ public class BallHandler extends SubsystemBase {
       computed[1] > intakeCurrentVelocityThreshold  &&
       computed[2] > intakeCurrentAccelerationThreshold
     );
+
+    // SmartDashboard.putBoolean("ball detected", ballDetected);
 
     //only allow the intake to run if the arms have had 0.4 secs to lower
     canRunIntake = (armsDown && (Timer.getFPGATimestamp() - armsLoweredTimer) > 0.3);
