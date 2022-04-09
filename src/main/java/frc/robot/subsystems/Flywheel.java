@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.networktables.NetworkTablesJNI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.math.CubicSplineInterpolate;
@@ -27,10 +28,21 @@ public class Flywheel extends SubsystemBase {
 
   double shooterSetpoint = 0;
 
+  int numFiredBalls = 0;
+
+  boolean ballFired = false;
+  boolean flywheelReady = false;
+  boolean prevBallFired = false;
+
   //acceptable errors (to tell when the flywheel is up to speed)
   private final double velocityRange = 200,
                         accelerationRange = 15,
                         jerkRange = 15;
+
+  //thresholds for ball fire detection
+  private final double ballDetectVelocity = 300,
+                      ballDetectAcceleration = 30,
+                      ballDetectJerk = 30;
 
   //holds previous 3 flywheel velocities, for flywheel up to speed calculations
   double[] history = new double[3];
@@ -83,13 +95,15 @@ public class Flywheel extends SubsystemBase {
    * @return the flywheel speed
    */
   public boolean ready(){
-    double[] decomposition = Sequencer.compute(history);
-    return (
-      Util.inRange(decomposition[0], velocityRange) &&
-      Util.inRange(decomposition[1], accelerationRange) &&
-      Util.inRange(decomposition[2], jerkRange)
-      );
+    return flywheelReady;
     // return (Math.abs(shooterSetpoint) - Math.abs(flywheelMasterController.getSelectedSensorVelocity())) < 500;
+  }
+
+  boolean prevBallFired2 = false;
+  public boolean ballFired(){
+    boolean newBallFired = (prevBallFired && !prevBallFired2);
+    prevBallFired2 = ballFired;
+    return newBallFired;
   }
   
   /**
@@ -119,6 +133,25 @@ public class Flywheel extends SubsystemBase {
   
   @Override
   public void periodic() {
+    double[] decomposition = Sequencer.compute(history);
+    flywheelReady = (
+      Util.inRange(decomposition[0], velocityRange) &&
+      Util.inRange(decomposition[1], accelerationRange) &&
+      Util.inRange(decomposition[2], jerkRange)
+    );
+
+    ballFired = ballFired ? !flywheelReady : (
+      decomposition[0] > ballDetectVelocity     &&
+      decomposition[1] > ballDetectAcceleration &&
+      decomposition[2] > ballDetectJerk
+    );
+
+    if(ballFired && !prevBallFired) numFiredBalls++;
+
+    prevBallFired = ballFired;
+
+
+    SmartDashboard.putNumber("balls fired :)", numFiredBalls);
     SmartDashboard.putBoolean("flywheel ready", ready());
     SmartDashboard.putNumber("flywheel velocity", getFlywheelVelocity());
 
