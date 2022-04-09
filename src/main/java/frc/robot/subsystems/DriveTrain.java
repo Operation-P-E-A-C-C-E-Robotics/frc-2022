@@ -22,8 +22,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.DriveSignal;
 import static frc.robot.Constants.DriveTrainConstants.*;
 
-import java.util.ResourceBundle.Control;
-
 public class DriveTrain extends SubsystemBase {
     private final WPI_TalonFX leftMasterController = new WPI_TalonFX(LEFT_MASTER_PORT);
     private final WPI_TalonFX leftSlaveController = new WPI_TalonFX(LEFT_SLAVE_PORT);
@@ -34,7 +32,8 @@ public class DriveTrain extends SubsystemBase {
     private final DifferentialDrive dDrive = new DifferentialDrive(leftMasterController, rightMasterController);
     private final PIDController lPid = new PIDController(high_kP, high_kI, high_kD);
     private final PIDController rPid = new PIDController(high_kP, high_kI, high_kD);
-    private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(high_kS, high_kV, high_kA);
+    private final SimpleMotorFeedforward highGearFeedforward = new SimpleMotorFeedforward(high_kS, high_kV, high_kA);
+    private final SimpleMotorFeedforward lowGearFeedforward = new SimpleMotorFeedforward(low_kS, low_kV, low_kA);
 
     //DRIVE RATIOS 54:30, 64:20
 
@@ -58,6 +57,19 @@ public class DriveTrain extends SubsystemBase {
 
         leftMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 35, 35, 10));
         rightMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 35, 35, 10));
+    
+        // SmartDashboard.putNumber("high ks", high_kS);
+        // SmartDashboard.putNumber("high kv", high_kV);
+        // SmartDashboard.putNumber("high ka", high_kA);
+        // SmartDashboard.putNumber("high kp", high_kP);
+        // SmartDashboard.putNumber("high ki", high_kI);
+        // SmartDashboard.putNumber("high kd", high_kD);
+        // SmartDashboard.putNumber("low ks", low_kS);
+        // SmartDashboard.putNumber("low kv", low_kV);
+        // SmartDashboard.putNumber("low ka", low_kA);
+        // SmartDashboard.putNumber("low kp", low_kP);
+        // SmartDashboard.putNumber("low ki", low_kI);
+        // SmartDashboard.putNumber("low kd", low_kD);
     }
 
     /**
@@ -130,10 +142,29 @@ public class DriveTrain extends SubsystemBase {
     }
 
     public void velocityDrive(double lSpeed, double rSpeed){
-        leftMasterController.setVoltage(feedforward.calculate(lSpeed)
-            + lPid.calculate(leftMasterController.getSelectedSensorVelocity(), lSpeed));
-        rightMasterController.setVoltage(feedforward.calculate(rSpeed)
-            + rPid.calculate(leftMasterController.getSelectedSensorVelocity(), rSpeed));
+        if(getGear() == Gear.HIGH_GEAR){
+            lPid.setP(high_kP);
+            lPid.setI(high_kI);
+            lPid.setD(high_kD);
+            rPid.setP(high_kP);
+            rPid.setI(high_kI);
+            rPid.setD(high_kD);
+            leftMasterController.setVoltage(highGearFeedforward.calculate(lSpeed)
+                + lPid.calculate(leftMasterController.getSelectedSensorVelocity(), lSpeed));
+            rightMasterController.setVoltage(highGearFeedforward.calculate(rSpeed)
+                + rPid.calculate(rightMasterController.getSelectedSensorVelocity(), rSpeed));
+        } else {
+            lPid.setP(low_kP);
+            lPid.setI(low_kI);
+            lPid.setD(low_kD);
+            rPid.setP(low_kP);
+            rPid.setI(low_kI);
+            rPid.setD(low_kD);
+            leftMasterController.setVoltage(lowGearFeedforward.calculate(lSpeed)
+                + lPid.calculate(leftMasterController.getSelectedSensorVelocity(), lSpeed));
+            rightMasterController.setVoltage(lowGearFeedforward.calculate(rSpeed)
+                + rPid.calculate(rightMasterController.getSelectedSensorVelocity(), rSpeed));
+        }
     }
 
     /**
@@ -215,13 +246,35 @@ public class DriveTrain extends SubsystemBase {
         leftMasterController.setNeutralMode(mode);
         rightMasterController.setNeutralMode(mode);
     }
+
+    double autoShiftThreshold = 100; //TODO TODO TODO
+
     @Override
     public void periodic() {
+        // if(rightMasterController.getSelectedSensorVelocity() > autoShiftThreshold ||
+        //     leftMasterController.getSelectedSensorVelocity() > autoShiftThreshold){
+        //     shift(Gear.HIGH_GEAR);
+        // } else {
+        //     shift(Gear.LOW_GEAR);
+        // }
         // SmartDashboard.putNumber("drivetrain left current", leftMasterController.getSupplyCurrent() + leftSlaveController.getSupplyCurrent());
         // SmartDashboard.putNumber("drivetrain right current", rightMasterController.getSupplyCurrent() + rightSlaveController.getSupplyCurrent());
         dDrive.feed();
 
         SmartDashboard.putNumber("DT Avg Enc", getAverageEncoderSimpleDistance());
+    
+        // high_kS = SmartDashboard.getNumber("high ks", high_kS);
+        // high_kV = SmartDashboard.getNumber("high kv", high_kV);
+        // high_kA = SmartDashboard.getNumber("high ka", high_kA);
+        // high_kP = SmartDashboard.getNumber("high kp", high_kP);
+        // high_kI = SmartDashboard.getNumber("high ki", high_kI);
+        // high_kD = SmartDashboard.getNumber("high kd", high_kD);
+        // low_kS = SmartDashboard.getNumber("low ks", low_kS);
+        // low_kV = SmartDashboard.getNumber("low kv", low_kV);
+        // low_kA = SmartDashboard.getNumber("low ka", low_kA);
+        // low_kP = SmartDashboard.getNumber("low kp", low_kP);
+        // low_kI = SmartDashboard.getNumber("low ki", low_kI);
+        // low_kD = SmartDashboard.getNumber("low kd", low_kD);
     }
 
     public enum Gear {

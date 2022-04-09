@@ -14,6 +14,7 @@ public class ArcadeDrive extends CommandBase {
  private final DriveTrain driveTrain;
   private final RobotContainer container;
 
+  private final double velocityMultiplier = 3000;
 
   /** Creates a new drive. */
   public ArcadeDrive(DriveTrain driveTrain, RobotContainer container) {
@@ -35,6 +36,10 @@ public class ArcadeDrive extends CommandBase {
     double x = driverJoystick.getX();
     double y = driverJoystick.getY();
     
-    driveTrain.percentDrive(-y - x, -y + x);
+    double left = -y - x;
+    double right = -y + x;
+
+    driveTrain.percentDrive(left, right);
+    // driveTrain.velocityDrive(left * velocityMultiplier * driverJoystick.getThrottle(), right * velocityMultiplier * driverJoystick.getThrottle());
   }
 }

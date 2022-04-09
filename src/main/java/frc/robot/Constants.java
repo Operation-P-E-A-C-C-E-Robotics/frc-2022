@@ -20,7 +20,7 @@ public final class Constants {
                                 LEFT_SLAVE_PORT = 3,
                                 DRIVE_ENCODER_CPR = 2048;
         
-        public static final double DRIVE_HIGH_GEAR_RATIO = 9.1,
+        public static double DRIVE_HIGH_GEAR_RATIO = 9.1,
                                     DRIVE_LOW_GEAR_RATIO = 24,
                                     WHEEL_DIAMETER_METERS = 0.1524,
                                     high_kS = 0,
@@ -28,7 +28,13 @@ public final class Constants {
                                     high_kA = 0,
                                     high_kP = 0,
                                     high_kI = 0,
-                                    high_kD = 0;
+                                    high_kD = 0,
+                                    low_kS = 0,
+                                    low_kV = 0,
+                                    low_kA = 0,
+                                    low_kP = 0,
+                                    low_kI = 0,
+                                    low_kD = 0;
     }
 
     public static final class FlywheelConstants{
