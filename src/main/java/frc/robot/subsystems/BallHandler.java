@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.math.Sequencer;
+import frc.lib.util.Util;
 
 public class BallHandler extends SubsystemBase {
   private final WPI_TalonSRX intakeMotor = new WPI_TalonSRX(INTAKE_CONTROLLER_PORT);
@@ -20,6 +22,13 @@ public class BallHandler extends SubsystemBase {
   private boolean canRunIntake = false,
                   armsDown = false;
   private double armsLoweredTimer = 0;
+
+  private double[] intakeCurrentHistory = new double[3];
+  private double intakeCurrentThreshold = 10,
+                 intakeCurrentVelocityThreshold = 5,
+                 intakeCurrentAccelerationThreshold = 5;
+  private boolean ballDetected = false,
+                  prevBallDetected = false;
 
 
   //Arm Pnuematics
@@ -31,6 +40,7 @@ public class BallHandler extends SubsystemBase {
     intakeMotor.setInverted(true);
     traversalMotor.configContinuousCurrentLimit(5);
     armsUp();
+    intakeCurrentHistory = Util.zeros(intakeCurrentHistory);
   }
 
   /**
@@ -84,9 +94,23 @@ public class BallHandler extends SubsystemBase {
     armsDown = true;
     arms.set(Value.kForward);
   }
+
+  public boolean ballInIntake(){
+    boolean res = ballDetected;
+    ballDetected = false;
+    return res;
+  }
   
   @Override
   public void periodic() {
+    Util.shiftLeft(intakeCurrentHistory, intakeMotor.getStatorCurrent());
+    double[] computed = Sequencer.compute(intakeCurrentHistory);
+    ballDetected = ballDetected ? true : (
+      computed[0] > intakeCurrentThreshold          &&
+      computed[1] > intakeCurrentVelocityThreshold  &&
+      computed[2] > intakeCurrentAccelerationThreshold
+    );
+
     //only allow the intake to run if the arms have had 0.4 secs to lower
     canRunIntake = (armsDown && (Timer.getFPGATimestamp() - armsLoweredTimer) > 0.3);
   }
