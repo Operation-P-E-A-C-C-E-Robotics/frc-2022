@@ -73,6 +73,7 @@ public class TargetTracker {
         limelightTargetAreaBuffer = Util.zeros(limelightTargetAreaBuffer);
         limelightTargetCenterTracker = new PointTracker(3);
         limelightTargetCenterTracker = new PointTracker(3);
+        // SmartDashboard.putNumber("test target angle", 0);
     }
 
     /**
@@ -372,7 +373,7 @@ public class TargetTracker {
     private PointTracker _filterLimelightTarget(){
         if(!targetInBounds()){
             //just use prediction if the limelight target is erronious
-            limelightTargetCenterTracker = limelightTargetCenterTracker.getFuture(1);
+            // limelightTargetCenterTracker = limelightTargetCenterTracker.getFuture(1);
             return limelightTargetCenterTracker.smooth(targetSmoothingFactor, targetSmoothingCeiling);
         }
 
@@ -454,12 +455,19 @@ public class TargetTracker {
         SmartDashboard.putNumber("limelight raw y", limelight.getTargetOffsetY());
         SmartDashboard.putNumberArray("limelight target area graph", limelightTargetAreaBuffer);
         SmartDashboard.putNumber("limelight frta", fieldRelativeTargetAngleFromLimelight().getDegrees());
-        // SmartDashboard.putBoolean("target in bounds", targetInBounds());
-        // SmartDashboard.putNumber("filtered target x", filterLimelightTarget().x());
-        // SmartDashboard.putNumber("filtered target y", filterLimelightTarget().y());
-        // SmartDashboard.putNumber("manual offset x", manualOffset.getX());
-        // SmartDashboard.putNumber("manual offset y", manualOffset.getY());
-        // SmartDashboard.putNumber("final target offset", getTargetAngle().getDegrees());
-        // SmartDashboard.putNumber("final target distance", getTargetDistance());
+        SmartDashboard.putBoolean("target in bounds", targetInBounds());
+        SmartDashboard.putNumber("filtered target x", filterLimelightTarget().x());
+        SmartDashboard.putNumber("filtered target y", filterLimelightTarget().y());
+        SmartDashboard.putNumber("manual offset x", manualOffset.getX());
+        SmartDashboard.putNumber("manual offset y", manualOffset.getY());
+        SmartDashboard.putNumber("final target offset", getTargetAngle().getDegrees());
+        SmartDashboard.putNumber("final target distance", getTargetDistance());
+        SmartDashboard.putBoolean("target in bounds", targetInBounds());
+        SmartDashboard.putNumber("limelight odo target x", fieldRelativeTargetFromRobotFromLimelight.x());
+        SmartDashboard.putNumber("limelight odo target y", fieldRelativeTargetFromRobotFromLimelight.y());
+        SmartDashboard.putNumber("drivetrain odo target x", fieldRelativeTargetFromRobotFromLimelight.x());
+        SmartDashboard.putNumber("drivetrain odo target y", fieldRelativeTargetFromRobotFromLimelight.y());
+
+        // turret.setTurretAngle(getTargetAngle());
     }
 }

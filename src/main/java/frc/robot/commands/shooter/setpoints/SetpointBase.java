@@ -5,6 +5,7 @@ import frc.lib.sensors.Limelight;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.OldTurret;
+import frc.robot.subsystems.Turret;
 import frc.robot.RobotContainer;
 
 public class SetpointBase extends CommandBase{
@@ -17,10 +18,10 @@ public class SetpointBase extends CommandBase{
     private Flywheel shooter;
     private Hood hood;
     private Limelight limelight;
-    private OldTurret turret;
+    private Turret turret;
     private RobotContainer container;
 
-    public SetpointBase(Flywheel shooter, Hood hood, OldTurret turret, Limelight camera, RobotContainer container, double velocity, double angle, boolean withLimelight){
+    public SetpointBase(Flywheel shooter, Hood hood, Turret turret, Limelight camera, RobotContainer container, double velocity, double angle, boolean withLimelight){
         this.shooter = shooter;
         this.hood = hood;
         this.limelight = camera;

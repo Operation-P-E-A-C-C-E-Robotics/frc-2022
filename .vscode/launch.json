@@ -6,6 +6,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Launch Turret",
+      "request": "launch",
+      "mainClass": "frc.robot.subsystems.Turret",
+      "projectName": "2022-robot"
+    },
+    {
+      "type": "java",
       "name": "Launch NiceCurve",
       "request": "launch",
       "mainClass": "frc.lib.math.NiceCurve",

@@ -41,8 +41,9 @@ public final class Constants {
         public static final int FLYWHEEL_MASTER_PORT = 5,
                                 FLYWHEEL_SLAVE_PORT = 4;  
         
-        public static final double FLYWHEEL_kF = 0.055,
-                                    FLYWHEEL_kP = 0.15,
+        // public static final double FLY[]\]
+         public static final double    FLYWHEEL_kF = 0.051,
+                                    FLYWHEEL_kP = 0.25,
                                     FLYWHEEL_kI = 0,
                                     FLYWHEEL_kD = 0;
     }
@@ -88,8 +89,11 @@ public final class Constants {
     }
 
     public static final double[][] AIM_DATA = {
-        {/*0.2,*/   1.4, 2.56, 3.6,  6}, //distances
-        {/*6200,*/  5850, 6600,7200, 9800}, //flywheel velocities
-        {/*75,*/    130, 220, 220, 220}, //hood angles
+        {/*0.2,*/   1.4, 2.56, 3.6,  4.7, 6}, //distances
+        {/*6200,*/  5900, 6500,7400, 8000, 9000}, //flywheel velocities
+        {/*75,*/    130, 220, 220, 220, 220}, //hood angles
+        // {/*0.2,*/   1.4, 2.56, 4.7, 6}, //distances
+        // {/*6200,*/  5850, 6600,9000, 11000}, //flywheel velocities
+        // {/*75,*/    130, 220, 220, 220}, //hood angles
     };
 }

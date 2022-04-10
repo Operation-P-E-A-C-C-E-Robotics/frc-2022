@@ -189,11 +189,11 @@ public class DriveTrain extends SubsystemBase {
     /**
      * @return average of left and right encoder positions
      */
-    public double getAverageEncoderDistance() {
+    public double getAverageEncoderMeters() {
         return (lEncoderPosition() + rEncoderPosition()) / 2.0;
     }
 
-    public double getAverageEncoderSimpleDistance() {
+    public double getAverageEncoderCounts() {
         return (leftMasterController.getSelectedSensorPosition() + rightMasterController.getSelectedSensorPosition()) / 2;
     }
 
@@ -261,7 +261,7 @@ public class DriveTrain extends SubsystemBase {
         // SmartDashboard.putNumber("drivetrain right current", rightMasterController.getSupplyCurrent() + rightSlaveController.getSupplyCurrent());
         dDrive.feed();
 
-        SmartDashboard.putNumber("DT Avg Enc", getAverageEncoderSimpleDistance());
+        SmartDashboard.putNumber("DT Avg Enc", getAverageEncoderCounts());
     
         // high_kS = SmartDashboard.getNumber("high ks", high_kS);
         // high_kV = SmartDashboard.getNumber("high kv", high_kV);

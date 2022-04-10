@@ -1,33 +1,41 @@
 package frc.robot;
 
+import org.w3c.dom.Text;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.Joystick;
 import frc.lib.sensors.Limelight;
 import frc.lib.sensors.Pigeon;
+import frc.lib.util.TargetTracker;
 import frc.lib.util.TargetTracker_old;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.OldTurret;
+import frc.robot.subsystems.Turret;
 
 public class Odometry {
     private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(0.6);
     private final DifferentialDriveOdometry odometry;
     private final Pigeon pigeon;
-    private TargetTracker_old target;
+    // private TargetTracker_old target;
+    TargetTracker target;
     private final DriveTrain driveTrain;
     // private Limelight camera;
+    private Joystick joystick;
 
-    public Odometry (DriveTrain driveTrain, OldTurret turret, Pigeon pigeon, Limelight camera){
+    public Odometry (DriveTrain driveTrain, Turret turret, Pigeon pigeon, Limelight camera, Joystick operatorJoystick){
         this.driveTrain = driveTrain;
         this.pigeon = pigeon;
+        this.joystick = operatorJoystick;
         // this.camera = camera;
         odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getHeading()));
-        target = new TargetTracker_old(camera, pigeon, odometry, turret, new Translation2d(0.3,0));
+        target = new TargetTracker(camera, turret, pigeon, odometry, new Pose2d(), new Translation2d(), operatorJoystick);
     }
 
-    public TargetTracker_old getTarget(){
+    public TargetTracker getTarget(){
         return target;
     }
 
@@ -35,7 +43,7 @@ public class Odometry {
         // target.update();
         pigeon.update(getHeading());
         odometry.update(Rotation2d.fromDegrees(getHeading()), driveTrain.lEncoderPosition(), driveTrain.rEncoderPosition());
-        // SmartDashboard.putNumber("robot x", getCurrentPose().getX());
+        target.test(joystick.getRawButton(5));
         // SmartDashboard.putNumber("robot y", getCurrentPose().getY());
         // SmartDashboard.putNumber("robot heading", getCurrentPose().getRotation().getDegrees());
     }

@@ -84,6 +84,10 @@ public class Pigeon {
     public double getHeading(){
         return Math.IEEEremainder(pg.getFusedHeading(), 360.0d) * -1.0d;
     }
+
+    public double getRelativeHeading(){
+        return pg.getFusedHeading();
+    }
     public void zeroHeading(){
         pg.setFusedHeading(0);
     }

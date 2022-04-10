@@ -35,14 +35,14 @@ public class Flywheel extends SubsystemBase {
   boolean prevBallFired = false;
 
   //acceptable errors (to tell when the flywheel is up to speed)
-  private final double velocityRange = 200,
-                        accelerationRange = 15,
-                        jerkRange = 15;
+  private final double velocityRange = 600,
+                        accelerationRange = 40,
+                        jerkRange = 40;
 
   //thresholds for ball fire detection
-  private final double ballDetectVelocity = 300,
-                      ballDetectAcceleration = 30,
-                      ballDetectJerk = 30;
+  private final double ballDetectVelocity = 200,
+                      ballDetectAcceleration = 20,
+                      ballDetectJerk = 20;
 
   //holds previous 3 flywheel velocities, for flywheel up to speed calculations
   double[] history = new double[3];
@@ -66,6 +66,7 @@ public class Flywheel extends SubsystemBase {
    * @param speed the speed (-1 to 1)
    */
   public void flywheelPercent(double speed) {
+    flywheelReady = false;
     flywheelMasterController.set(speed);
   }
 
@@ -74,6 +75,7 @@ public class Flywheel extends SubsystemBase {
    * @param velocity the velocity to set to in sensor units/100ms
    */
   public void flywheelVelocity(double velocity){
+    flywheelReady = false;
     flywheelMasterController.set(ControlMode.Velocity, velocity);
     shooterSetpoint = velocity;
   }
@@ -95,7 +97,13 @@ public class Flywheel extends SubsystemBase {
    * @return the flywheel speed
    */
   public boolean ready(){
-    return flywheelReady;
+    double[] decomposition = Sequencer.compute(history);
+    return (
+      Util.inRange(decomposition[0], velocityRange) &&
+      Util.inRange(decomposition[1], accelerationRange) &&
+      Util.inRange(decomposition[2], jerkRange)
+    ) && flywheelMasterController.getSelectedSensorVelocity() > 500;
+    // return flywheelReady;
     // return (Math.abs(shooterSetpoint) - Math.abs(flywheelMasterController.getSelectedSensorVelocity())) < 500;
   }
 
@@ -134,7 +142,7 @@ public class Flywheel extends SubsystemBase {
   @Override
   public void periodic() {
     double[] decomposition = Sequencer.compute(history);
-    flywheelReady = (
+    flywheelReady = flywheelReady ? !ballFired : (
       Util.inRange(decomposition[0], velocityRange) &&
       Util.inRange(decomposition[1], accelerationRange) &&
       Util.inRange(decomposition[2], jerkRange)
@@ -152,7 +160,7 @@ public class Flywheel extends SubsystemBase {
 
 
     SmartDashboard.putNumber("balls fired :)", numFiredBalls);
-    SmartDashboard.putBoolean("flywheel ready", ready());
+    SmartDashboard.putBoolean("flywheel ready", flywheelReady);
     SmartDashboard.putNumber("flywheel velocity", getFlywheelVelocity());
 
     //shift shooter velocity into history array

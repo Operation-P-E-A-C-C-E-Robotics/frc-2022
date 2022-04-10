@@ -9,19 +9,20 @@ import frc.lib.math.PointTracker;
 import frc.lib.sensors.Limelight;
 import frc.lib.sensors.Pigeon;
 import frc.robot.subsystems.OldTurret;
+import frc.robot.subsystems.Turret;
 
 public class TargetTracker_old {
     private Limelight limelight;
     private Pigeon pigeon;
     private DifferentialDriveOdometry odometry;
 
-    private OldTurret turret;
+    private Turret turret;
     
     private Pose2d pose;
     private PointTracker targetRelativeToRobot;
     private final Translation2d targetPosition;
 
-    public TargetTracker_old(Limelight limelight, Pigeon pigeon, DifferentialDriveOdometry odometry, OldTurret turret, Translation2d targetPosition){
+    public TargetTracker_old(Limelight limelight, Pigeon pigeon, DifferentialDriveOdometry odometry, Turret turret, Translation2d targetPosition){
         this.limelight = limelight;
         this.odometry = odometry;
         this.turret = turret;

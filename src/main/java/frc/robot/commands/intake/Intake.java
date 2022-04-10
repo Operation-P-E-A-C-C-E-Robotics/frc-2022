@@ -17,6 +17,7 @@ public class Intake extends CommandBase{
   public void execute() {
     intake.setIntake(1);
     intake.setTraversal(1);
+    intake.armsDown();
   }
 
   // Called once the command ends or is interrupted.

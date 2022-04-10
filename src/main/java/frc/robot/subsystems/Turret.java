@@ -19,6 +19,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.Util;
 
@@ -67,8 +68,8 @@ public class Turret extends SubsystemBase {
     }
 
     public void setTurretAngle(Rotation2d angle){
-        double robotRelativeRotations = angle.getDegrees() / 360;
-        setTurretRotations(-robotRelativeRotations + 0.5);
+        double robotRelativeDegrees = (((-angle.getDegrees()) % 360) + 360) % 360;
+        setTurretRotations((robotRelativeDegrees / 360) - 0.5);
     }
 
     public void setTurretRotations(double rotations){
@@ -157,5 +158,13 @@ public class Turret extends SubsystemBase {
             return this;
         }
 
+    }
+
+    public static void main(String args[]){
+        for(double i = -360; i < 360; i++){
+            double robotRelativeRotations = (((-i) % 360) + 360) % 360;
+            // robotRelativeRotations = robotRelativeRotations < 0 ? 360 + robotRelativeRotations : robotRelativeRotations;
+            System.out.println(i + ": " + ((robotRelativeRotations / 360) - 0.5));
+        }
     }
 }

@@ -10,9 +10,10 @@ import frc.lib.math.NiceCurve;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.OldTurret;
+import frc.robot.subsystems.Turret;
 
 public class ManualAim extends CommandBase {
-  private final OldTurret turret;
+  private final Turret turret;
   private final RobotContainer container;
   private Hood hood;
   
@@ -24,7 +25,7 @@ public class ManualAim extends CommandBase {
   private final NiceCurve curve = NiceCurve.preset1();
 
   /** Aim with joystick. */
-  public ManualAim(OldTurret shooter, Hood hood, RobotContainer container) {
+  public ManualAim(Turret shooter, Hood hood, RobotContainer container) {
     this.turret = shooter;
     this.hood = hood;
     this.container = container;

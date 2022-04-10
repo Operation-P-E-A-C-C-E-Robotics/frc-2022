@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.ctre.phoenix.sensors.PigeonIMU;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticHub;
@@ -19,7 +20,11 @@ import frc.lib.sensors.Limelight;
 import frc.lib.sensors.Pigeon;
 //import frc.robot.OI.DriverMappings;
 import frc.robot.OI.Mappings;
+import frc.robot.autonomous.DriveDistance;
 import frc.robot.autonomous.FarHumanPlayerBallAuto;
+import frc.robot.autonomous.FarRightBall;
+import frc.robot.autonomous.ThreeBallAuto;
+import frc.robot.autonomous.TurnAngle;
 import frc.robot.autonomous.TwoBallAuto;
 import frc.robot.commands.climber.JoystickClimber;
 import frc.robot.commands.intake.Eject;
@@ -37,6 +42,7 @@ import frc.robot.commands.shooter.setpoints.SetpointBase;
 import frc.robot.commands.shooter.ProtectedShotSetpoint;
 import frc.robot.commands.shooter.LayupShotSetpoint;
 import frc.robot.commands.drivetrain.ArcadeDrive;
+import frc.robot.commands.helpers.FlywheelTuner;
 import frc.robot.commands.helpers.SetpointHelper;
 import frc.robot.subsystems.BallHandler;
 import frc.robot.subsystems.Climber;
@@ -44,6 +50,7 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.OldTurret;
+import frc.robot.subsystems.Turret;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -55,8 +62,8 @@ public class RobotContainer {
   //declare robot components
   private final Robot robot = new Robot();
 
-  //utilities:
-  private final Limelight limelight = new Limelight(2.62, 0.9, 30);
+  //utilities: target height 103 inches
+  private final Limelight limelight = new Limelight(2.62, 0.9, 20);
   private final Pigeon pigeon = new Pigeon(new PigeonIMU(20));
   private final PneumaticHub pneumaticHub = new PneumaticHub();
   
@@ -64,11 +71,11 @@ public class RobotContainer {
   private final DriveTrain driveTrain = new DriveTrain();
   private final Flywheel flywheel = new Flywheel();
   private final BallHandler intake = new BallHandler();
-  private final OldTurret turret = new OldTurret();
+  private final Turret turret = new Turret();
   private final Climber climber = new Climber();
   private final Hood hood = new Hood();
   
-  private final Odometry odometry = new Odometry(driveTrain, turret, pigeon, limelight);
+  
   
   // OI:
   private final Joystick driverJoystick = new Joystick(0);
@@ -159,13 +166,16 @@ public class RobotContainer {
     //         .bind(DriverMappings.RUN_INTAKE, runIntake);
   
     //setpoint creation helper
-    //testButton1.toggleWhenPressed(new SetpointHelper(flywheel, hood, limelight, testJoystick));//.alongWith(new AutoTurret(turret, odometry.getTarget())));
+    testButton1.toggleWhenPressed(new SetpointHelper(flywheel, hood, limelight, testJoystick));//.alongWith(new AutoTurret(turret, odometry.getTarget())));
+    testButton2.toggleWhenPressed(new FlywheelTuner(flywheel, testJoystick));
   }
 
-//   Joystick testJoystick = new Joystick(3);
-//   JoystickButton testButton1 = new JoystickButton(testJoystick, 1);
-//   public void testModeButtonBindings(){
+  Joystick testJoystick = new Joystick(3);
+  JoystickButton testButton1 = new JoystickButton(testJoystick, 1);
+  JoystickButton testButton2 = new JoystickButton(testJoystick, 2);
+  //   public void testModeButtonBindings(){
 //  }
+private final Odometry odometry = new Odometry(driveTrain, turret, pigeon, limelight, testJoystick);
 
   //access functions:
   public Odometry getOdometry() {
@@ -194,13 +204,18 @@ public class RobotContainer {
     return robot;
   }
 
+  public Pigeon getPigeon() {
+    return pigeon;
+  }
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {  
-    return m_chooser.getSelected();
+    // return m_chooser.getSelected();  
+    return new ThreeBallAuto(driveTrain, intake, flywheel, turret, hood, limelight, this, pigeon);
     //new TwoBallAutoLeftSide(driveTrain, flywheel, hood, intake, turret, limelight, this);
   }
 

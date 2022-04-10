@@ -39,7 +39,10 @@ public class BallHandler extends SubsystemBase {
   public BallHandler() {
     traversalMotor.setInverted(true);
     intakeMotor.setInverted(true);
-    traversalMotor.configContinuousCurrentLimit(5);
+    // traversalMotor.configContinuousCurrentLimit(5);
+    traversalMotor.configContinuousCurrentLimit(1);
+    traversalMotor.configPeakCurrentLimit(5);
+    traversalMotor.configPeakCurrentDuration(50);
     armsUp();
     intakeCurrentHistory = Util.zeros(intakeCurrentHistory);
   }
