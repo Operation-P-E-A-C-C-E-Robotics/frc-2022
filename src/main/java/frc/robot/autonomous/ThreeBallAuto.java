@@ -19,7 +19,7 @@ public class ThreeBallAuto extends SequentialCommandGroup{
 
     public ThreeBallAuto(DriveTrain driveTrain, BallHandler intake, Flywheel flywheel, Turret turret, Hood hood, Limelight limelight, RobotContainer container, Pigeon pigeon){
         this.flywheel = flywheel;
-        flywheel.setDefaultCommand(new RampFlywheel(flywheel));
+        // flywheel.setDefaultCommand(new RampFlywheel(flywheel));
         addCommands(
             new DriveDistance(driveTrain, container, 0.83, 0.25)
                 .raceWith(new Intake(intake)),
@@ -37,6 +37,6 @@ public class ThreeBallAuto extends SequentialCommandGroup{
 
     @Override
     public void end(boolean e){
-        flywheel.setDefaultCommand(null);
+        // flywheel.setDefaultCommand(null);
     }
 }

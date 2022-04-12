@@ -441,32 +441,32 @@ public class TargetTracker {
 
         update(aiming);
         //write dashboard information
-        SmartDashboard.putNumber("odometry x", odometry.getPoseMeters().getX());
-        SmartDashboard.putNumber("odometry y", odometry.getPoseMeters().getY());
-        SmartDashboard.putNumber("odometry heading", odometry.getPoseMeters().getRotation().getDegrees());
-        SmartDashboard.putNumber("pigeon heading", pigeon.getHeading());
-        SmartDashboard.putNumber("odometry offset x", odometryOffset.getX());
-        SmartDashboard.putNumber("odometry offset y", odometryOffset.getY());
-        SmartDashboard.putNumber("tracking mode", mode.ordinal());
-        SmartDashboard.putNumber("backup mode", backup.ordinal());
-        SmartDashboard.putNumber("error mode", error.ordinal());
-        SmartDashboard.putNumber("turret position", turret.getAngle().getDegrees());
-        SmartDashboard.putNumber("limelight raw x", limelight.getTargetOffsetX());
-        SmartDashboard.putNumber("limelight raw y", limelight.getTargetOffsetY());
-        SmartDashboard.putNumberArray("limelight target area graph", limelightTargetAreaBuffer);
-        SmartDashboard.putNumber("limelight frta", fieldRelativeTargetAngleFromLimelight().getDegrees());
-        SmartDashboard.putBoolean("target in bounds", targetInBounds());
-        SmartDashboard.putNumber("filtered target x", filterLimelightTarget().x());
-        SmartDashboard.putNumber("filtered target y", filterLimelightTarget().y());
-        SmartDashboard.putNumber("manual offset x", manualOffset.getX());
-        SmartDashboard.putNumber("manual offset y", manualOffset.getY());
-        SmartDashboard.putNumber("final target offset", getTargetAngle().getDegrees());
-        SmartDashboard.putNumber("final target distance", getTargetDistance());
-        SmartDashboard.putBoolean("target in bounds", targetInBounds());
-        SmartDashboard.putNumber("limelight odo target x", fieldRelativeTargetFromRobotFromLimelight.x());
-        SmartDashboard.putNumber("limelight odo target y", fieldRelativeTargetFromRobotFromLimelight.y());
-        SmartDashboard.putNumber("drivetrain odo target x", fieldRelativeTargetFromRobotFromLimelight.x());
-        SmartDashboard.putNumber("drivetrain odo target y", fieldRelativeTargetFromRobotFromLimelight.y());
+        // SmartDashboard.putNumber("odometry x", odometry.getPoseMeters().getX());
+        // SmartDashboard.putNumber("odometry y", odometry.getPoseMeters().getY());
+        // SmartDashboard.putNumber("odometry heading", odometry.getPoseMeters().getRotation().getDegrees());
+        // SmartDashboard.putNumber("pigeon heading", pigeon.getHeading());
+        // SmartDashboard.putNumber("odometry offset x", odometryOffset.getX());
+        // SmartDashboard.putNumber("odometry offset y", odometryOffset.getY());
+        // SmartDashboard.putNumber("tracking mode", mode.ordinal());
+        // SmartDashboard.putNumber("backup mode", backup.ordinal());
+        // SmartDashboard.putNumber("error mode", error.ordinal());
+        // SmartDashboard.putNumber("turret position", turret.getAngle().getDegrees());
+        // SmartDashboard.putNumber("limelight raw x", limelight.getTargetOffsetX());
+        // SmartDashboard.putNumber("limelight raw y", limelight.getTargetOffsetY());
+        // SmartDashboard.putNumberArray("limelight target area graph", limelightTargetAreaBuffer);
+        // SmartDashboard.putNumber("limelight frta", fieldRelativeTargetAngleFromLimelight().getDegrees());
+        // SmartDashboard.putBoolean("target in bounds", targetInBounds());
+        // SmartDashboard.putNumber("filtered target x", filterLimelightTarget().x());
+        // SmartDashboard.putNumber("filtered target y", filterLimelightTarget().y());
+        // SmartDashboard.putNumber("manual offset x", manualOffset.getX());
+        // SmartDashboard.putNumber("manual offset y", manualOffset.getY());
+        // SmartDashboard.putNumber("final target offset", getTargetAngle().getDegrees());
+        // SmartDashboard.putNumber("final target distance", getTargetDistance());
+        // SmartDashboard.putBoolean("target in bounds", targetInBounds());
+        // SmartDashboard.putNumber("limelight odo target x", fieldRelativeTargetFromRobotFromLimelight.x());
+        // SmartDashboard.putNumber("limelight odo target y", fieldRelativeTargetFromRobotFromLimelight.y());
+        // SmartDashboard.putNumber("drivetrain odo target x", fieldRelativeTargetFromRobotFromLimelight.x());
+        // SmartDashboard.putNumber("drivetrain odo target y", fieldRelativeTargetFromRobotFromLimelight.y());
 
         // turret.setTurretAngle(getTargetAngle());
     }

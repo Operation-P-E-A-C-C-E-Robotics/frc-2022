@@ -44,13 +44,13 @@ public class AutoTurret extends CommandBase {
       double deltaX = limelight.getTargetOffsetX() / 360;
       double newTargetTurretPosition = curretTurretPosition + deltaX; //todo figure out what's flipped
       // double newTargetTurretPosition = target.getTargetAngle();
-      if(deltaX < 0.05) smoothing = true;
+      // if(deltaX < 0.05) smoothing = true;
 
-      if(Double.isNaN(targetTurretPosition) || !smoothing){
-        targetTurretPosition = newTargetTurretPosition;
-      } else {
-        targetTurretPosition += (newTargetTurretPosition - targetTurretPosition) / 10;
-      }
+      // if(Double.isNaN(targetTurretPosition) || !smoothing){
+      //   targetTurretPosition = newTargetTurretPosition;
+      // } else {
+      //   targetTurretPosition += (newTargetTurretPosition - targetTurretPosition) / 10;
+      // }
       
 
       turret.setTurretRotations(newTargetTurretPosition);

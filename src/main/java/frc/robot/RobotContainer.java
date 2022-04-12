@@ -43,6 +43,7 @@ import frc.robot.commands.shooter.ProtectedShotSetpoint;
 import frc.robot.commands.shooter.LayupShotSetpoint;
 import frc.robot.commands.drivetrain.ArcadeDrive;
 import frc.robot.commands.helpers.FlywheelTuner;
+import frc.robot.commands.helpers.NewSetpointHelper;
 import frc.robot.commands.helpers.SetpointHelper;
 import frc.robot.subsystems.BallHandler;
 import frc.robot.subsystems.Climber;
@@ -91,10 +92,10 @@ public class RobotContainer {
     arcadeDrive     = new ArcadeDrive(driveTrain, this),
     joystickAim     = new ManualAim(turret, hood, this),
     povIntake       = new POVIntake(intake, flywheel, this, true),
-    protectedShot   = new SetpointBase(flywheel, hood, turret, limelight, this, 7300, 210, false),
+    protectedShot   = new SetpointBase(flywheel, hood, turret, limelight, this, 7600, 250, false),
     layupShot       = new SetpointBase(flywheel, hood, turret, limelight, this, 6200, 60, false),
     insideLine       = new SetpointBase(flywheel, hood, turret, limelight, this, 6200, 170, false),
-    outsideLine       = new SetpointBase(flywheel, hood, turret, limelight, this, 7200, 220, false),
+    outsideLine       = new SetpointBase(flywheel, hood, turret, limelight, this, 7130, 220, false),
     manualClimb     = new JoystickClimber(climber, climbOperatorJoystick, driverJoystick, this),
     reverseTrigger  = new ReverseTrigger(flywheel, intake),
     // runTrigger      = new RunTrigger(intake),
@@ -166,7 +167,7 @@ public class RobotContainer {
     //         .bind(DriverMappings.RUN_INTAKE, runIntake);
   
     //setpoint creation helper
-    testButton1.toggleWhenPressed(new SetpointHelper(flywheel, hood, limelight, testJoystick));//.alongWith(new AutoTurret(turret, odometry.getTarget())));
+    testButton1.toggleWhenPressed(new NewSetpointHelper(flywheel, hood, limelight, testJoystick));//.alongWith(new AutoTurret(turret, odometry.getTarget())));
     testButton2.toggleWhenPressed(new FlywheelTuner(flywheel, testJoystick));
   }
 
@@ -214,14 +215,15 @@ private final Odometry odometry = new Odometry(driveTrain, turret, pigeon, limel
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {  
-    // return m_chooser.getSelected();  
-    return new ThreeBallAuto(driveTrain, intake, flywheel, turret, hood, limelight, this, pigeon);
+    return m_chooser.getSelected();  
+    // return new ThreeBallAuto(driveTrain, intake, flywheel, turret, hood, limelight, this, pigeon);
     //new TwoBallAutoLeftSide(driveTrain, flywheel, hood, intake, turret, limelight, this);
   }
 
   private Command leftSide = new TwoBallAuto(driveTrain, flywheel, hood, intake, turret, limelight, this);
 
-  private Command rightSide = new FarHumanPlayerBallAuto(driveTrain, flywheel, hood, intake, turret, limelight, this);
+  // private Command rightSide = new FarHumanPlayerBallAuto(driveTrain, flywheel, hood, intake, turret, limelight, this);
+  private Command rightSide = new ThreeBallAuto(driveTrain, intake, flywheel, turret, hood, limelight, this, pigeon);
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 }

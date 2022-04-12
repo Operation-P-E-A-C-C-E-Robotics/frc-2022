@@ -45,6 +45,10 @@ public class BallHandler extends SubsystemBase {
     traversalMotor.configPeakCurrentDuration(50);
     armsUp();
     intakeCurrentHistory = Util.zeros(intakeCurrentHistory);
+
+    SmartDashboard.putNumber("i detect c", intakeCurrentThreshold);
+    SmartDashboard.putNumber("i detect v", intakeCurrentThreshold);
+    SmartDashboard.putNumber("i detect a", intakeCurrentThreshold);
   }
 
   /**
@@ -115,6 +119,11 @@ public class BallHandler extends SubsystemBase {
       computed[2] > intakeCurrentAccelerationThreshold
     );
 
+    SmartDashboard.putBoolean("intake ball detected", ballDetected);
+    
+    intakeCurrentThreshold = SmartDashboard.getNumber("i detect c", intakeCurrentThreshold);
+    intakeCurrentVelocityThreshold = SmartDashboard.getNumber("i detect v", intakeCurrentVelocityThreshold);
+    intakeCurrentAccelerationThreshold = SmartDashboard.getNumber("i detect a", intakeCurrentAccelerationThreshold);
     // SmartDashboard.putBoolean("ball detected", ballDetected);
 
     //only allow the intake to run if the arms have had 0.4 secs to lower

@@ -43,7 +43,7 @@ public class TriggerWhenReady extends CommandBase {
     //   intake.setTraversal(1);
     // } else{
     //   intake.setTrigger(0);
-    //   intake.setTraversal(0.2);
+    //   intake.setTraversal(0.5);
     // }
   }
   // Called once the command ends or is interrupted.
@@ -59,9 +59,9 @@ public class TriggerWhenReady extends CommandBase {
     intake.setTrigger(1);
     intake.setTraversal(1);
     // intake.setTraversal(0.6);
-    Timer.delay(0.2);
+    Timer.delay(0.1);
     intake.setTrigger(0);
-    intake.setTraversal(0.2);
+    intake.setTraversal(0.5);
 
   }
 
