@@ -6,6 +6,7 @@ package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.sensors.Limelight;
+import frc.lib.sensors.Pigeon;
 import frc.robot.subsystems.OldTurret;
 import frc.robot.subsystems.Turret;
 
@@ -18,10 +19,12 @@ public class AutoTurret extends CommandBase {
 
   private boolean smoothing = false;
   // private TargetTracker target;
+  private Pigeon pigeon;
 
   /** Creates a new AutoAim. */
-  public AutoTurret(Turret turret, Limelight limelight) {
+  public AutoTurret(Turret turret, Limelight limelight, Pigeon pigeon) {
     this.turret = turret;
+    this.pigeon = pigeon;
     // this.target = target;
     this.limelight = limelight;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -42,6 +45,7 @@ public class AutoTurret extends CommandBase {
     if(limelight.hasTarget() == 1){
       curretTurretPosition = turret.getPosition();
       double deltaX = limelight.getTargetOffsetX() / 360;
+      // deltaX += pigeon.deltaHeading() / 360;
       double newTargetTurretPosition = curretTurretPosition + deltaX; //todo figure out what's flipped
       // double newTargetTurretPosition = target.getTargetAngle();
       // if(deltaX < 0.05) smoothing = true;

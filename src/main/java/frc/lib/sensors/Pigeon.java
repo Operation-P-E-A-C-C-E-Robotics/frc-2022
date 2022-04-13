@@ -77,6 +77,14 @@ public class Pigeon {
     public boolean wasBumped(){
         return bumped;
     }
+
+    double prevHeading = 0;
+
+    public double deltaHeading(){
+        double delta = getHeading() - prevHeading;
+        prevHeading = getHeading();
+        return delta;
+    }
     /**
      * get the fused accelerometer and magnetometer heading from the pigeon
      * @return the heading in degrees

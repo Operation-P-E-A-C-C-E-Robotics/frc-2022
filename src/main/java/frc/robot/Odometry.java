@@ -23,14 +23,14 @@ public class Odometry {
     // private TargetTracker_old target;
     TargetTracker target;
     private final DriveTrain driveTrain;
-    // private Limelight camera;
+    private Limelight camera;
     private Joystick joystick;
 
     public Odometry (DriveTrain driveTrain, Turret turret, Pigeon pigeon, Limelight camera, Joystick operatorJoystick){
         this.driveTrain = driveTrain;
         this.pigeon = pigeon;
         this.joystick = operatorJoystick;
-        // this.camera = camera;
+        this.camera = camera;
         odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getHeading()));
         target = new TargetTracker(camera, turret, pigeon, odometry, new Pose2d(), new Translation2d(), operatorJoystick);
     }
@@ -41,6 +41,7 @@ public class Odometry {
 
     public void update() {
         // target.update();
+        camera.update();
         pigeon.update(getHeading());
         odometry.update(Rotation2d.fromDegrees(getHeading()), driveTrain.lEncoderPosition(), driveTrain.rEncoderPosition());
         target.test(joystick.getRawButton(5));

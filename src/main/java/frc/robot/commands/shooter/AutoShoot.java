@@ -11,7 +11,7 @@ import frc.robot.subsystems.Turret;
 
 public class AutoShoot extends ParallelCommandGroup{
     public AutoShoot(Flywheel flywheel, Hood hood, Turret turret, BallHandler intake, Limelight limelight, RobotContainer container) {
-        addCommands(new AutoAim(flywheel, hood, turret, limelight),
+        addCommands(new AutoAim(flywheel, hood, turret, limelight, container),
                     new TriggerWhenReady(turret, hood, flywheel, intake, limelight));
     }
 }

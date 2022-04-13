@@ -1,5 +1,7 @@
 package frc.lib.sensors;
 
+import org.opencv.core.Point;
+
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.lib.math.PointTracker;
@@ -12,6 +14,9 @@ public class Limelight {
   private final double tHeight;
   private final double cHeight;
   private final double cAngle;
+
+  private PointTracker raw = new PointTracker(5);
+  private PointTracker smoothed = new PointTracker(5);
 
   /**
    * @param targetHeight the height of the target for calculating distance
@@ -63,16 +68,18 @@ public class Limelight {
   }
 
   public void update(){
+    // raw.xy(getTargetOffsetX(), getTargetOffsetY());
+    // smoothed = raw.smooth(5, 0.1);
     //zoom levels with pipelines
     //TODO change values, X value should be changed so it will only trigger 
     //when the target is low enough
-    if(getTargetOffsetX() < 5 && getTargetOffsetY() < 5){
-      setPipeline(3);
-    } else if (getTargetOffsetX() < 10 && getTargetOffsetY() < 10){
-      setPipeline(2);
-    }  else {
-      setPipeline(0);
-    }
+    // if(getTargetOffsetX() < 5 && getTargetOffsetY() < 5){
+    //   setPipeline(3);
+    // } else if (getTargetOffsetX() < 10 && getTargetOffsetY() < 10){
+    //   setPipeline(2);
+    // }  else {
+    //   setPipeline(0);
+    // }
 
 
   }
