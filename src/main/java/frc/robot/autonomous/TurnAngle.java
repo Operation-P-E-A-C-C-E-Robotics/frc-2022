@@ -47,10 +47,11 @@ private Rotation2d angle;
   public void execute() {
     SmartDashboard.putNumber("r asdfjkl", rSpeed);
     SmartDashboard.putNumber("l asdfjkl", lSpeed);
-    driveTrain.percentDrive(
-      rSpeed * kP * Math.abs(angle.getDegrees() - pigeon.getHeading()), 
-      rSpeed * kP * Math.abs(angle.getDegrees() - pigeon.getHeading())
-    );
+//     driveTrain.percentDrive(
+//       rSpeed * kP * Math.abs(angle.getDegrees() - pigeon.getHeading()), 
+//       rSpeed * kP * Math.abs(angle.getDegrees() - pigeon.getHeading())
+//     );
+    driveTrain.percentDrive(rSpeed, lSpeed);
   }
 
   // Called once the command ends or is interrupted.
@@ -64,9 +65,7 @@ private Rotation2d angle;
   @Override
   public boolean isFinished() {
     return (
-      Math.abs(pigeon.getRelativeHeading()) > Math.abs(angle.getDegrees()) - 3 &&
-      pigeon.deltaHeading() < 3
-    );
+      Math.abs(pigeon.getRelativeHeading()) > Math.abs(angle.getDegrees()));
   }
 
 }
