@@ -46,10 +46,10 @@ public class DriveDistance extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {    
-        double left = rate, right = rate;
-        left -= kP * pigeon.getHeading();
-        right += kP * pigeon.getHeading();
-        driveTrain.percentDrive(right, left);
+//         double left = rate, right = rate;
+//         left -= kP * pigeon.getHeading();
+//         right += kP * pigeon.getHeading();
+        driveTrain.percentDrive(rate, rate);
         
         System.out.println(driveTrain.getAverageEncoderMeters());
   }
