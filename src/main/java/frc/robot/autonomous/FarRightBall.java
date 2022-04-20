@@ -78,8 +78,9 @@ public class FarRightBall extends CommandBase {
         }
         break;
       case TURN:
-        driveTrain.percentDrive(-0.25, 0.25);
-        if (container.getPigeon().getHeading() > 85){
+        driveTrain.percentDrive(-0.2, 0.2);
+        if (container.getPigeon().getHeading() > 90) {
+          driveTrain.percentDrive(0, 0);
           driveTrain.resetEncoders();
           currentStage = test.BALL2;
         }

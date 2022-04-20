@@ -58,6 +58,7 @@ public class AutoTurret extends CommandBase {
       
 
       turret.setTurretRotations(newTargetTurretPosition);
+      limelight.writeTableValue("snapshot", 1);
     } else{
       targetTurretPosition = Double.NaN;
       turret.setTurretPercent(0.0);
@@ -68,6 +69,7 @@ public class AutoTurret extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     targetTurretPosition = Double.NaN;
+    limelight.writeTableValue("snapshot", 0);
   }
 
   // Returns true when the command should end.

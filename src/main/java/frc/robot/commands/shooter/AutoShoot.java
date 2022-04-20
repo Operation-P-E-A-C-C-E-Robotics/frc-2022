@@ -3,6 +3,7 @@ package frc.robot.commands.shooter;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.lib.sensors.Limelight;
 import frc.robot.RobotContainer;
+import frc.robot.commands.intake.Intake;
 import frc.robot.subsystems.BallHandler;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Hood;
@@ -14,4 +15,6 @@ public class AutoShoot extends ParallelCommandGroup{
         addCommands(new AutoAim(flywheel, hood, turret, limelight, container),
                     new TriggerWhenReady(turret, hood, flywheel, intake, limelight));
     }
+
+
 }

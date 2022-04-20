@@ -26,6 +26,7 @@ import frc.robot.autonomous.FarRightBall;
 import frc.robot.autonomous.ThreeBallAuto;
 import frc.robot.autonomous.TurnAngle;
 import frc.robot.autonomous.TwoBallAuto;
+import frc.robot.autonomous.TwoBallRightSide;
 import frc.robot.commands.climber.JoystickClimber;
 import frc.robot.commands.intake.Eject;
 import frc.robot.commands.intake.Intake;
@@ -94,7 +95,7 @@ public class RobotContainer {
     povIntake       = new POVIntake(intake, flywheel, this, true),
     protectedShot   = new SetpointBase(flywheel, hood, turret, limelight, this, 7600, 250, false),
     layupShot       = new SetpointBase(flywheel, hood, turret, limelight, this, 6200, 60, false),
-    insideLine       = new SetpointBase(flywheel, hood, turret, limelight, this, 6200, 170, false),
+    insideLine       = new SetpointBase(flywheel, hood, turret, limelight, this, 3200, 270, false),
     outsideLine       = new SetpointBase(flywheel, hood, turret, limelight, this, 7130, 220, false),
     manualClimb     = new JoystickClimber(climber, climbOperatorJoystick, driverJoystick, this),
     reverseTrigger  = new ReverseTrigger(flywheel, intake),
@@ -146,8 +147,9 @@ public class RobotContainer {
 
 
       // Add commands to the autonomous command chooser
-    m_chooser.setDefaultOption("Two Ball", leftSide);
-    m_chooser.addOption("Three Ball", rightSide);
+    m_chooser.setDefaultOption("Two Ball", TwoBallLeft);
+    m_chooser.addOption("Three Ball", ThreeBall);
+    m_chooser.addOption("2BRight", TwoBallRight);
     SmartDashboard.putData(m_chooser);
 
     mainOperatorOI.bind(Mappings.LAYUP_SHOT, layupShot)
@@ -167,13 +169,13 @@ public class RobotContainer {
     //         .bind(DriverMappings.RUN_INTAKE, runIntake);
   
     //setpoint creation helper
-    testButton1.toggleWhenPressed(new NewSetpointHelper(flywheel, hood, limelight, testJoystick));//.alongWith(new AutoTurret(turret, odometry.getTarget())));
-    testButton2.toggleWhenPressed(new FlywheelTuner(flywheel, testJoystick));
+    //testButton1.toggleWhenPressed(new NewSetpointHelper(flywheel, hood, limelight, testJoystick));//.alongWith(new AutoTurret(turret, odometry.getTarget())));
+    //testButton2.toggleWhenPressed(new FlywheelTuner(flywheel, testJoystick));
   }
 
   Joystick testJoystick = new Joystick(3);
-  JoystickButton testButton1 = new JoystickButton(testJoystick, 1);
-  JoystickButton testButton2 = new JoystickButton(testJoystick, 2);
+  //JoystickButton testButton1 = new JoystickButton(testJoystick, 1);
+  //JoystickButton testButton2 = new JoystickButton(testJoystick, 2);
   //   public void testModeButtonBindings(){
 //  }
 private final Odometry odometry = new Odometry(driveTrain, turret, pigeon, limelight, testJoystick);
@@ -217,13 +219,15 @@ private final Odometry odometry = new Odometry(driveTrain, turret, pigeon, limel
   public Command getAutonomousCommand() {  
     return m_chooser.getSelected();  
     // return new ThreeBallAuto(driveTrain, intake, flywheel, turret, hood, limelight, this, pigeon);
-    //new TwoBallAutoLeftSide(driveTrain, flywheel, hood, intake, turret, limelight, this);
+    //new TwoBallAutoTwoBallLeft(driveTrain, flywheel, hood, intake, turret, limelight, this);
   }
 
-  private Command leftSide = new TwoBallAuto(driveTrain, flywheel, hood, intake, turret, limelight, this);
+  private Command TwoBallLeft = new TwoBallAuto(driveTrain, flywheel, hood, intake, turret, limelight, this);
 
-  // private Command rightSide = new FarHumanPlayerBallAuto(driveTrain, flywheel, hood, intake, turret, limelight, this);
-  private Command rightSide = new ThreeBallAuto(driveTrain, intake, flywheel, turret, hood, limelight, this, pigeon);
+  // private Command ThreeBall = new FarHumanPlayerBallAuto(driveTrain, flywheel, hood, intake, turret, limelight, this);
+  private Command ThreeBall = new ThreeBallAuto(driveTrain, intake, flywheel, turret, hood, limelight, this, pigeon);
+
+  private Command TwoBallRight = new TwoBallRightSide(driveTrain, pigeon, flywheel, hood, turret, intake, limelight, this);
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 }
