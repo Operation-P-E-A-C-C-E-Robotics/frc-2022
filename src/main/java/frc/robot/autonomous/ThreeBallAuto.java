@@ -55,7 +55,7 @@ public class ThreeBallAuto extends SequentialCommandGroup{
                 .raceWith(new RampFlywheel(flywheel)),
             new TurnAngle(driveTrain, pigeon, container, Rotation2d.fromDegrees(93.5), 0.2)
                 .raceWith(new RampFlywheel(flywheel)),
-            new AutoShoot(flywheel, hood, turret, intake, limelight, container).withTimeout(2),
+            new AutoShoot(flywheel, hood, turret, intake, driveTrain, limelight, container).withTimeout(2),
             new DriveDistance(driveTrain, pigeon, container, 2, 0.5)
                 .alongWith(new TurretAngle(turret, Rotation2d.fromDegrees(-60)))
                 .raceWith(
@@ -66,7 +66,7 @@ public class ThreeBallAuto extends SequentialCommandGroup{
                 .withTimeout(0.8)
                 .raceWith(new RampFlywheel(flywheel)),
             // new IntakeDown(intake),
-            new AutoShoot(flywheel, hood, turret, intake, limelight, container)
+            new AutoShoot(flywheel, hood, turret, intake, driveTrain,limelight, container)
                 .withTimeout(2)
         );
     }

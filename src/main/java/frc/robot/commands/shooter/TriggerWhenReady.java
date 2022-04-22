@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.sensors.Limelight;
 import frc.robot.subsystems.BallHandler;
+import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.OldTurret;
@@ -20,12 +21,14 @@ public class TriggerWhenReady extends CommandBase {
   private final Limelight limelight;
   private BallHandler intake;
   private double timer = 0;
+  private DriveTrain driveTrain;
 
   /** Run the trigger once everything is in position to shoot */
-  public TriggerWhenReady(Turret turret, Hood hood, Flywheel shooter, BallHandler intake, Limelight limelight) {
+  public TriggerWhenReady(Turret turret, Hood hood, Flywheel shooter, BallHandler intake, DriveTrain driveTrain, Limelight limelight) {
     this.turret = turret;
     this.hood = hood;
     this.shooter = shooter;
+    this.driveTrain = driveTrain;
     this.limelight = limelight;
     this.intake = intake;
 
@@ -36,7 +39,7 @@ public class TriggerWhenReady extends CommandBase {
   @Override
   public void execute() {
     intake.setTraversal(0.2);
-    if(limelight.hasTarget() == 1 && turret.ready() && shooter.ready() && hood.ready()){
+    if(limelight.hasTarget() == 1 && turret.ready() && shooter.ready() && hood.ready() && !driveTrain.moving()){
       twosecondtriggerwheel();
     }
     //     intake.setTrigger(1);
@@ -55,11 +58,11 @@ public class TriggerWhenReady extends CommandBase {
 
   private void twosecondtriggerwheel() {
    // timer = Timer.getFPGATimestamp();
-
+    Timer.delay(0.1);
     intake.setTrigger(1);
     intake.setTraversal(1);
     // intake.setTraversal(0.6);
-    Timer.delay(0.1);
+    Timer.delay(0.2);
     intake.setTrigger(0);
     intake.setTraversal(0.5);
 

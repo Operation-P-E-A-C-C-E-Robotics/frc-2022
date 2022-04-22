@@ -59,13 +59,13 @@ public class Flywheel extends SubsystemBase {
     configTalonGains(FLYWHEEL_kF, FLYWHEEL_kP, FLYWHEEL_kI, FLYWHEEL_kD);
 
     flywheelMasterController.setNeutralMode(NeutralMode.Coast);
-    SmartDashboard.putNumber("f ready v", velocityRange);
-    SmartDashboard.putNumber("f ready a", accelerationRange);
-    SmartDashboard.putNumber("f ready j", jerkRange);
+    // SmartDashboard.putNumber("f ready v", velocityRange);
+    // SmartDashboard.putNumber("f ready a", accelerationRange);
+    // SmartDashboard.putNumber("f ready j", jerkRange);
     
-    SmartDashboard.putNumber("f fire v", ballDetectVelocity);
-    SmartDashboard.putNumber("f fire a", ballDetectAcceleration);
-    SmartDashboard.putNumber("f fire j", ballDetectJerk);
+    // SmartDashboard.putNumber("f fire v", ballDetectVelocity);
+    // SmartDashboard.putNumber("f fire a", ballDetectAcceleration);
+    // SmartDashboard.putNumber("f fire j", ballDetectJerk);
   }
   
   /**
@@ -175,13 +175,13 @@ public class Flywheel extends SubsystemBase {
     SmartDashboard.putBoolean("flywheel ready", flywheelReady);
     SmartDashboard.putNumber("flywheel velocity", getFlywheelVelocity());
 
-    velocityRange = SmartDashboard.getNumber("f ready v", velocityRange);
-    accelerationRange = SmartDashboard.getNumber("f ready a", accelerationRange);
-    jerkRange = SmartDashboard.getNumber("f ready j", jerkRange);
+    // velocityRange = SmartDashboard.getNumber("f ready v", velocityRange);
+    // accelerationRange = SmartDashboard.getNumber("f ready a", accelerationRange);
+    // jerkRange = SmartDashboard.getNumber("f ready j", jerkRange);
 
-    ballDetectVelocity = SmartDashboard.getNumber("f fire v", ballDetectVelocity);
-    ballDetectAcceleration = SmartDashboard.getNumber("f fire a", ballDetectAcceleration);
-    ballDetectJerk = SmartDashboard.getNumber("f fire j", ballDetectJerk);
+    // ballDetectVelocity = SmartDashboard.getNumber("f fire v", ballDetectVelocity);
+    // ballDetectAcceleration = SmartDashboard.getNumber("f fire a", ballDetectAcceleration);
+    // ballDetectJerk = SmartDashboard.getNumber("f fire j", ballDetectJerk);
 
     //shift shooter velocity into history array
     for(int i = 0; i < history.length - 1; i++){

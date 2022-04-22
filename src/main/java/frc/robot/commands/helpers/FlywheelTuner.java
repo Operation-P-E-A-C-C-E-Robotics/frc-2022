@@ -17,20 +17,20 @@ public class FlywheelTuner extends CommandBase{
 
         addRequirements(flywheel);
 
-        SmartDashboard.putNumber("flywheel kp", FLYWHEEL_kP);
-        SmartDashboard.putNumber("flywheel ki", FLYWHEEL_kI);
-        SmartDashboard.putNumber("flywheel kd", FLYWHEEL_kD);
-        SmartDashboard.putNumber("flywheel kf", FLYWHEEL_kF);
+        // SmartDashboard.putNumber("flywheel kp", FLYWHEEL_kP);
+        // SmartDashboard.putNumber("flywheel ki", FLYWHEEL_kI);
+        // SmartDashboard.putNumber("flywheel kd", FLYWHEEL_kD);
+        // SmartDashboard.putNumber("flywheel kf", FLYWHEEL_kF);
     }
 
     @Override
     public void execute(){
-        flywheel.configTalonGains(
-            SmartDashboard.getNumber("flywheel kf", FLYWHEEL_kF),
-            SmartDashboard.getNumber("flywheel kp", FLYWHEEL_kP),
-            SmartDashboard.getNumber("flywheel ki", FLYWHEEL_kI),
-            SmartDashboard.getNumber("flywheel kd", FLYWHEEL_kD)
-        );
+        // flywheel.configTalonGains(
+            // SmartDashboard.getNumber("flywheel kf", FLYWHEEL_kF),
+            // SmartDashboard.getNumber("flywheel kp", FLYWHEEL_kP),
+            // SmartDashboard.getNumber("flywheel ki", FLYWHEEL_kI),
+            // SmartDashboard.getNumber("flywheel kd", FLYWHEEL_kD)
+        // );
         velocity += joystick.getRawAxis(3) * 20; //todo get axis
         flywheel.flywheelVelocity(velocity);
         SmartDashboard.putNumber("flyweel velocity", flywheel.getFlywheelVelocity());

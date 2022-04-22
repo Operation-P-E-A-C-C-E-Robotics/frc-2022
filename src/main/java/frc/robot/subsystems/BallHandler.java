@@ -46,9 +46,9 @@ public class BallHandler extends SubsystemBase {
     armsUp();
     intakeCurrentHistory = Util.zeros(intakeCurrentHistory);
 
-    SmartDashboard.putNumber("i detect c", intakeCurrentThreshold);
-    SmartDashboard.putNumber("i detect v", intakeCurrentThreshold);
-    SmartDashboard.putNumber("i detect a", intakeCurrentThreshold);
+    // SmartDashboard.putNumber("i detect c", intakeCurrentThreshold);
+    // SmartDashboard.putNumber("i detect v", intakeCurrentThreshold);
+    // SmartDashboard.putNumber("i detect a", intakeCurrentThreshold);
   }
 
   /**

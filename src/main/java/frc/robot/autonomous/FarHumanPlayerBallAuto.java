@@ -14,7 +14,7 @@ import frc.robot.subsystems.Flywheel;
 
 public class FarHumanPlayerBallAuto extends SequentialCommandGroup {
     public FarHumanPlayerBallAuto(DriveTrain driveTrain, Flywheel shooter, Hood hood, BallHandler intake, Turret turret, Limelight limelight, RobotContainer container){
-        addCommands(new FarRightBall(driveTrain, shooter, hood, intake, turret, limelight, container), new AutoShoot(shooter, hood, turret, intake, limelight, container));
+        addCommands(new FarRightBall(driveTrain, shooter, hood, intake, turret, limelight, container), new AutoShoot(shooter, hood, turret, intake, driveTrain, limelight, container));
     }
     
 }

@@ -23,6 +23,7 @@ import frc.robot.OI.Mappings;
 import frc.robot.autonomous.DriveDistance;
 import frc.robot.autonomous.FarHumanPlayerBallAuto;
 import frc.robot.autonomous.FarRightBall;
+import frc.robot.autonomous.OneBallOffLine;
 import frc.robot.autonomous.ThreeBallAuto;
 import frc.robot.autonomous.TurnAngle;
 import frc.robot.autonomous.TwoBallAuto;
@@ -34,11 +35,13 @@ import frc.robot.commands.intake.IntakeDown;
 import frc.robot.commands.intake.IntakeNoTraversal;
 import frc.robot.commands.intake.IntakeUp;
 import frc.robot.commands.intake.POVIntake;
+import frc.robot.commands.shooter.AutoAim;
 import frc.robot.commands.shooter.AutoShoot;
 import frc.robot.commands.shooter.ManualAim;
 import frc.robot.commands.shooter.RampFlywheel;
 import frc.robot.commands.shooter.ReverseTrigger;
 import frc.robot.commands.shooter.RunTrigger;
+import frc.robot.commands.shooter.TriggerWhenReady;
 import frc.robot.commands.shooter.setpoints.SetpointBase;
 import frc.robot.commands.shooter.ProtectedShotSetpoint;
 import frc.robot.commands.shooter.LayupShotSetpoint;
@@ -100,7 +103,9 @@ public class RobotContainer {
     manualClimb     = new JoystickClimber(climber, climbOperatorJoystick, driverJoystick, this),
     reverseTrigger  = new ReverseTrigger(flywheel, intake),
     // runTrigger      = new RunTrigger(intake),
-    autoShoot       = new AutoShoot(flywheel, hood, turret, intake, limelight, this),
+    autoAim = new AutoAim(flywheel, hood, turret, limelight, this),
+    autoShoot       = new AutoShoot(flywheel, hood, turret, intake, driveTrain, limelight, this),
+    autoTrigger     = new TriggerWhenReady(turret, hood, flywheel, intake, driveTrain, limelight),
     runIntake       = new Intake(intake).alongWith(new IntakeDown(intake),
                         new RampFlywheel(flywheel).withTimeout(10)
     ),
@@ -147,9 +152,11 @@ public class RobotContainer {
 
 
       // Add commands to the autonomous command chooser
-    m_chooser.setDefaultOption("Two Ball", TwoBallLeft);
-    m_chooser.addOption("Three Ball", ThreeBall);
-    m_chooser.addOption("2BRight", TwoBallRight);
+      m_chooser.addOption("One Ball", OneBallLine);
+      m_chooser.setDefaultOption("Two Ball", TwoBallLeft);
+      m_chooser.addOption("Two Ball Right", TwoBallRight);
+      m_chooser.addOption("Three Ball", ThreeBall);
+
     SmartDashboard.putData(m_chooser);
 
     mainOperatorOI.bind(Mappings.LAYUP_SHOT, layupShot)
@@ -161,8 +168,9 @@ public class RobotContainer {
               .bind(Mappings.EJECT_BALL, eject)
               .bind(Mappings.RUN_INTAKE, runIntakeNoTraversal)
 
-              .bind(Mappings.AUTO_SHOOT, autoShoot)
+              .bind(Mappings.AUTO_SHOOT, autoTrigger)
               .bind(Mappings.RUN_TRAVERSAL, runTraversal)
+              .bind(Mappings.PREPARE_SHOOT, autoAim)
               .bind(Mappings.RUN_TRAVERSAL_AND_TRIGGER, runTraversalAndTrigger);
     
     // driverOI.bind(DriverMappings.AUTO_SHOOT, autoShoot)
@@ -228,6 +236,8 @@ private final Odometry odometry = new Odometry(driveTrain, turret, pigeon, limel
   private Command ThreeBall = new ThreeBallAuto(driveTrain, intake, flywheel, turret, hood, limelight, this, pigeon);
 
   private Command TwoBallRight = new TwoBallRightSide(driveTrain, pigeon, flywheel, hood, turret, intake, limelight, this);
+
+  private Command OneBallLine = new OneBallOffLine(driveTrain, flywheel, hood, turret, intake, limelight, pigeon, this);
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 }

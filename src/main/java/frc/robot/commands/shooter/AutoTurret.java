@@ -4,6 +4,7 @@
 
 package frc.robot.commands.shooter;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.sensors.Limelight;
 import frc.lib.sensors.Pigeon;
@@ -58,6 +59,7 @@ public class AutoTurret extends CommandBase {
       
 
       turret.setTurretRotations(newTargetTurretPosition);
+      // SmartDashboard.putNumber("limelight distance", limelight.getTargetDistance());
       limelight.writeTableValue("snapshot", 1);
     } else{
       targetTurretPosition = Double.NaN;

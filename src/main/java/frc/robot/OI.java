@@ -21,9 +21,10 @@ public class OI {
                                 REVERSE_TRIGGER = 10,
                                 EJECT_BALL = 11,
                                 RUN_TRAVERSAL = 5,
-                                AUTO_SHOOT = 6,
+                                PREPARE_SHOOT = 6,
+                                AUTO_SHOOT = 8,
                                 RUN_INTAKE = 7,
-                                RUN_TRAVERSAL_AND_TRIGGER = 8,
+                                RUN_TRAVERSAL_AND_TRIGGER = 9,
                                 CLIMBER_ARM_TOGGLE = 10;
     }
 

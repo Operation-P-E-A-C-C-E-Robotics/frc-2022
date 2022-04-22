@@ -205,6 +205,11 @@ public class DriveTrain extends SubsystemBase {
         return rightMasterController.getSelectedSensorPosition();
     }
 
+    public boolean moving(){
+        return Math.abs(leftMasterController.getSelectedSensorVelocity()) > 100 ||
+                Math.abs(rightMasterController.getSelectedSensorVelocity()) > 100;
+    }
+
     /**
      * set maximum voltage to motors.
      * for auto, or when somebody else is trying out for drive team
@@ -261,7 +266,7 @@ public class DriveTrain extends SubsystemBase {
         // SmartDashboard.putNumber("drivetrain right current", rightMasterController.getSupplyCurrent() + rightSlaveController.getSupplyCurrent());
         dDrive.feed();
 
-        SmartDashboard.putNumber("DT Avg Enc", getAverageEncoderCounts());
+        // SmartDashboard.putNumber("DT Avg Enc", getAverageEncoderCounts());
     
         // high_kS = SmartDashboard.getNumber("high ks", high_kS);
         // high_kV = SmartDashboard.getNumber("high kv", high_kV);

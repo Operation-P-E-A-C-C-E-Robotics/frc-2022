@@ -45,8 +45,8 @@ private Rotation2d angle;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SmartDashboard.putNumber("r asdfjkl", rSpeed);
-    SmartDashboard.putNumber("l asdfjkl", lSpeed);
+    // SmartDashboard.putNumber("r asdfjkl", rSpeed);
+    // SmartDashboard.putNumber("l asdfjkl", lSpeed);
 //     driveTrain.percentDrive(
 //       rSpeed * kP * Math.abs(angle.getDegrees() - pigeon.getHeading()), 
 //       rSpeed * kP * Math.abs(angle.getDegrees() - pigeon.getHeading())
