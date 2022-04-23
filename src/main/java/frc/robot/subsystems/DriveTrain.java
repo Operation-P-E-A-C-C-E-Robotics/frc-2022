@@ -55,8 +55,8 @@ public class DriveTrain extends SubsystemBase {
         leftSlaveController.setInverted(InvertType.FollowMaster);
         rightSlaveController.setInverted(InvertType.FollowMaster);
 
-        leftMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 35, 35, 10));
-        rightMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 35, 35, 10));
+        leftMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(false, 35, 35, 10));
+        rightMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(false, 35, 35, 10));
     
         // SmartDashboard.putNumber("high ks", high_kS);
         // SmartDashboard.putNumber("high kv", high_kV);
@@ -105,6 +105,7 @@ public class DriveTrain extends SubsystemBase {
     public void percentDrive(double rSpeed, double lSpeed) {
         leftMasterController.set(ControlMode.PercentOutput, lSpeed);
         rightMasterController.set(ControlMode.PercentOutput, rSpeed);
+        setNeutralModes(NeutralMode.Brake);
         //SmartDashboard.putNumber("DT Left Speed", lSpeed);
         //SmartDashboard.putNumber("DT Right Speed", rSpeed);
         dDrive.feed(); //keep the wpilib arcade drive that we need for auto from freaking out
@@ -116,6 +117,7 @@ public class DriveTrain extends SubsystemBase {
      * @param rot rotation left-right duh
      */
     public void arcadeDrive(double spd, double rot) {
+        setNeutralModes(NeutralMode.Brake);
         dDrive.arcadeDrive(spd, rot);
     }
 
@@ -126,6 +128,7 @@ public class DriveTrain extends SubsystemBase {
     public void arcadeDrive(DriveSignal signal) {
         leftMasterController.set(signal.getLeft());
         rightMasterController.set(signal.getRight());
+        setNeutralModes(signal.getBrakeMode() ? NeutralMode.Brake : NeutralMode.Coast);
         dDrive.feed();
     }
 
@@ -136,12 +139,14 @@ public class DriveTrain extends SubsystemBase {
      * @param rVolts voltage to feed to the right motor
      */
     public void voltageDrive(double lVolts, double rVolts) {
+        setNeutralModes(NeutralMode.Brake);
         leftMasterController.setVoltage(lVolts);
         rightMasterController.setVoltage(rVolts);
         dDrive.feed();
     }
 
     public void velocityDrive(double lSpeed, double rSpeed){
+        setNeutralModes(NeutralMode.Brake);
         if(getGear() == Gear.HIGH_GEAR){
             lPid.setP(high_kP);
             lPid.setI(high_kI);

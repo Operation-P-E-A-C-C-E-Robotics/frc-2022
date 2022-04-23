@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.lib.sensors.Limelight;
 import frc.lib.sensors.Pigeon;
+import frc.robot.OI.DriverMappings;
 //import frc.robot.OI.DriverMappings;
 import frc.robot.OI.Mappings;
 import frc.robot.autonomous.DriveDistance;
@@ -37,6 +38,7 @@ import frc.robot.commands.intake.IntakeUp;
 import frc.robot.commands.intake.POVIntake;
 import frc.robot.commands.shooter.AutoAim;
 import frc.robot.commands.shooter.AutoShoot;
+import frc.robot.commands.shooter.FieldRelativeManualTurret;
 import frc.robot.commands.shooter.ManualAim;
 import frc.robot.commands.shooter.RampFlywheel;
 import frc.robot.commands.shooter.ReverseTrigger;
@@ -46,6 +48,7 @@ import frc.robot.commands.shooter.setpoints.SetpointBase;
 import frc.robot.commands.shooter.ProtectedShotSetpoint;
 import frc.robot.commands.shooter.LayupShotSetpoint;
 import frc.robot.commands.drivetrain.ArcadeDrive;
+import frc.robot.commands.drivetrain.CheesyDrive;
 import frc.robot.commands.helpers.FlywheelTuner;
 import frc.robot.commands.helpers.NewSetpointHelper;
 import frc.robot.commands.helpers.SetpointHelper;
@@ -89,12 +92,14 @@ public class RobotContainer {
   
   private final OI mainOperatorOI = new OI(mainOperatorJoystick);
   private final OI climbOperatorOI = new OI(climbOperatorJoystick);
-  //private final OI driverOI = new OI(driverJoystick);
+  private final OI driverOI = new OI(driverJoystick);
   
   // commands:
   private final Command 
     arcadeDrive     = new ArcadeDrive(driveTrain, this),
+    cheesyDrive     = new CheesyDrive(driveTrain, this),
     joystickAim     = new ManualAim(turret, hood, this),
+    joystickAimFR   = new FieldRelativeManualTurret(turret, hood, pigeon, this, 0),
     povIntake       = new POVIntake(intake, flywheel, this, true),
     protectedShot   = new SetpointBase(flywheel, hood, turret, limelight, this, 7600, 250, false),
     layupShot       = new SetpointBase(flywheel, hood, turret, limelight, this, 6200, 60, false),
@@ -142,9 +147,9 @@ public class RobotContainer {
    */
 
   private void configureButtonBindings() {
-    driveTrain.setDefaultCommand(arcadeDrive);
+    driveTrain.setDefaultCommand(cheesyDrive);
     intake.setDefaultCommand(povIntake);
-    hood.setDefaultCommand(joystickAim);
+    hood.setDefaultCommand(joystickAimFR);
     climber.setDefaultCommand(manualClimb);
 
     new JoystickButton(mainOperatorJoystick, Mappings.RUN_INTAKE).whenReleased(new IntakeUp(intake).alongWith(new RampFlywheel(flywheel).withTimeout(10)));
@@ -156,6 +161,8 @@ public class RobotContainer {
       m_chooser.setDefaultOption("Two Ball", TwoBallLeft);
       m_chooser.addOption("Two Ball Right", TwoBallRight);
       m_chooser.addOption("Three Ball", ThreeBall);
+
+      // startPositionChooser.addOption("example start position", new FieldRelativeManualTurret(turret, hood, pigeon, this, 180));
 
     SmartDashboard.putData(m_chooser);
 
@@ -171,10 +178,10 @@ public class RobotContainer {
               .bind(Mappings.AUTO_SHOOT, autoTrigger)
               .bind(Mappings.RUN_TRAVERSAL, runTraversal)
               .bind(Mappings.PREPARE_SHOOT, autoAim)
-              .bind(Mappings.RUN_TRAVERSAL_AND_TRIGGER, runTraversalAndTrigger);
+              .bind(Mappings.RUN_TRAVERSAL_AND_TRIGGER, runTraversalAndTrigger)
+              .bind(Mappings.NORMAL_TURRET_BUTTON, joystickAim);
     
-    // driverOI.bind(DriverMappings.AUTO_SHOOT, autoShoot)
-    //         .bind(DriverMappings.RUN_INTAKE, runIntake);
+    driverOI.bind(DriverMappings.NORMAL_DRIVE_BUTTON, arcadeDrive);
   
     //setpoint creation helper
     //testButton1.toggleWhenPressed(new NewSetpointHelper(flywheel, hood, limelight, testJoystick));//.alongWith(new AutoTurret(turret, odometry.getTarget())));
@@ -189,6 +196,10 @@ public class RobotContainer {
 private final Odometry odometry = new Odometry(driveTrain, turret, pigeon, limelight, testJoystick);
 
   //access functions:
+    public Hood getHood(){
+      return hood;
+    }
+
   public Odometry getOdometry() {
     return odometry;
   }
@@ -240,5 +251,7 @@ private final Odometry odometry = new Odometry(driveTrain, turret, pigeon, limel
   private Command OneBallLine = new OneBallOffLine(driveTrain, flywheel, hood, turret, intake, limelight, pigeon, this);
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
+
+  // public SendableChooser<Command> startPositionChooser = new SendableChooser<>();
 }
 

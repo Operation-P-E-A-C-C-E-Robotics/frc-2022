@@ -1,5 +1,7 @@
 package frc.lib.util;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 /**
  * Helper class to implement "Cheesy Drive". "Cheesy Drive" simply means that the "turning" stick controls the curvature
  * of the robot's path rather than its rate of heading change. This helps make the robot more controllable at high
@@ -12,30 +14,54 @@ public class CheesyDriveHelper {
     private static final double kWheelDeadband = 0.02;
 
     // These factor determine how fast the wheel traverses the "non linear" sine curve.
-    private static final double kHighWheelNonLinearity = 0.7;
-    private static final double kLowWheelNonLinearity = 0.5;
+    private static double kHighWheelNonLinearity = 0.7;
+    private static double kLowWheelNonLinearity = 0.5;
 
-    private static final double kHighNegInertiaScalar = 1.8;
+    private static double kHighNegInertiaScalar = 2; //1.8
 
-    private static final double kLowNegInertiaThreshold = 0.65;
-    private static final double kLowNegInertiaTurnScalar = 3.5;
-    private static final double kLowNegInertiaCloseScalar = 4.0;
-    private static final double kLowNegInertiaFarScalar = 5.0;
+    private static double kLowNegInertiaThreshold = 0.65;
+    private static double kLowNegInertiaTurnScalar = 3.5;
+    private static double kLowNegInertiaCloseScalar = 4.0;
+    private static double kLowNegInertiaFarScalar = 5.0;
 
-    private static final double kHighSensitivity = 0.65;
-    private static final double kLowSensitiity = 0.65;
+    private static double kHighSensitivity = 0.7;
+    private static double kLowSensitiity = 0.85;
 
-    private static final double kQuickStopDeadband = 0.5;
-    private static final double kQuickStopWeight = 0.1;
-    private static final double kQuickStopScalar = 5.0;
+    private static double kQuickStopDeadband = 0.5;
+    private static double kQuickStopWeight = 0.15;
+    private static double kQuickStopScalar = 6.0;
 
     private double mOldWheel = 0.0;
     private double mQuickStopAccumlator = 0.0;
     private double mNegInertiaAccumlator = 0.0;
 
+    public CheesyDriveHelper(){
+        SmartDashboard.putNumber("kHighWheelNonLinearity",kHighWheelNonLinearity);
+        SmartDashboard.putNumber("kLowWheelNonLinearity",kLowWheelNonLinearity);
+        SmartDashboard.putNumber("kHighNegInertiaScalar",kHighNegInertiaScalar);
+        SmartDashboard.putNumber("kLowNegInertiaThreshold",kLowNegInertiaThreshold);
+        SmartDashboard.putNumber("kLowNegInertiaCloseScalar",kLowNegInertiaCloseScalar);
+        SmartDashboard.putNumber("kLowNegInertiaFarScalar",kLowNegInertiaFarScalar);
+        SmartDashboard.putNumber("kHighSensitivity",kHighSensitivity);
+        SmartDashboard.putNumber("kLowSensitiity",kLowSensitiity);
+        SmartDashboard.putNumber("kQuickStopDeadband",kQuickStopDeadband);
+        SmartDashboard.putNumber("kQuickStopWeight",kQuickStopWeight);
+        SmartDashboard.putNumber("kQuickStopScalar",kQuickStopScalar);
+    }
+
     public DriveSignal cheesyDrive(double throttle, double wheel, boolean isQuickTurn,
                                    boolean isHighGear) {
-
+        kHighWheelNonLinearity = SmartDashboard.getNumber("kHighWheelNonLinearity",kHighWheelNonLinearity);
+        kLowWheelNonLinearity = SmartDashboard.getNumber("kLowWheelNonLinearity",kLowWheelNonLinearity);
+        kHighNegInertiaScalar = SmartDashboard.getNumber("kHighNegInertiaScalar",kHighNegInertiaScalar);
+        kLowNegInertiaThreshold = SmartDashboard.getNumber("kLowNegInertiaThreshold",kLowNegInertiaThreshold);
+        kLowNegInertiaCloseScalar = SmartDashboard.getNumber("kLowNegInertiaCloseScalar",kLowNegInertiaCloseScalar);
+        kLowNegInertiaFarScalar = SmartDashboard.getNumber("kLowNegInertiaFarScalar",kLowNegInertiaFarScalar);
+        kHighSensitivity = SmartDashboard.getNumber("kHighSensitivity",kHighSensitivity);
+        kLowSensitiity = SmartDashboard.getNumber("kLowSensitiity",kLowSensitiity);
+        kQuickStopDeadband = SmartDashboard.getNumber("kQuickStopDeadband",kQuickStopDeadband);
+        kQuickStopWeight = SmartDashboard.getNumber("kQuickStopWeight",kQuickStopWeight);
+        kQuickStopScalar = SmartDashboard.getNumber("kQuickStopScalar",kQuickStopScalar);
         wheel = handleDeadband(wheel, kWheelDeadband);
         throttle = handleDeadband(throttle, kThrottleDeadband);
 

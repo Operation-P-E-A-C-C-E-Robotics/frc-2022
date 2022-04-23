@@ -11,6 +11,7 @@ import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.math.Point2d;
 
 /**
@@ -44,12 +45,18 @@ public class Pigeon {
         pg.getBiasedAccelerometer(xyz);
         return xyz;
     }
+
+    public double compass(){
+        // pg.getYawPitchRoll(ypr_deg)
+        // SmartDashboard.putNumber("pigeon compass heading", pg.getAbsoluteCompassHeading());
+        return pg.getAbsoluteCompassHeading();
+    }
     /**
      * get the robots yaw from the pigeon.
      * @return the yaw in degrees
      */
     public double getYaw(){
-        return ypr[0];
+        return Math.IEEEremainder(ypr[0], 360.0d);
     }
     /**
      * get the robots pitch from the pigeon.
