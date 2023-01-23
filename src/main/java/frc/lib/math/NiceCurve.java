@@ -1,7 +1,7 @@
 package frc.lib.math;
 
 public class NiceCurve {
-    private double mult;
+    // private double mult;
     private double c;
     private double b;
     private double a;

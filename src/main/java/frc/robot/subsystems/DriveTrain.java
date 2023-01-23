@@ -4,6 +4,26 @@
 
 package frc.robot.subsystems;
 
+import static frc.robot.Constants.DriveTrainConstants.DRIVE_ENCODER_CPR;
+import static frc.robot.Constants.DriveTrainConstants.DRIVE_HIGH_GEAR_RATIO;
+import static frc.robot.Constants.DriveTrainConstants.LEFT_MASTER_PORT;
+import static frc.robot.Constants.DriveTrainConstants.LEFT_SLAVE_PORT;
+import static frc.robot.Constants.DriveTrainConstants.RIGHT_MASTER_PORT;
+import static frc.robot.Constants.DriveTrainConstants.RIGHT_SLAVE_PORT;
+import static frc.robot.Constants.DriveTrainConstants.WHEEL_DIAMETER_METERS;
+import static frc.robot.Constants.DriveTrainConstants.high_kA;
+import static frc.robot.Constants.DriveTrainConstants.high_kD;
+import static frc.robot.Constants.DriveTrainConstants.high_kI;
+import static frc.robot.Constants.DriveTrainConstants.high_kP;
+import static frc.robot.Constants.DriveTrainConstants.high_kS;
+import static frc.robot.Constants.DriveTrainConstants.high_kV;
+import static frc.robot.Constants.DriveTrainConstants.low_kA;
+import static frc.robot.Constants.DriveTrainConstants.low_kD;
+import static frc.robot.Constants.DriveTrainConstants.low_kI;
+import static frc.robot.Constants.DriveTrainConstants.low_kP;
+import static frc.robot.Constants.DriveTrainConstants.low_kS;
+import static frc.robot.Constants.DriveTrainConstants.low_kV;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -12,12 +32,11 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.DriveSignal;
-import static frc.robot.Constants.DriveTrainConstants.*;
 
 public class DriveTrain extends SubsystemBase {
     private final WPI_TalonFX leftMasterController = new WPI_TalonFX(LEFT_MASTER_PORT);
@@ -46,8 +65,21 @@ public class DriveTrain extends SubsystemBase {
         leftSlaveController.setInverted(InvertType.FollowMaster);
         rightSlaveController.setInverted(InvertType.FollowMaster);
 
-        leftMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 35, 35, 10));
-        rightMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 35, 35, 10));
+        leftMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 50, 60, 10));
+        rightMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 50, 60, 10));
+    
+        // SmartDashboard.putNumber("high ks", high_kS);
+        // SmartDashboard.putNumber("high kv", high_kV);
+        // SmartDashboard.putNumber("high ka", high_kA);
+        // SmartDashboard.putNumber("high kp", high_kP);
+        // SmartDashboard.putNumber("high ki", high_kI);
+        // SmartDashboard.putNumber("high kd", high_kD);
+        // SmartDashboard.putNumber("low ks", low_kS);
+        // SmartDashboard.putNumber("low kv", low_kV);
+        // SmartDashboard.putNumber("low ka", low_kA);
+        // SmartDashboard.putNumber("low kp", low_kP);
+        // SmartDashboard.putNumber("low ki", low_kI);
+        // SmartDashboard.putNumber("low kd", low_kD);
     }
 
     /**
