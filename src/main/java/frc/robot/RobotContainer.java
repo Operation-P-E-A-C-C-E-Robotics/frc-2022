@@ -38,13 +38,16 @@ import frc.robot.commands.intake.IntakeUp;
 import frc.robot.commands.intake.POVIntake;
 import frc.robot.commands.shooter.AutoAim;
 import frc.robot.commands.shooter.AutoShoot;
+import frc.robot.commands.shooter.AutoTurret;
 import frc.robot.commands.shooter.FieldRelativeManualTurret;
 import frc.robot.commands.shooter.ManualAim;
+import frc.robot.commands.shooter.ManualDistance;
 import frc.robot.commands.shooter.RampFlywheel;
 import frc.robot.commands.shooter.ReverseTrigger;
 import frc.robot.commands.shooter.RunTrigger;
 import frc.robot.commands.shooter.TriggerWhenReady;
 import frc.robot.commands.shooter.setpoints.SetpointBase;
+import frc.robot.commands.visiondemo.AlignDrivetrainWithTurret;
 import frc.robot.commands.shooter.ProtectedShotSetpoint;
 import frc.robot.commands.shooter.LayupShotSetpoint;
 import frc.robot.commands.drivetrain.ArcadeDrive;
@@ -94,6 +97,7 @@ public class RobotContainer {
   private final OI climbOperatorOI = new OI(climbOperatorJoystick);
   private final OI driverOI = new OI(driverJoystick);
   
+
   // commands:
   private final Command 
     arcadeDrive     = new ArcadeDrive(driveTrain, this),
@@ -112,6 +116,9 @@ public class RobotContainer {
     autoShoot       = new AutoShoot(flywheel, hood, turret, intake, driveTrain, limelight, this),
     autoTrigger     = new TriggerWhenReady(turret, hood, flywheel, intake, driveTrain, limelight),
     runIntake       = new Intake(intake).alongWith(new IntakeDown(intake),
+                        new RampFlywheel(flywheel).withTimeout(0.5)
+    ),
+    runIntakeNoTraversal       = new IntakeNoTraversal(intake).alongWith(new IntakeDown(intake),
                         new RampFlywheel(flywheel).withTimeout(10)
     ),
     runIntakeNoTraversal       = new IntakeNoTraversal(intake).alongWith(new IntakeDown(intake),
@@ -183,6 +190,7 @@ public class RobotContainer {
     
     driverOI.bind(DriverMappings.NORMAL_DRIVE_BUTTON, arcadeDrive);
   
+    new JoystickButton(testJoystick, 4).whileHeld(new AutoTurret(turret, limelight, pigeon).alongWith(new AlignDrivetrainWithTurret(driveTrain, turret, limelight, this)));
     //setpoint creation helper
     //testButton1.toggleWhenPressed(new NewSetpointHelper(flywheel, hood, limelight, testJoystick));//.alongWith(new AutoTurret(turret, odometry.getTarget())));
     //testButton2.toggleWhenPressed(new FlywheelTuner(flywheel, testJoystick));
