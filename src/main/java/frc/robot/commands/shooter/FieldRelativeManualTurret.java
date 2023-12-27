@@ -5,17 +5,20 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.math.NiceCurve;
+import frc.lib.math.PointTracker;
+import frc.lib.sensors.Pigeon;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.OldTurret;
 import frc.robot.subsystems.Turret;
 
-public class ManualAim extends CommandBase {
+public class FieldRelativeManualTurret extends CommandBase {
   private final Turret turret;
   private final RobotContainer container;
-  private Hood hood;
+  private final Hood hood;
   
   private double turretRotations = 0;
   private double hoodCounts = 0;
@@ -24,11 +27,16 @@ public class ManualAim extends CommandBase {
   
   private final NiceCurve curve = NiceCurve.preset1();
 
+  private final double fieldHeading;
   /** Aim with joystick. */
-  public ManualAim(Turret shooter, Hood hood, RobotContainer container) {
+    private Pigeon pigeon;
+  public FieldRelativeManualTurret(Turret shooter, Hood hood, Pigeon pigeon, RobotContainer container, double fieldHeading) {
     this.turret = shooter;
     this.hood = hood;
+    this.pigeon = pigeon;
     this.container = container;
+
+    this.fieldHeading = fieldHeading;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter, hood);
   }
@@ -42,21 +50,18 @@ public class ManualAim extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // if(container.getOperatorJoystick().getRawButton(3)){
-    //   turret.zero();
-    // }
-    // if(Math.abs(container.getOperatorJoystick().getX()) > 0.2) {
-    //   turretRotations += curve.get(container.getOperatorJoystick().getX()) * 0.03;
-    //   turret.setTurretRotations(turretRotations);
-    //   // turret.setTurretPercent(curve.get(container.getOperatorJoystick().getX()));
-    // }
-    // else {
-    //   // turret.setTurretPercent(0.0);
-    //   turretRotations = turret.getPosition();
-    //   hoodCounts = hood.getHoodPosition();
-    // }
+    double robotHeading = -((pigeon.getYaw() - fieldHeading) / 360);
+    double y = -container.getOperatorJoystick().getRawAxis(0);
+    double x = container.getOperatorJoystick().getRawAxis(1);
+    PointTracker point = new PointTracker(1);
+    point.xy(x,y);
 
-      turret.setTurretPercent(container.getOperatorJoystick().getX());
+    if(point.r() > 0.3){
+        double angle = (point.p() / (2 * Math.PI));
+        SmartDashboard.putNumber("joystick angle", angle);
+        SmartDashboard.putNumber("robot heading", robotHeading);
+        turret.setTurretRotations((((angle - robotHeading) + 0.5) % 1) - 0.5);
+    }
 
 
     if(Math.abs(container.getOperatorJoystick().getRawAxis(2)) > 0.2){

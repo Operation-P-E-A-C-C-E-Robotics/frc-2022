@@ -4,11 +4,13 @@
 
 package frc.robot.autonomous;
 
+import com.ctre.phoenix.sensors.PigeonIMU;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.lib.sensors.Limelight;
 import frc.lib.sensors.Pigeon;
 import frc.robot.RobotContainer;
 import frc.robot.commands.shooter.AutoShoot;
+import frc.robot.commands.shooter.RampFlywheel;
 import frc.robot.subsystems.BallHandler;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Flywheel;
@@ -23,6 +25,6 @@ public class OneBallOffLine extends SequentialCommandGroup {
   public OneBallOffLine(DriveTrain driveTrain, Flywheel shooter, Hood hood, Turret turret, BallHandler intake, Limelight limelight, Pigeon pigeon, RobotContainer container) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new AutoShoot(shooter, hood, turret, intake, driveTrain, limelight, container).withTimeout(8), new DriveDistance(driveTrain, pigeon, container, 1, 0.25));
+    addCommands(new DriveDistance(driveTrain, pigeon, container, 1, 0.25).raceWith(new RampFlywheel(shooter)), new AutoShoot(shooter, hood, turret, intake, driveTrain, limelight, container).withTimeout(5));
   }
 }

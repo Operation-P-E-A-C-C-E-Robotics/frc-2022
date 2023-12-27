@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.sensors.Limelight;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.BallHandler;
+import frc.robot.subsystems.OldTurret;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Flywheel;
@@ -30,7 +31,7 @@ public class FarRightBall extends CommandBase {
   private double timer = Timer.getFPGATimestamp();
   private boolean finished = false;
 
-  // private double stage = 0;
+  private double stage = 0;
 
   /** Creates a new autonomous. */
   public FarRightBall(DriveTrain driveTrain, Flywheel shooter, Hood hood, BallHandler intake, Turret turret, Limelight limelight, RobotContainer container) {
@@ -60,7 +61,7 @@ public class FarRightBall extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // double time = Timer.getFPGATimestamp() - timer;
+    double time = Timer.getFPGATimestamp() - timer;
 
     
     

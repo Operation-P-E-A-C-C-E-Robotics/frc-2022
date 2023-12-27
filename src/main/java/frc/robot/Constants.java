@@ -20,17 +20,30 @@ public final class Constants {
                                 LEFT_SLAVE_PORT = 3,
                                 DRIVE_ENCODER_CPR = 2048;
         
-        public static final double DRIVE_HIGH_GEAR_RATIO = 9.1,
+        public static double DRIVE_HIGH_GEAR_RATIO = 9.1,
                                     DRIVE_LOW_GEAR_RATIO = 24,
-                                    WHEEL_DIAMETER_METERS = 0.1524;
+                                    WHEEL_DIAMETER_METERS = 0.1524,
+                                    high_kS = 0,
+                                    high_kV = 0,
+                                    high_kA = 0,
+                                    high_kP = 0,
+                                    high_kI = 0,
+                                    high_kD = 0,
+                                    low_kS = 0,
+                                    low_kV = 0,
+                                    low_kA = 0,
+                                    low_kP = 0,
+                                    low_kI = 0,
+                                    low_kD = 0;
     }
 
     public static final class FlywheelConstants{
         public static final int FLYWHEEL_MASTER_PORT = 5,
                                 FLYWHEEL_SLAVE_PORT = 4;  
         
-        public static final double FLYWHEEL_kF = 0.055,
-                                    FLYWHEEL_kP = 0.15,
+        // public static final double FLY[]\]
+         public static final double    FLYWHEEL_kF = 0.051,
+                                    FLYWHEEL_kP = 0.25,
                                     FLYWHEEL_kI = 0,
                                     FLYWHEEL_kD = 0;
     }
@@ -76,8 +89,15 @@ public final class Constants {
     }
 
     public static final double[][] AIM_DATA = {
-        {/*0.2,*/   1.4, 2.56, 3.6,  6}, //distances
-        {/*6200,*/  5850, 6600,7200, 9800}, //flywheel velocities
-        {/*75,*/    130, 220, 220, 220}, //hood angles
+        // Commented values are old
+        // {/*0.2,*/   1.4, 2.56, 3.6,  4.7, 6}, //distances
+        // {/*6200,*/  5900, 6500,7400, 8000, 9000}, //flywheel velocities
+        // {/*75,*/    130, 220, 220, 220, 220}, //hood angles
+        //{1.43, 2.1, 2.58, 3.146, 3.71, 4.2,  5.12, 6.6,   8.33}, //distances
+        //{6000, 6250, 6570, 6820, 7130, 7435, 7760, 9100, 11000}, //flywheel velocities
+        //{   80, 150, 165,   200, 220,   250,  260, 270,    280}, //hood angles
+        {1.43,  2.1, 2.58, 3.146, 3.71,  4.2, 5.12,  6.6, 8.33}, //distances
+        {6000, 6275, 6570,  6770, 6990, 7400, 7600, 8700, 9700}, //flywheel velocities
+        {  90,  125,  165,   190,  220,  240,  265,  285,  270}, //hood angles
     };
 }

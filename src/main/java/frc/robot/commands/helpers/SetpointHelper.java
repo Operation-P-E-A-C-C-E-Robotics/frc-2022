@@ -54,8 +54,13 @@ public class SetpointHelper extends CommandBase{
         SmartDashboard.putNumber("flywheel setpoint", 0);
         SmartDashboard.putNumber("distance", distance);
 
-        hood.setHoodPosition(hoodSetpoint);
-        flywheel.flywheelVelocity(flywheelSetpoint);
+        // hood.setHoodPosition(hoodSetpoint);
+
+        if(joystick.getRawButton(6)) {
+            // flywheel.flywheelVelocity(flywheelSetpoint);
+        } else {
+            flywheel.flywheelPercent(0);
+        }
     }
 
     @Override
@@ -64,16 +69,24 @@ public class SetpointHelper extends CommandBase{
         hoodSetpointOffset += joystick.getRawAxis(3);
         distance = camera.getTargetDistance();
 
-        hoodSetpoint = hoodInterp.cubicSplineInterpolate(distance);
-        flywheelSetpoint = flywheelInterp.cubicSplineInterpolate(distance);
+        try{
+            hoodSetpoint = hoodInterp.cubicSplineInterpolate(distance);
+            flywheelSetpoint = flywheelInterp.cubicSplineInterpolate(distance);
+            SmartDashboard.putNumber("interp hood setpoint", hoodSetpoint);
+            SmartDashboard.putNumber("interp flywheel setpoint", flywheelSetpoint);
+        } catch (Error e){
+            e.printStackTrace();
+        }
 
         // hoodSetpoint += hoodSetpointOffset;
         // flywheelSetpoint += flywheelSetpointOffset;
 
-        SmartDashboard.putNumber("interp hood setpoint", hoodSetpoint);
-        SmartDashboard.putNumber("interp flywheel setpoint", flywheelSetpoint);
         hood.setHoodPosition(SmartDashboard.getNumber("hood setpoint", 0));
-        flywheel.flywheelVelocity(SmartDashboard.getNumber("flywheel setpoint", 0));
+        if(joystick.getRawButton(6)) {
+            flywheel.flywheelVelocity(SmartDashboard.getNumber("flywheel setpoint", 0));
+        } else {
+            flywheel.flywheelPercent(0);
+        }
         
         SmartDashboard.putNumber("distance", distance);
     }

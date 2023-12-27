@@ -7,6 +7,8 @@
 
 package frc.robot.commands.drivetrain;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.util.CheesyDriveHelper;
@@ -34,7 +36,7 @@ public class CheesyDrive extends CommandBase {
   public void execute() {
     Joystick driverJoystick = container.getDriverJoystick();
 
-    if(driverJoystick.getRawButtonPressed(3)) driveTrain.shift(Gear.LOW_GEAR);
+    if(driverJoystick.getRawButtonPressed(2)) driveTrain.shift(Gear.LOW_GEAR);
     else driveTrain.shift(Gear.HIGH_GEAR);
 
     double spd = -driverJoystick.getY();

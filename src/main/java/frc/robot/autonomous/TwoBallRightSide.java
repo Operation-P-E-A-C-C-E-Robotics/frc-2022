@@ -26,6 +26,5 @@ public class TwoBallRightSide extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(new DriveDistance(driveTrain, pigeon, container, 3.5, 0.25).withTimeout(4).raceWith(new Intake(intake), new RampFlywheel(shooter)), new AutoShoot(shooter, hood, turret, intake, driveTrain, limelight, container).alongWith(new IntakeUp(intake)));
   }
-
-} 
+}
 

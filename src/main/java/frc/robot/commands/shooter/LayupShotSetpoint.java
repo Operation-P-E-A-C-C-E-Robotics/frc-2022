@@ -11,7 +11,7 @@ import frc.robot.subsystems.Flywheel;
 public class LayupShotSetpoint extends CommandBase {
   private final Flywheel shooter;
   private final Hood hood;
-  private double veloctiy = 6700;
+  private double veloctiy = 5850; //old 6700
   
   /** Creates a new ShooterControl. */
   public LayupShotSetpoint(Flywheel shooter, Hood hood) {
@@ -27,8 +27,8 @@ public class LayupShotSetpoint extends CommandBase {
   public void execute() {
     //Replace with PID Control
     shooter.flywheelVelocity(veloctiy);
-    hood.setHoodPosition(32);
-
+    hood.setHoodPosition(75); //old 32
+    //hello car9 was here
   }
 
   // Called once the command ends or is interrupted.

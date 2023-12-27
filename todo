@@ -1,3 +1,5 @@
- - test new AutoAiming + debug
- - test drive shifters
- - add autoaim setpoints
+WORLDS CODE TODO:
+ - limelight tuning
+ - auto modes
+ - maybe tune chessy drive (probably not)
+ - better ready detection for everything

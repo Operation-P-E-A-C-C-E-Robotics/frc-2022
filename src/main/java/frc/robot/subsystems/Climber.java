@@ -7,7 +7,6 @@ package frc.robot.subsystems;
 
 import static frc.robot.Constants.ClimberConstants.*;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -15,6 +14,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Climber extends SubsystemBase {
@@ -60,8 +60,21 @@ public class Climber extends SubsystemBase {
     armSolenoid.toggle();
   }
 
+  public double getLiftPosition(){
+    return liftMasterController.getSelectedSensorPosition();
+  }
+
+  public boolean liftFullyRetracted(){
+    return liftMasterController.isFwdLimitSwitchClosed() == 1;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if(liftMasterController.isFwdLimitSwitchClosed() == 1){
+      liftMasterController.setSelectedSensorPosition(0);
+    }
+
+    // SmartDashboard.putNumber("climber position", getLiftPosition());
   }
 }

@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.networktables.NetworkTablesJNI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.math.CubicSplineInterpolate;
@@ -27,10 +28,21 @@ public class Flywheel extends SubsystemBase {
 
   double shooterSetpoint = 0;
 
+  int numFiredBalls = 0;
+
+  boolean ballFired = false;
+  boolean flywheelReady = false;
+  boolean prevBallFired = false;
+
   //acceptable errors (to tell when the flywheel is up to speed)
-  private final double velocityRange = 200,
-                        accelerationRange = 15,
-                        jerkRange = 15;
+  private double velocityRange = 200,
+                        accelerationRange = 10,
+                        jerkRange = 100;
+
+  //thresholds for ball fire detection
+  private double ballDetectVelocity = 200,
+                      ballDetectAcceleration = 20,
+                      ballDetectJerk = 20;
 
   //holds previous 3 flywheel velocities, for flywheel up to speed calculations
   double[] history = new double[3];
@@ -47,6 +59,13 @@ public class Flywheel extends SubsystemBase {
     configTalonGains(FLYWHEEL_kF, FLYWHEEL_kP, FLYWHEEL_kI, FLYWHEEL_kD);
 
     flywheelMasterController.setNeutralMode(NeutralMode.Coast);
+    // SmartDashboard.putNumber("f ready v", velocityRange);
+    // SmartDashboard.putNumber("f ready a", accelerationRange);
+    // SmartDashboard.putNumber("f ready j", jerkRange);
+    
+    // SmartDashboard.putNumber("f fire v", ballDetectVelocity);
+    // SmartDashboard.putNumber("f fire a", ballDetectAcceleration);
+    // SmartDashboard.putNumber("f fire j", ballDetectJerk);
   }
   
   /**
@@ -54,6 +73,7 @@ public class Flywheel extends SubsystemBase {
    * @param speed the speed (-1 to 1)
    */
   public void flywheelPercent(double speed) {
+    flywheelReady = false;
     flywheelMasterController.set(speed);
   }
 
@@ -62,6 +82,12 @@ public class Flywheel extends SubsystemBase {
    * @param velocity the velocity to set to in sensor units/100ms
    */
   public void flywheelVelocity(double velocity){
+    flywheelReady = false;
+    if(flywheelMasterController.getSelectedSensorVelocity() > 1000) {
+      flywheelMasterController.configClosedloopRamp(0);
+    } else {
+      flywheelMasterController.configClosedloopRamp(2);
+    }
     flywheelMasterController.set(ControlMode.Velocity, velocity);
     shooterSetpoint = velocity;
   }
@@ -88,8 +114,16 @@ public class Flywheel extends SubsystemBase {
       Util.inRange(decomposition[0], velocityRange) &&
       Util.inRange(decomposition[1], accelerationRange) &&
       Util.inRange(decomposition[2], jerkRange)
-      );
+    ) && flywheelMasterController.getSelectedSensorVelocity() > 500;
+    // return flywheelReady;
     // return (Math.abs(shooterSetpoint) - Math.abs(flywheelMasterController.getSelectedSensorVelocity())) < 500;
+  }
+
+  boolean prevBallFired2 = false;
+  public boolean ballFired(){
+    boolean newBallFired = (prevBallFired && !prevBallFired2);
+    prevBallFired2 = ballFired;
+    return newBallFired;
   }
   
   /**
@@ -100,7 +134,7 @@ public class Flywheel extends SubsystemBase {
     flywheelMasterController.config_kP(0, kP);
     flywheelMasterController.config_kI(0, kI);
     flywheelMasterController.config_kD(0, kD);
-    flywheelMasterController.configClosedloopRamp(2);
+    // flywheelMasterController.configClosedloopRamp(2);
   }
 
   /**
@@ -119,7 +153,35 @@ public class Flywheel extends SubsystemBase {
   
   @Override
   public void periodic() {
-    SmartDashboard.putBoolean("flywheel ready", ready());
+    double[] decomposition = Sequencer.compute(history);
+    flywheelReady = flywheelReady ? !ballFired : (
+      Util.inRange(decomposition[0], velocityRange) &&
+      Util.inRange(decomposition[1], accelerationRange) &&
+      Util.inRange(decomposition[2], jerkRange)
+    );
+
+    ballFired = ballFired ? !flywheelReady : (
+      decomposition[0] > ballDetectVelocity     &&
+      decomposition[1] > ballDetectAcceleration &&
+      decomposition[2] > ballDetectJerk
+    );
+
+    if(ballFired && !prevBallFired) numFiredBalls++;
+
+    prevBallFired = ballFired;
+
+
+    SmartDashboard.putNumber("balls fired :)", numFiredBalls);
+    SmartDashboard.putBoolean("flywheel ready", flywheelReady);
+    SmartDashboard.putNumber("flywheel velocity", getFlywheelVelocity());
+
+    // velocityRange = SmartDashboard.getNumber("f ready v", velocityRange);
+    // accelerationRange = SmartDashboard.getNumber("f ready a", accelerationRange);
+    // jerkRange = SmartDashboard.getNumber("f ready j", jerkRange);
+
+    // ballDetectVelocity = SmartDashboard.getNumber("f fire v", ballDetectVelocity);
+    // ballDetectAcceleration = SmartDashboard.getNumber("f fire a", ballDetectAcceleration);
+    // ballDetectJerk = SmartDashboard.getNumber("f fire j", ballDetectJerk);
 
     //shift shooter velocity into history array
     for(int i = 0; i < history.length - 1; i++){

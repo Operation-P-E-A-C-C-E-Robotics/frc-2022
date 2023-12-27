@@ -30,11 +30,14 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.DriveSignal;
 
@@ -46,6 +49,12 @@ public class DriveTrain extends SubsystemBase {
     private final DoubleSolenoid shiftSolenoid = new DoubleSolenoid(1, PneumaticsModuleType.REVPH, 0,1);
     
     private final DifferentialDrive dDrive = new DifferentialDrive(leftMasterController, rightMasterController);
+    private final PIDController lPid = new PIDController(high_kP, high_kI, high_kD);
+    private final PIDController rPid = new PIDController(high_kP, high_kI, high_kD);
+    private final SimpleMotorFeedforward highGearFeedforward = new SimpleMotorFeedforward(high_kS, high_kV, high_kA);
+    private final SimpleMotorFeedforward lowGearFeedforward = new SimpleMotorFeedforward(low_kS, low_kV, low_kA);
+
+    //DRIVE RATIOS 54:30, 64:20
 
     private Gear _gear = Gear.LOW_GEAR;
 
@@ -64,6 +73,7 @@ public class DriveTrain extends SubsystemBase {
         rightMasterController.setInverted(false);
         leftSlaveController.setInverted(InvertType.FollowMaster);
         rightSlaveController.setInverted(InvertType.FollowMaster);
+
 
         leftMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 50, 60, 10));
         rightMasterController.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 50, 60, 10));
@@ -115,6 +125,9 @@ public class DriveTrain extends SubsystemBase {
     public void percentDrive(double rSpeed, double lSpeed) {
         leftMasterController.set(ControlMode.PercentOutput, lSpeed);
         rightMasterController.set(ControlMode.PercentOutput, rSpeed);
+        setNeutralModes(NeutralMode.Brake);
+        //SmartDashboard.putNumber("DT Left Speed", lSpeed);
+        //SmartDashboard.putNumber("DT Right Speed", rSpeed);
         dDrive.feed(); //keep the wpilib arcade drive that we need for auto from freaking out
     }
 
@@ -124,6 +137,7 @@ public class DriveTrain extends SubsystemBase {
      * @param rot rotation left-right duh
      */
     public void arcadeDrive(double spd, double rot) {
+        setNeutralModes(NeutralMode.Brake);
         dDrive.arcadeDrive(spd, rot);
     }
 
@@ -134,6 +148,7 @@ public class DriveTrain extends SubsystemBase {
     public void arcadeDrive(DriveSignal signal) {
         leftMasterController.set(signal.getLeft());
         rightMasterController.set(signal.getRight());
+        setNeutralModes(signal.getBrakeMode() ? NeutralMode.Brake : NeutralMode.Coast);
         dDrive.feed();
     }
 
@@ -144,9 +159,37 @@ public class DriveTrain extends SubsystemBase {
      * @param rVolts voltage to feed to the right motor
      */
     public void voltageDrive(double lVolts, double rVolts) {
+        setNeutralModes(NeutralMode.Brake);
         leftMasterController.setVoltage(lVolts);
         rightMasterController.setVoltage(rVolts);
         dDrive.feed();
+    }
+
+    public void velocityDrive(double lSpeed, double rSpeed){
+        setNeutralModes(NeutralMode.Brake);
+        if(getGear() == Gear.HIGH_GEAR){
+            lPid.setP(high_kP);
+            lPid.setI(high_kI);
+            lPid.setD(high_kD);
+            rPid.setP(high_kP);
+            rPid.setI(high_kI);
+            rPid.setD(high_kD);
+            leftMasterController.setVoltage(highGearFeedforward.calculate(lSpeed)
+                + lPid.calculate(leftMasterController.getSelectedSensorVelocity(), lSpeed));
+            rightMasterController.setVoltage(highGearFeedforward.calculate(rSpeed)
+                + rPid.calculate(rightMasterController.getSelectedSensorVelocity(), rSpeed));
+        } else {
+            lPid.setP(low_kP);
+            lPid.setI(low_kI);
+            lPid.setD(low_kD);
+            rPid.setP(low_kP);
+            rPid.setI(low_kI);
+            rPid.setD(low_kD);
+            leftMasterController.setVoltage(lowGearFeedforward.calculate(lSpeed)
+                + lPid.calculate(leftMasterController.getSelectedSensorVelocity(), lSpeed));
+            rightMasterController.setVoltage(lowGearFeedforward.calculate(rSpeed)
+                + rPid.calculate(rightMasterController.getSelectedSensorVelocity(), rSpeed));
+        }
     }
 
     /**
@@ -171,8 +214,25 @@ public class DriveTrain extends SubsystemBase {
     /**
      * @return average of left and right encoder positions
      */
-    public double getAverageEncoderDistance() {
+    public double getAverageEncoderMeters() {
         return (lEncoderPosition() + rEncoderPosition()) / 2.0;
+    }
+
+    public double getAverageEncoderCounts() {
+        return (leftMasterController.getSelectedSensorPosition() + rightMasterController.getSelectedSensorPosition()) / 2;
+    }
+
+    public double getLeftEncoderSimple() {
+        return leftMasterController.getSelectedSensorPosition();
+    }
+
+    public double getRightEncoderSimple() {
+        return rightMasterController.getSelectedSensorPosition();
+    }
+
+    public boolean moving(){
+        return Math.abs(leftMasterController.getSelectedSensorVelocity()) > 100 ||
+                Math.abs(rightMasterController.getSelectedSensorVelocity()) > 100;
     }
 
     /**
@@ -216,11 +276,35 @@ public class DriveTrain extends SubsystemBase {
         leftMasterController.setNeutralMode(mode);
         rightMasterController.setNeutralMode(mode);
     }
+
+    double autoShiftThreshold = 100; //TODO TODO TODO
+
     @Override
     public void periodic() {
+        // if(rightMasterController.getSelectedSensorVelocity() > autoShiftThreshold ||
+        //     leftMasterController.getSelectedSensorVelocity() > autoShiftThreshold){
+        //     shift(Gear.HIGH_GEAR);
+        // } else {
+        //     shift(Gear.LOW_GEAR);
+        // }
         // SmartDashboard.putNumber("drivetrain left current", leftMasterController.getSupplyCurrent() + leftSlaveController.getSupplyCurrent());
         // SmartDashboard.putNumber("drivetrain right current", rightMasterController.getSupplyCurrent() + rightSlaveController.getSupplyCurrent());
         dDrive.feed();
+
+        // SmartDashboard.putNumber("DT Avg Enc", getAverageEncoderCounts());
+    
+        // high_kS = SmartDashboard.getNumber("high ks", high_kS);
+        // high_kV = SmartDashboard.getNumber("high kv", high_kV);
+        // high_kA = SmartDashboard.getNumber("high ka", high_kA);
+        // high_kP = SmartDashboard.getNumber("high kp", high_kP);
+        // high_kI = SmartDashboard.getNumber("high ki", high_kI);
+        // high_kD = SmartDashboard.getNumber("high kd", high_kD);
+        // low_kS = SmartDashboard.getNumber("low ks", low_kS);
+        // low_kV = SmartDashboard.getNumber("low kv", low_kV);
+        // low_kA = SmartDashboard.getNumber("low ka", low_kA);
+        // low_kP = SmartDashboard.getNumber("low kp", low_kP);
+        // low_kI = SmartDashboard.getNumber("low ki", low_kI);
+        // low_kD = SmartDashboard.getNumber("low kd", low_kD);
     }
 
     public enum Gear {
